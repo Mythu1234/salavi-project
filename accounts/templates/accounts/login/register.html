@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salavi - Tạo tài khoản</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .icon-header {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 15px;
+            border-radius: 12px;
+            background: #ef8989;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .icon-header svg {
+            width: 40px;
+            height: 40px;
+            fill: #fff;
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            color: #000;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #000;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 12px;
+            background: #eee;
+        }
+
+        .input-wrapper svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .input-wrapper input::placeholder {
+            color: #ccc;
+        }
+
+        .submit-btn {
+            display: block;
+            margin-top: 10px;
+            padding: 14px;
+            border-radius: 12px;
+            background: #ef8989;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+
+        .footer-text {
+            margin-top: 20px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .footer-text a {
+            margin-left: 5px;
+            color: #ef8989;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @media (max-width: 520px) {
+            .auth-card {
+                padding: 28px 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-card">
+        <div class="icon-header">
+            <svg viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </div>
+
+        <h2>Tạo tài khoản</h2>
+
+        <div class="form-group">
+            <label>Tên đăng nhập (SĐT)</label>
+            <div class="input-wrapper">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                <input type="text" placeholder="Nhập tên đăng nhập">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Mật khẩu</label>
+            <div class="input-wrapper">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <input type="password" placeholder="Nhập mật khẩu">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Mật khẩu xác nhận</label>
+            <div class="input-wrapper">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <input type="password" placeholder="Nhập mật khẩu xác nhận">
+            </div>
+        </div>
+
+        <div class="submit-btn">Xác nhận</div>
+
+        <div class="footer-text">
+            Đã có tài khoản ? <a href="{% url 'accounts:login' %}">Đăng nhập</a>
+        </div>
+    </div>
+</body>
+</html>

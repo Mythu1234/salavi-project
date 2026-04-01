@@ -1,0 +1,71 @@
+{% extends 'products/product_list.html' %}
+{% load static %}
+
+{% block content %}
+{{ block.super }}
+
+<style>
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(2px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        box-sizing: border-box;
+    }
+
+    .success-modal-content {
+        background-color: #fafafa;
+        width: 380px;
+        max-width: 90%;
+        border-radius: 12px;
+        padding: 35px 25px 25px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .success-icon {
+        color: #0ab253;
+        margin-bottom: 25px;
+    }
+
+    .success-card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 25px 20px;
+        width: 100%;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .success-text {
+        font-size: 16px;
+        font-weight: bold;
+        color: #111;
+        margin: 0;
+    }
+</style>
+
+<a href="{% url 'products:product_list' %}" class="modal-overlay" style="text-decoration: none;">
+    <div class="success-modal-content" onclick="event.preventDefault(); event.stopPropagation();">
+        <div class="success-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </div>
+        <div class="success-card">
+            <p class="success-text">Thêm sản phẩm thành công</p>
+        </div>
+    </div>
+</a>
+
+{% endblock %}

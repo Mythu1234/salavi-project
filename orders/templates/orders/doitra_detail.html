@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Chi tiết yêu cầu đổi trả{% endblock %}
+
+{% block content %}
+<main class="max-w-[750px] mx-auto my-14 bg-white rounded-lg overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-gray-100 mb-20">
+    <!-- Header màu hồng -->
+    <div class="bg-[#ef8f8d] text-white p-6 text-center">
+        <h1 class="text-[32px] font-bold tracking-wide">Chi tiết yêu cầu đổi trả</h1>
+    </div>
+
+    <!-- KHỐI NỘI DUNG -->
+    <div class="p-8 space-y-8">
+        
+        <!-- Bảng Trạng thái -->
+        <div class="bg-[#fff9d2] py-4 rounded-md text-center max-w-[80%] mx-auto">
+            <p class="text-[#f5a623] text-[15px] mb-1">Trạng thái yêu cầu</p>
+            <p class="text-[#f5a623] font-medium text-lg">{{ doitra.TrangThai|default:"Chờ xử lý" }}</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Thông tin khách hàng -->
+            <div>
+                <h3 class="text-[17px] font-bold mb-3 text-black">Thông tin khách hàng:</h3>
+                <div class="border border-gray-600 rounded-lg p-5 space-y-4">
+                    <p class="text-black text-[15px]">Khách hàng: {{ doitra.MaKH.HoTen|default:"Nguyễn Văn A" }}</p>
+                    <p class="text-black text-[15px]">SĐT: {{ doitra.MaKH.SDT|default:"0846166245" }}</p>
+                </div>
+            </div>
+
+            <!-- Thông tin sản phẩm -->
+            <div>
+                <h3 class="text-[17px] font-bold mb-3 text-black">Thông tin sản phẩm:</h3>
+                <div class="border border-gray-600 rounded-lg p-5 space-y-4">
+                    <p class="text-black text-[15px]">Mã đơn: {{ doitra.MaCTDH.MaDonHang.MaDonHang|default:"ĐH002" }}</p>
+                    <p class="text-black text-[15px]">Ngày mua: {{ doitra.MaCTDH.MaDonHang.NgayDat|date:"d/m/Y"|default:"10/01/2021" }}</p>
+                    <p class="text-black text-[15px]">Ngày giao: {{ doitra.MaCTDH.MaDonHang.NgayGiao|date:"d/m/Y"|default:"15/01/2021" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Hình ảnh minh chứng -->
+            <div>
+                <h3 class="text-[17px] font-bold mb-3 text-black">Hình ảnh minh chứng</h3>
+                <div class="overflow-hidden bg-gray-100 flex items-center justify-center">
+                    {% if doitra.HinhAnh %}
+                        <img src="{{ doitra.HinhAnh.url }}" alt="Minh chứng" class="w-full h-auto object-cover">
+                    {% else %}
+                        <!-- Ảnh mạng chèn tạm để dàn Layout lúc DB chưa có hình tĩnh -->
+                        <img src="https://i.pinimg.com/736x/21/cf/3e/21cf3ee85d9eb39589d89ab57930ef58.jpg" alt="Minh chứng tạm" class="w-full h-auto object-cover opacity-90">
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Chi tiết yêu cầu -->
+            <div>
+                <h3 class="text-[17px] font-bold mb-3 text-black">Chi tiết yêu cầu</h3>
+                <div class="border border-gray-600 rounded-lg p-5 space-y-4">
+                    <p class="text-black text-[15px]">Loại yêu cầu: {{ doitra.get_LoaiYeuCau_display|default:"Trả hàng - Hoàn tiền" }}</p>
+                    <p class="text-black text-[15px]">Lý do: {{ doitra.LyDo|default:"Sản phẩm không giống mô tả" }}</p>
+                    <p class="text-black text-[15px]">Ngày gửi: {{ doitra.NgayYeuCau|date:"d/m/Y"|default:"20/01/2021" }}</p>
+                </div>
+                
+                <h3 class="text-[17px] font-bold mt-6 mb-3 text-black">Ghi chú xử lý:</h3>
+                <div class="w-full">
+                    <input type="text" placeholder="Ghi chú" class="w-full border border-gray-400 rounded-3xl p-3 focus:outline-none focus:border-gray-600 text-[15px]">
+                </div>
+
+                <!-- Các nút bấm tương tác -->
+                <div class="flex justify-between items-center mt-8 gap-3">
+                    <button class="px-6 py-2 bg-[#81b979] text-white font-medium text-[15px] rounded-full hover:bg-green-600 transition shadow-sm w-full">Duyệt</button>
+                    <button class="px-6 py-2 bg-[#f05c2f] text-white font-medium text-[15px] rounded-full hover:bg-red-600 transition shadow-sm w-full">Từ chối</button>
+                    <button class="px-6 py-2 bg-white text-black font-medium text-[15px] rounded-full border border-black hover:bg-gray-100 transition shadow-sm w-full">Huỷ</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+{% endblock %}

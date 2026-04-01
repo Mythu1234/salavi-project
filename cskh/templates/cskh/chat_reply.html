@@ -1,0 +1,464 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<style>
+    /* Tổng quan container */
+    .cskh-chat-container {
+        display: flex;
+        width: 100%;
+        max-width: 950px;
+        height: 550px;
+        margin: 20px auto;
+        background-color: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border: 1px solid #eaeaea;
+        font-family: Arial, sans-serif;
+    }
+
+
+    /* BÊN TRÁI: DANH SÁCH KHÁCH HÀNG */
+    .chat-sidebar {
+        width: 320px;
+        background-color: #e8e8e8;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #ddd;
+    }
+
+
+    .sidebar-header {
+        padding: 20px 20px 10px;
+    }
+
+
+    .sidebar-title {
+        font-size: 16px;
+        font-weight: 800;
+        color: #111;
+        margin-bottom: 15px;
+    }
+
+
+    .sidebar-filter, .sidebar-search {
+        width: 100%;
+        padding: 10px 15px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        outline: none;
+        box-sizing: border-box;
+        font-size: 14px;
+        background-color: #f8f8f8;
+        color: #333;
+    }
+   
+    .sidebar-search {
+        background-color: #fff;
+        margin-bottom: 20px;
+    }
+
+
+    .thread-list {
+        flex-grow: 1;
+        overflow-y: auto;
+        -ms-overflow-style: none; /* Ẩn thanh cuộn IE/Edge */
+        scrollbar-width: none; /* Ẩn thanh cuộn Firefox */
+    }
+   
+    .thread-list::-webkit-scrollbar {
+        display: none; /* Ẩn thanh cuộn Chrome/Safari */
+    }
+
+
+    .thread-item {
+        padding: 15px 20px;
+        border-bottom: 1px solid #e0e0e0;
+        cursor: pointer;
+        background-color: transparent;
+        transition: background-color 0.2s;
+        position: relative;
+    }
+
+
+    .thread-item.active {
+        background-color: #eedcdc;
+    }
+
+
+    .thread-item:hover:not(.active) {
+        background-color: #dedede;
+    }
+
+
+    .thread-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+
+
+    .thread-name {
+        font-weight: bold;
+        color: #111;
+        font-size: 15px;
+    }
+
+
+    .thread-time {
+        font-size: 12px;
+        color: #888;
+    }
+
+
+    .thread-snippet {
+        font-size: 14px;
+        color: #666;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 5px;
+    }
+
+
+    .thread-status {
+        font-size: 12px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+
+
+    .status-red { color: #f44336; }
+    .status-red .status-dot { background-color: #f44336; }
+   
+    .status-yellow { color: #ffb300; }
+    .status-yellow .status-dot { background-color: #fbc02d; }
+   
+    .status-green { color: #4caf50; }
+    .status-green .status-dot { background-color: #4caf50; }
+
+
+    /* BÊN PHẢI: KHUNG CHAT CHÍNH */
+    .chat-main {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        background-color: #fafafa;
+    }
+
+
+    .chat-header {
+        background-color: #e8e8e8;
+        padding: 20px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 1px solid #ddd;
+    }
+
+
+    .chat-header-info {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+
+    .chat-header-name {
+        font-size: 18px;
+        font-weight: bold;
+        color: #111;
+    }
+
+
+    .chat-header-status {
+        font-size: 13px;
+        color: #777;
+    }
+
+
+    .chat-header-time {
+        font-size: 14px;
+        color: #888;
+    }
+
+
+    .chat-messages {
+        flex-grow: 1;
+        padding: 30px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        -ms-overflow-style: none; /* Ẩn thanh cuộn IE/Edge */
+        scrollbar-width: none; /* Ẩn thanh cuộn Firefox */
+    }
+
+
+    .chat-messages::-webkit-scrollbar {
+        display: none; /* Ẩn thanh cuộn Chrome/Safari */
+    }
+
+
+    .message-bubble-wrapper {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+        max-width: 85%;
+    }
+
+
+    /* Bubble của Khách hàng */
+    .message-bubble.customer {
+        background-color: #fff;
+        padding: 15px 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        border: 1px solid #f0f0f0;
+        align-self: flex-start;
+    }
+
+
+    /* Bubble của Shop */
+    .message-bubble.shop {
+        background-color: #f18686; /* Nền màu hồng đỏ */
+        padding: 15px 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(241, 134, 134, 0.2);
+        align-self: flex-start;
+    }
+
+
+    .message-text {
+        font-size: 15px;
+        line-height: 1.4;
+        margin-bottom: 8px;
+    }
+
+
+    .message-bubble.customer .message-text {
+        color: #111;
+    }
+
+
+    .message-bubble.shop .message-text {
+        color: #fff; /* Chữ màu trắng */
+    }
+
+
+    .message-time {
+        font-size: 12px;
+    }
+
+
+    .message-bubble.customer .message-time {
+        color: #999;
+    }
+
+
+    .message-bubble.shop .message-time {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+
+    /* Trạng thái đã gửi nằm riêng bên ngoài bubble nhưng căn lề phải cục bộ so với độ dài của shop bubble */
+    .message-bubble-wrapper-shop {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Giữ bubble bên trái */
+        margin-bottom: 20px;
+    }
+
+
+    .send-status {
+        width: 100%;
+        text-align: right; /* Căn phải nội dung "Đã gửi" nhưng chỉ phụ thuộc khối của mình */
+        font-size: 12px;
+        color: #aaa;
+        margin-top: 5px;
+        padding-right: 5px;
+    }
+
+
+    /* KHU VỰC NHẬP TIN NHẮN */
+    .chat-input-area {
+        background-color: #fff;
+        padding: 20px 30px;
+        border-top: 1px solid #eaeaea;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+
+    .chat-input-row {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+
+
+    .chat-input {
+        flex-grow: 1;
+        padding: 12px 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 30px;
+        outline: none;
+        font-size: 15px;
+        color: #333;
+    }
+
+
+    .chat-input::placeholder {
+        color: #aaa;
+    }
+
+
+    .chat-send-btn {
+        background-color: #f18686;
+        color: #fff;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 30px;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+
+    .chat-send-btn:hover {
+        background-color: #e57373;
+    }
+
+
+    .chat-note {
+        font-size: 12px;
+        color: #999;
+        padding-left: 10px;
+    }
+
+
+</style>
+
+
+<div class="cskh-chat-container">
+    <!-- Cột danh sách -->
+    <div class="chat-sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">Yêu cầu tư vấn</div>
+            <select class="sidebar-filter">
+                <option>Tất cả trạng thái</option>
+                <option>Chưa phản hồi</option>
+                <option>Đang trao đổi</option>
+                <option>Đã phản hồi</option>
+            </select>
+            <input type="text" class="sidebar-search" placeholder="Tìm khách hàng...">
+        </div>
+       
+        <div class="thread-list">
+            <!-- Item 1: Đang trao đổi (Đang chọn) -->
+            <div class="thread-item active">
+                <div class="thread-top">
+                    <span class="thread-name">Nguyễn Thị Lan</span>
+                    <span class="thread-time">09:15</span>
+                </div>
+                <div class="thread-snippet">Shop cho em hỏi áo này còn size M kh...</div>
+                <div class="thread-status status-yellow">
+                    <span class="status-dot"></span> Đang trao đổi
+                </div>
+            </div>
+
+
+            <!-- Item 2: Đang trao đổi -->
+            <div class="thread-item">
+                <div class="thread-top">
+                    <span class="thread-name">Khách vãng lai</span>
+                    <span class="thread-time">Hôm qua</span>
+                </div>
+                <div class="thread-snippet">Thời gian giao hàng bao lâu?</div>
+                <div class="thread-status status-yellow">
+                    <span class="status-dot"></span> Đang trao đổi
+                </div>
+            </div>
+
+
+            <!-- Item 3: Đã phản hồi -->
+            <div class="thread-item">
+                <div class="thread-top">
+                    <span class="thread-name">Trần Văn Minh</span>
+                    <span class="thread-time">20/01</span>
+                </div>
+                <div class="thread-snippet">Cảm ơn shop tư vấn rất nhiệt tình</div>
+                <div class="thread-status status-green">
+                    <span class="status-dot"></span> Đã phản hồi
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Khung Chat Chính -->
+    <div class="chat-main">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <div class="chat-header-name">Nguyễn Thị Lan</div>
+                <div class="chat-header-status">Trạng thái: Chưa phản hồi</div>
+            </div>
+            <div class="chat-header-time">
+                Yêu cầu lúc 09:12
+            </div>
+        </div>
+
+
+        <!-- Khung Tin nhắn -->
+        <div class="chat-messages">
+            <!-- Tin nhắn của Khách hàng -->
+            <div class="message-bubble-wrapper">
+                <div class="message-bubble customer">
+                    <div class="message-text">Shop cho em hỏi áo thun cổ tròn còn size M không ạ?</div>
+                    <div class="message-time">09:12</div>
+                </div>
+            </div>
+
+
+            <!-- Tin nhắn trả lời của Shop -->
+            <div class="message-bubble-wrapper-shop">
+                <div class="message-bubble shop">
+                    <div class="message-text">Chào bạn Lan 🌸 Áo hiện tại shop còn đủ size M nhé!</div>
+                    <div class="message-time">09:16</div>
+                </div>
+                <div class="send-status">Đã gửi</div>
+            </div>
+        </div>
+
+
+        <!-- Khu vực nhập tin -->
+        <div class="chat-input-area">
+            <div class="chat-input-row">
+                <input type="text" class="chat-input" placeholder="Nhập nội dung phản hồi...">
+                <button class="chat-send-btn">Gửi</button>
+            </div>
+            <div class="chat-note">* Nội dung phản hồi sẽ được lưu vào lịch sử tư vấn</div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+

@@ -1,0 +1,826 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Điểm tích lũy chủ - Salavi{% endblock %}
+
+
+{% block content %}
+<style>
+    /* Styling riêng cho phần nội dung Điểm tích luỹ */
+    .loyalty-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #ffffff;
+    }
+
+
+    .customer-search-section {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 40px;
+        margin-top: 20px;
+    }
+
+
+    .input-group {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+
+    .input-group input {
+        width: 500px;
+        padding: 12px 25px;
+        border-radius: 30px;
+        border: 1px solid #ddd;
+        background-color: #fafafa;
+        outline: none;
+    }
+
+
+    .btn-search-pink {
+        background-color: #EF8989;
+        border: none;
+        color: white;
+        width: 45px;
+        height: 45px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    .btn-search-pink:hover {
+        opacity: 0.8;
+    }
+
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #f7f3f3; /* Màu xám kem nền cho hàng lẻ giống thiết kế */
+    }
+
+
+    .data-table thead th {
+        background-color: #EF8989;
+        color: white;
+        padding: 15px;
+        font-weight: 500;
+        border-right: 1px solid rgba(255,255,255,0.4);
+    }
+
+
+    .data-table thead th:last-child {
+        border-right: none;
+    }
+
+
+    .data-table td {
+        padding: 15px;
+        text-align: center;
+        color: #444;
+        border-bottom: 2px solid #ffffff; /* Viền trắng mảnh cách hàng */
+    }
+
+
+    .bg-light {
+        background-color: #ffffff; /* Nền trắng cho hàng chẵn */
+    }
+
+
+    .data-table tbody tr {
+        cursor: pointer;
+    }
+
+
+    .data-table tbody tr:hover {
+        background-color: #ffe8e8;
+    }
+
+
+    /* CSS cho Modal */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.4);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+
+    .modal-overlay.active {
+        display: flex;
+    }
+
+
+    .point-modal {
+        background: white;
+        width: 700px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+
+    .modal-header {
+        background-color: #EF8989;
+        color: white;
+        text-align: center;
+        padding: 15px;
+        font-size: 20px;
+        font-weight: 600;
+        position: relative;
+    }
+
+
+    .close-btn {
+        position: absolute;
+        right: 20px;
+        top: 15px;
+        font-size: 24px;
+        cursor: pointer;
+        line-height: 1;
+    }
+
+
+    .modal-body {
+        padding: 30px;
+    }
+
+
+    .customer-summary {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+
+    .avatar-circle {
+        width: 100px;
+        height: 100px;
+        background-color: #EF8989;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        font-weight: 600;
+    }
+
+
+    .info-box {
+        flex: 1;
+        background: #fdfdfd;
+        border: 1px solid #eee;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+
+
+    .info-row {
+        display: flex;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+
+    .info-label {
+        width: 140px;
+        font-weight: 600;
+        color: #333;
+    }
+
+
+    .info-value {
+        color: #555;
+    }
+
+
+    .points-highlight {
+        color: #ff0000;
+        font-size: 22px;
+        font-weight: 700;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+
+    .action-icons svg {
+        width: 20px;
+        height: 20px;
+        margin-left: 10px;
+        cursor: pointer;
+        color: #333;
+    }
+
+
+    .history-section h3 {
+        font-size: 16px;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+
+    .history-table-container {
+        background: #fcfcfc;
+        border: 1px solid #f0f0f0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+
+    .history-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+    }
+
+
+    .history-table th {
+        padding: 12px;
+        font-weight: 600;
+        border-bottom: 1px solid #eee;
+        font-style: italic;
+    }
+
+
+    .history-table td {
+        padding: 12px;
+        color: #555;
+    }
+
+
+    /* CSS cho Delete Modal */
+    .delete-modal {
+        background: #fcfcfc;
+        width: 450px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+    }
+    .delete-header {
+        background-color: #F38D91;
+        color: white;
+        text-align: center;
+        padding: 12px;
+        font-size: 18px;
+        font-weight: 600;
+        position: relative;
+    }
+    .delete-header .close-btn {
+        top: 10px;
+        font-size: 20px;
+    }
+    .delete-body {
+        padding: 30px;
+        text-align: center;
+    }
+    .delete-input {
+        width: 100%;
+        padding: 12px 15px;
+        margin-bottom: 25px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        outline: none;
+        box-sizing: border-box;
+        text-align: center;
+        font-style: italic;
+    }
+    .delete-input:focus {
+        border-color: #F38D91;
+    }
+    .delete-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+    .btn-cancel, .btn-confirm {
+        padding: 10px 30px;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        font-size: 16px;
+        width: 100px;
+    }
+    .btn-cancel {
+        background-color: #e5e5e5;
+        color: #555;
+    }
+    .btn-confirm {
+        background-color: #F38D91;
+        color: white;
+    }
+    .btn-cancel:hover { background-color: #d5d5d5; }
+    .btn-confirm:hover { background-color: #e37d81; }
+
+
+    /* CSS cho Confirm Modal */
+    .confirm-modal {
+        background: white;
+        width: 400px;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+    .confirm-icon {
+        color: #F38D91;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: center;
+    }
+    .confirm-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+    }
+    .confirm-text {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 25px;
+        line-height: 1.5;
+        padding: 0 10px;
+    }
+
+
+    /* Toast Notification */
+    .toast-container {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .toast {
+        background-color: #92e6b5;
+        color: #1a1a1a;
+        padding: 15px 25px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 500;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transform: translateX(120%);
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .toast.show {
+        transform: translateX(0);
+    }
+    .toast-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .toast-close {
+        margin-left: 20px;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        opacity: 0.6;
+    }
+    .toast-close:hover {
+        opacity: 1;
+    }
+</style>
+
+
+<div class="loyalty-container">
+    <div class="customer-search-section">
+        <form method="GET" action="" class="input-group">
+            <input type="text" name="phone" placeholder="Nhập số điện thoại khách hàng" value="{{ request.GET.phone }}">
+            <button type="submit" class="btn-search-pink">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+        </form>
+    </div>
+
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width: 60px;">STT</th>
+                <th>Tên khách hàng</th>
+                <th>Mã khách hàng</th>
+                <th>Số điện thoại</th>
+                <th>Điểm tích lũy</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tich_diem in danh_sach_tich_diem %}
+            <tr class="{% cycle 'bg-light' '' %}" onclick="openModal('{{ tich_diem.MaKH.MaKH }}')" id="row-{{ tich_diem.MaKH.MaKH }}">
+                <td>{{ forloop.counter }}</td>
+                <td>{{ tich_diem.MaKH.HoTen }}</td>
+                <td>{{ tich_diem.MaKH.MaKH }}</td>
+                <td>{{ tich_diem.MaKH.MaTK.TenDangNhap }}</td>
+                <td>{{ tich_diem.TongDiem }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">Chưa có dữ liệu tích điểm nào.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<!-- Modal Chi Tiết Tích Lũy -->
+<div class="modal-overlay" id="chiTietModal" onclick="closeModal(event)">
+    <div class="point-modal" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            CHI TIẾT ĐIỂM TÍCH LŨY
+            <span class="close-btn" onclick="closeModal(true)">&times;</span>
+        </div>
+       
+        <div class="modal-body">
+            <div class="customer-summary">
+                <div class="avatar-circle" id="modalAvatar">A</div>
+                <div class="info-box">
+                    <div class="info-row">
+                        <div class="info-label">Mã khách hàng:</div>
+                        <div class="info-value" id="modalMaKH">KH00001</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Tên khách hàng:</div>
+                        <div class="info-value" id="modalTenKH">Nguyễn Văn An</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Số điện thoại:</div>
+                        <div class="info-value" id="modalSDT">0835725356</div>
+                    </div>
+                    <div class="points-highlight">
+                        <span id="modalDiem">3700 điểm</span>
+                        <div class="action-icons">
+                            <svg onclick="openEditModal()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                            <svg onclick="openDeleteModal()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="history-section">
+                <h3>LỊCH SỬ ĐIỂM TÍCH LŨY</h3>
+                <div class="history-table-container">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Ngày</th>
+                                <th>Nội dung</th>
+                                <th>Điểm tích lũy</th>
+                                <th>Kết quả</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modalHistoryBody">
+                            <!-- Dữ liệu sẽ được load qua JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Nhập Số Điểm Cần Xóa -->
+<div class="modal-overlay" id="deletePointsModal" style="z-index: 1005;" onclick="closeDeleteModal(event)">
+    <div class="delete-modal" onclick="event.stopPropagation()">
+        <div class="delete-header">
+            Vui lòng nhập số điểm cần xóa
+            <span class="close-btn" onclick="closeDeleteModal(true)">&times;</span>
+        </div>
+        <div class="delete-body">
+            <input type="number" id="deleteInput" class="delete-input" placeholder="Nhập số điểm cần xóa">
+            <div class="delete-actions">
+                <button class="btn-cancel" onclick="closeDeleteModal(true)">Hủy</button>
+                <button class="btn-confirm" onclick="openConfirmModal()">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Xác Nhận Xóa (Layer 3) -->
+<div class="modal-overlay" id="confirmPointsModal" style="z-index: 1010;" onclick="closeConfirmModal(event)">
+    <div class="confirm-modal" onclick="event.stopPropagation()">
+        <div class="confirm-icon">
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <circle cx="12" cy="16" r="1" fill="currentColor"></circle>
+            </svg>
+        </div>
+        <div class="confirm-title">XÁC NHẬN XÓA</div>
+        <div class="confirm-text">Bạn có chắc chắn muốn xóa số điểm tích lũy này không?</div>
+        <div class="delete-actions" style="margin-top: 25px;">
+            <button class="btn-cancel" style="background-color: #d8d8d8; color: #333;" onclick="closeConfirmModal(true)">Không</button>
+            <button class="btn-confirm" style="background-color: #F38D91;" onclick="executeDeletePoints()">Đồng ý</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Nhập Số Điểm Cần Sửa -->
+<div class="modal-overlay" id="editPointsModal" style="z-index: 1005;" onclick="closeEditModal(event)">
+    <div class="delete-modal" onclick="event.stopPropagation()">
+        <div class="delete-header">
+            Vui lòng nhập số điểm cần sửa
+            <span class="close-btn" onclick="closeEditModal(true)">&times;</span>
+        </div>
+        <div class="delete-body">
+            <input type="number" id="editInput" class="delete-input" placeholder="Nhập số điểm cần sửa">
+            <div class="delete-actions">
+                <button class="btn-cancel" onclick="closeEditModal(true)">Hủy</button>
+                <button class="btn-confirm" onclick="openConfirmEditModal()">Sửa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Xác Nhận Sửa -->
+<div class="modal-overlay" id="confirmEditPointsModal" style="z-index: 1010;" onclick="closeConfirmEditModal(event)">
+    <div class="confirm-modal" onclick="event.stopPropagation()">
+        <div class="confirm-icon">
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <circle cx="12" cy="16" r="1" fill="currentColor"></circle>
+            </svg>
+        </div>
+        <div class="confirm-title">XÁC NHẬN SỬA</div>
+        <div class="confirm-text">Bạn có chắc chắn muốn thay đổi số điểm tích lũy này không?</div>
+        <div class="delete-actions" style="margin-top: 25px;">
+            <button class="btn-cancel" style="background-color: #d8d8d8; color: #333;" onclick="closeConfirmEditModal(true)">Không</button>
+            <button class="btn-confirm" style="background-color: #F38D91;" onclick="executeEditPoints()">Đồng ý</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+
+<script>
+    let currentMaKH = null;
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const navLinks = document.querySelectorAll('.nav-container .nav a');
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.textContent.trim() === 'Tích điểm') {
+                link.classList.add('active');
+            }
+        });
+    });
+
+
+    function openModal(ma_kh) {
+        currentMaKH = ma_kh;
+        document.getElementById('chiTietModal').classList.add('active');
+       
+        // Gọi API lấy dữ liệu chi tiết
+        fetch(`/diem-tich-luy/api/${ma_kh}/`)
+            .then(response => response.json())
+            .then(res => {
+                if(res.success) {
+                    const data = res.data;
+                    document.getElementById('modalAvatar').textContent = data.ho_ten.charAt(0).toUpperCase();
+                    document.getElementById('modalMaKH').textContent = data.ma_kh;
+                    document.getElementById('modalTenKH').textContent = data.ho_ten;
+                    document.getElementById('modalSDT').textContent = data.sdt;
+                    document.getElementById('modalDiem').textContent = data.tong_diem + ' điểm';
+                   
+                    const tbody = document.getElementById('modalHistoryBody');
+                    tbody.innerHTML = '';
+                   
+                    if(data.lich_su.length > 0) {
+                        data.lich_su.forEach(item => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>${item.ngay}</td>
+                                <td>${item.noi_dung}</td>
+                                <td>${item.diem_thay_doi}</td>
+                                <td>${item.ket_qua}</td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="4">Không có lịch sử</td></tr>';
+                    }
+                } else {
+                    alert('Lỗi khi tải dữ liệu: ' + res.error);
+                }
+            })
+            .catch(err => {
+                console.error('Fetch error:', err);
+                alert('Lỗi kết nối máy chủ');
+            });
+    }
+
+
+    function closeModal(force = false, event = null) {
+        if(force || (event && event.target.id === 'chiTietModal')) {
+            document.getElementById('chiTietModal').classList.remove('active');
+            currentMaKH = null;
+        }
+    }
+
+
+    function openDeleteModal() {
+        document.getElementById('deleteInput').value = '';
+        document.getElementById('deletePointsModal').classList.add('active');
+    }
+
+
+    function closeDeleteModal(force = false, event = null) {
+        if(force || (event && event.target.id === 'deletePointsModal')) {
+            document.getElementById('deletePointsModal').classList.remove('active');
+        }
+    }
+
+
+    function openConfirmModal() {
+        const diemTru = document.getElementById('deleteInput').value;
+        if (!diemTru || diemTru <= 0) {
+            alert('Vui lòng nhập số điểm hợp lệ.');
+            return;
+        }
+        document.getElementById('confirmPointsModal').classList.add('active');
+    }
+
+
+    function closeConfirmModal(force = false, event = null) {
+        if(force || (event && event.target.id === 'confirmPointsModal')) {
+            document.getElementById('confirmPointsModal').classList.remove('active');
+        }
+    }
+
+
+    function executeDeletePoints() {
+        const diemTru = document.getElementById('deleteInput').value;
+       
+        if (!currentMaKH) return;
+
+
+        fetch(`/diem-tich-luy/api/${currentMaKH}/tru-diem/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ diem_tru: diemTru })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                // Đóng tất cả popup
+                closeConfirmModal(true);
+                closeDeleteModal(true);
+                closeModal(true);
+               
+                // Cập nhật điểm trên bảng ngoài
+                const row = document.getElementById('row-' + currentMaKH);
+                if(row) {
+                    row.cells[4].innerText = data.new_tong_diem;
+                }
+               
+                // Hiển thị thông báo Toast
+                showToast('Xóa điểm thành công');
+            } else {
+                alert('Lỗi: ' + data.error);
+            }
+        })
+        .catch(err => {
+            console.error('Fetch error:', err);
+            alert('Lỗi kết nối máy chủ');
+        });
+    }
+
+
+    function openEditModal() {
+        const currentPointsText = document.getElementById('modalDiem').textContent;
+        const currentPoints = currentPointsText.replace(/[^0-9]/g, '');
+        document.getElementById('editInput').value = currentPoints;
+        document.getElementById('editPointsModal').classList.add('active');
+    }
+
+
+    function closeEditModal(force = false, event = null) {
+        if(force || (event && event.target.id === 'editPointsModal')) {
+            document.getElementById('editPointsModal').classList.remove('active');
+        }
+    }
+
+
+    function openConfirmEditModal() {
+        const diemMoi = document.getElementById('editInput').value;
+        if (diemMoi === '' || diemMoi < 0) {
+            alert('Vui lòng nhập số điểm hợp lệ.');
+            return;
+        }
+        document.getElementById('confirmEditPointsModal').classList.add('active');
+    }
+
+
+    function closeConfirmEditModal(force = false, event = null) {
+        if(force || (event && event.target.id === 'confirmEditPointsModal')) {
+            document.getElementById('confirmEditPointsModal').classList.remove('active');
+        }
+    }
+
+
+    function executeEditPoints() {
+        const diemMoi = document.getElementById('editInput').value;
+        if (!currentMaKH) return;
+
+
+        fetch(`/diem-tich-luy/api/${currentMaKH}/sua-diem/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ diem_moi: diemMoi })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                closeConfirmEditModal(true);
+                closeEditModal(true);
+                closeModal(true);
+               
+                const row = document.getElementById('row-' + currentMaKH);
+                if(row) {
+                    row.cells[4].innerText = data.new_tong_diem;
+                }
+               
+                showToast('Cập nhật điểm thành công');
+            } else {
+                alert('Lỗi: ' + data.error);
+            }
+        })
+        .catch(err => {
+            console.error('Fetch error:', err);
+            alert('Lỗi kết nối máy chủ');
+        });
+    }
+
+
+    function showToast(message) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `
+            <div class="toast-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <div>${message}</div>
+            <div class="toast-close" onclick="this.parentElement.remove()">&times;</div>
+        `;
+        container.appendChild(toast);
+       
+        // Hưởng hiệu ứng trượt vào
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 10);
+       
+        // Tự động ẩn sau 3s
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 400);
+        }, 3000);
+    }
+</script>
+
+
+{% endblock %}
+
+
+
+

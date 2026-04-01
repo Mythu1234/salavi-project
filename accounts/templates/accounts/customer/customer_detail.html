@@ -1,0 +1,454 @@
+{% extends 'base.html' %}
+
+{% block title %}Salavi - Thông tin khách hàng{% endblock %}
+
+{% block content %}
+<style>
+    .nav a {
+        color: #fff !important;
+        font-weight: 500 !important;
+        transition: color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .nav a:hover {
+        opacity: 0.84;
+    }
+
+    .nav a:nth-child(2) {
+        color: #2b2b2b !important;
+        font-weight: 800 !important;
+    }
+
+    .customer-page {
+        position: relative;
+    }
+
+    .customer-page .customer-container {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 18px 14px 36px;
+    }
+
+    .customer-page .search-filter-bar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 52px auto;
+        gap: 16px;
+        align-items: center;
+        margin: 0 0 18px;
+        padding: 0 0 18px;
+        border-bottom: 1px solid #d8d8d8;
+    }
+
+    .customer-page .customer-search-form {
+        display: contents;
+    }
+
+    .customer-page .filter-input-wrapper {
+        max-width: 560px;
+        justify-self: center;
+        width: 100%;
+    }
+
+    .customer-page .filter-input-wrapper input {
+        width: 100%;
+        height: 42px;
+        padding: 0 18px;
+        border: 1px solid #ece7e7;
+        border-radius: 18px;
+        background: #fff;
+        outline: none;
+        font-size: 15px;
+        color: #555;
+    }
+
+    .customer-page .search-btn-icon {
+        width: 52px;
+        height: 42px;
+        border: none;
+        border-radius: 12px;
+        background: #ef8989;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .customer-page .add-customer-btn {
+        justify-self: end;
+        height: 42px;
+        padding: 0 18px;
+        border-radius: 12px;
+        background: #ef8989;
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .customer-page .customer-table-shell {
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .customer-page .customer-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .customer-page .customer-table thead tr {
+        background: #ef8989;
+        color: #fff;
+    }
+
+    .customer-page .customer-table th {
+        padding: 14px 18px;
+        border-right: 1px solid rgba(255, 255, 255, 0.45);
+        font-size: 15px;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .customer-page .customer-table td {
+        padding: 18px;
+        font-size: 16px;
+        color: #2f2f2f;
+        text-align: center;
+    }
+
+    .customer-page .customer-table tbody tr:nth-child(odd) {
+        background: #f2eded;
+    }
+
+    .customer-page .customer-table tbody tr:nth-child(even) {
+        background: #fbf8f8;
+    }
+
+    .customer-page .customer-table td.customer-name {
+        text-align: left;
+        padding-left: 48px;
+    }
+
+    .customer-page .row-link {
+        display: block;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .customer-page .action-icons {
+        display: flex;
+        justify-content: center;
+        gap: 18px;
+    }
+
+    .customer-page .action-icons a,
+    .customer-page .action-icons button {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 50%;
+        background: transparent;
+        text-decoration: none;
+    }
+
+    .customer-page .action-icons svg {
+        width: 18px;
+        height: 18px;
+        fill: #111;
+    }
+
+    .customer-page.is-muted {
+        filter: blur(1px);
+    }
+
+    .customer-page.is-muted::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.25);
+        pointer-events: none;
+    }
+
+    .info-modal-overlay {
+        position: fixed;
+        inset: 0;
+        padding: 20px 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 20;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .info-modal-card {
+        width: 100%;
+        max-width: 600px;
+        overflow: hidden;
+        border: 1.5px solid #31a8ff;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22);
+    }
+
+    .info-header {
+        padding: 14px;
+        background: #ef8989;
+        color: #fff;
+        text-align: center;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .info-body {
+        padding: 16px;
+    }
+
+    .profile-section {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 14px;
+        padding: 14px;
+        border-radius: 10px;
+        background: #fdf5f4;
+    }
+
+    .profile-avatar {
+        width: 64px;
+        height: 64px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background: #ef8989;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        font-size: 26px;
+        font-weight: 700;
+    }
+
+    .profile-details {
+        display: grid;
+        grid-template-columns: 116px 1fr;
+        gap: 6px;
+        width: 100%;
+    }
+
+    .profile-details label {
+        color: #000;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    .profile-details span {
+        color: #333;
+        font-size: 13px;
+    }
+
+    .history-section {
+        padding: 14px;
+        border-radius: 10px;
+        background: #fdf5f4;
+    }
+
+    .history-title {
+        margin-bottom: 10px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid #e0e0e0;
+        color: #000;
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    .history-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .history-table th {
+        padding: 6px 0;
+        color: #333;
+        text-align: left;
+        font-size: 12px;
+        font-weight: 600;
+        font-style: italic;
+    }
+
+    .history-table td {
+        padding: 8px 0;
+        color: #333;
+        font-size: 12px;
+    }
+
+    .col-date {
+        width: 20%;
+    }
+
+    .col-content {
+        width: 30%;
+    }
+
+    .col-payment {
+        width: 25%;
+        text-align: right;
+        padding-right: 12px !important;
+    }
+
+    .col-points {
+        width: 25%;
+        text-align: right;
+        color: #ef8989;
+        font-weight: 700;
+    }
+
+    .history-table th.col-payment,
+    .history-table th.col-points {
+        text-align: right;
+    }
+
+    .history-table tr:not(:last-child) {
+        border-bottom: 1px solid #eee;
+    }
+
+    .detail-actions {
+        display: flex;
+        justify-content: center;
+        margin-top: 14px;
+    }
+
+    .back-btn {
+        min-width: 104px;
+        height: 36px;
+        border-radius: 10px;
+        background: #ef8989;
+        color: #fff;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+    }
+</style>
+
+<div class="customer-page is-muted">
+    <div class="customer-container">
+        <div class="search-filter-bar">
+            <form method="get" class="customer-search-form">
+                <div class="filter-input-wrapper">
+                    <input type="text" name="q" value="{{ query }}" placeholder="Nhập tên, mã khách hàng, tên đăng nhập hoặc địa chỉ">
+                </div>
+                <button type="submit" class="search-btn-icon" aria-label="Tìm kiếm khách hàng">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+            </form>
+            <a href="{% url 'accounts:customer_create' %}" class="add-customer-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Thêm khách hàng
+            </a>
+        </div>
+
+        <div class="customer-table-shell">
+            <table class="customer-table">
+                <thead>
+                    <tr>
+                        <th style="width: 72px;">STT</th>
+                        <th>Tên khách hàng</th>
+                        <th>Mã khách hàng</th>
+                        <th>Số điện thoại</th>
+                        <th>Địa chỉ</th>
+                        <th style="width: 180px;">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in customers %}
+                    <tr>
+                        <td><a class="row-link" href="{% url 'accounts:customer_detail' item.code %}">{{ item.stt }}</a></td>
+                        <td class="customer-name"><a class="row-link" href="{% url 'accounts:customer_detail' item.code %}">{{ item.name }}</a></td>
+                        <td><a class="row-link" href="{% url 'accounts:customer_detail' item.code %}">{{ item.code }}</a></td>
+                        <td><a class="row-link" href="{% url 'accounts:customer_detail' item.code %}">{{ item.phone }}</a></td>
+                        <td><a class="row-link" href="{% url 'accounts:customer_detail' item.code %}">{{ item.address }}</a></td>
+                        <td>
+                            <div class="action-icons">
+                                <a href="{% url 'accounts:customer_edit' item.code %}">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                                    </svg>
+                                </a>
+                                <button type="button">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="info-modal-overlay">
+    <div class="info-modal-card">
+        <div class="info-header">Thông tin khách hàng</div>
+
+        <div class="info-body">
+            <div class="profile-section">
+                <div class="profile-avatar">{{ customer.avatar_text }}</div>
+                <div class="profile-details">
+                    <label>Mã khách hàng:</label> <span>{{ customer.code }}</span>
+                    <label>Tên khách hàng:</label> <span>{{ customer.name }}</span>
+                    <label>Số điện thoại:</label> <span>{{ customer.phone }}</span>
+                    <label>Địa chỉ:</label> <span>{{ customer.address }}</span>
+                    <label>Tổng điểm:</label> <span>{{ customer.point_total }}</span>
+                </div>
+            </div>
+
+            <div class="history-section">
+                <div class="history-title">Lịch sử mua hàng</div>
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th class="col-date">Ngày</th>
+                            <th class="col-content">Nội dung</th>
+                            <th class="col-payment">Thanh toán</th>
+                            <th class="col-points">Điểm tích lũy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in purchase_history %}
+                        <tr>
+                            <td class="col-date">{{ item.date }}</td>
+                            <td class="col-content">{{ item.content }}</td>
+                            <td class="col-payment">{{ item.payment }}</td>
+                            <td class="col-points">{{ item.points }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">Chưa có lịch sử mua hàng trong cơ sở dữ liệu.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="detail-actions">
+                <a href="{% url 'accounts:customer_list' %}" class="back-btn">Quay lại</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

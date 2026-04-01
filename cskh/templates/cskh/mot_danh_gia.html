@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Chi tiết một đánh giá - Salavi{% endblock %}
+
+
+{% block content %}
+<style>
+    .single-review-container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: white;
+        padding: 40px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        min-height: 80vh;
+        border: 1px solid #f0f0f0;
+    }
+   
+    .back-link {
+        color: #888;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: 500;
+        display: inline-block;
+        margin-bottom: 40px;
+    }
+    .back-link:hover {
+        color: #555;
+    }
+   
+    .review-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 5px;
+    }
+   
+    .reviewer-info-left {
+        display: flex;
+        gap: 15px;
+    }
+   
+    .review-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #F38D91;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+   
+    .reviewer-details {
+        margin-top: 2px;
+    }
+    .reviewer-name {
+        font-weight: 600;
+        font-size: 18px;
+        color: #222;
+        margin-bottom: 4px;
+    }
+    .product-name-small {
+        color: #888;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+    .review-stars {
+        color: #FFD700;
+        font-size: 22px;
+        letter-spacing: 2px;
+    }
+    .review-stars .empty {
+        color: #e0e0e0;
+    }
+   
+    .review-date {
+        color: #aaa;
+        font-size: 15px;
+        margin-top: 10px;
+    }
+   
+    .review-text {
+        font-size: 16px;
+        color: #333;
+        line-height: 1.6;
+        margin: 25px 0 15px 0;
+    }
+   
+    .review-helpful {
+        color: #D3A74A;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 30px;
+    }
+   
+    .big-attached-image {
+        max-width: 100%;
+        max-height: 600px;
+        border-radius: 8px;
+        object-fit: contain;
+        display: block;
+        margin-top: 10px;
+    }
+   
+</style>
+
+
+<div class="single-review-container">
+    <a href="{% url 'cskh:chi_tiet_danh_gia' danh_gia.MaSP.MaSP %}" class="back-link">&lt; Quay lại</a>
+   
+    <div class="review-header-row">
+        <div class="reviewer-info-left">
+            <div class="review-avatar">
+                {{ danh_gia.MaKH.HoTen|make_list|first }}
+            </div>
+            <div class="reviewer-details">
+                <div class="reviewer-name">{{ danh_gia.MaKH.HoTen }}</div>
+                <div class="product-name-small">{{ danh_gia.MaSP.TenSP }}</div>
+                <div class="review-stars">
+                    {% for i in "12345"|make_list %}
+                        {% if forloop.counter <= danh_gia.SoSao %}
+                            ★
+                        {% else %}
+                            <span class="empty">★</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="review-date">{{ danh_gia.NgayDanhGia|date:"d/m/Y" }}</div>
+    </div>
+   
+    <div class="review-text">
+        {{ danh_gia.NoiDung }}
+    </div>
+   
+    <div class="review-helpful">👍 12 người thấy hữu ích</div>
+   
+    {% if danh_gia.HinhAnh %}
+        <img src="{{ danh_gia.HinhAnh.url }}" class="big-attached-image" alt="Hình ảnh đánh giá">
+    {% endif %}
+
+
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const navLinks = document.querySelectorAll('.nav-container .nav a');
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.textContent.trim() === 'Đánh giá') {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+
+

@@ -1,0 +1,16 @@
+{% extends 'base.html' %} 
+<!-- Cú pháp trên để kế thừa header, footer từ thư mục dùng chung -->
+
+{% block title %}Đăng nhập - Nhóm 4{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <h2>Màn hình Đăng nhập do bạn A (Phụ trách Accounts) làm</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" placeholder="Tên đăng nhập">
+        <input type="password" placeholder="Mật khẩu">
+        <button type="submit">Đăng nhập</button>
+    </form>
+</div>
+{% endblock %}

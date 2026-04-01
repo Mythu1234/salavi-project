@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Đánh giá Sản phẩm - Salavi{% endblock %}
+
+
+{% block content %}
+<style>
+    .review-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        background-color: #ffffff;
+    }
+
+
+    .page-title {
+        color: #F38D91;
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-left: 10px;
+    }
+
+
+    .product-list {
+        background: #fff;
+        border-radius: 12px;
+        border: 1px solid #ebebeb;
+        padding: 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.02);
+    }
+
+
+    .product-item {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+
+    .product-item:last-child {
+        border-bottom: none;
+    }
+
+
+    .product-img {
+        width: 80px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-right: 30px;
+        background-color: #f7f7f7;
+    }
+
+
+    .product-info {
+        flex: 1;
+    }
+
+
+    .product-code {
+        color: #888;
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+
+
+    .product-name {
+        color: #333;
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
+
+
+    .product-price {
+        color: #F38D91;
+        font-size: 18px;
+        font-weight: 600;
+        font-style: italic;
+    }
+
+
+    .btn-view-review {
+        background-color: #F38D91;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+
+    .btn-view-review:hover {
+        opacity: 0.8;
+    }
+
+
+    /* Icon chat nổi */
+    .floating-chat {
+        position: fixed;
+        bottom: 40px;
+        right: 40px;
+        width: 60px;
+        height: 60px;
+        background-color: #f7b2b5;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        z-index: 100;
+        border: 2px solid #555;
+    }
+
+
+    .floating-chat svg {
+        color: #333;
+        width: 30px;
+        height: 30px;
+    }
+</style>
+
+
+<div class="review-container">
+    <h1 class="page-title">Đánh giá sản phẩm</h1>
+
+
+    <div class="product-list">
+        {% for sp in danh_sach_sp %}
+        <div class="product-item">
+            {% if sp.HinhAnh %}
+            <img src="{{ sp.HinhAnh.url }}" alt="{{ sp.TenSP }}" class="product-img">
+            {% else %}
+            <div class="product-img" style="display:flex; align-items:center; justify-content:center; color:#999; font-size:12px; background: #fdf2f2;">No Image</div>
+            {% endif %}
+
+
+            <div class="product-info">
+                <div class="product-code">{{ sp.MaSP }}</div>
+                <div class="product-name">{{ sp.TenSP }}</div>
+                <div class="product-price">{{ sp.Gia|floatformat:0 }}đ</div>
+            </div>
+
+
+            <!-- Tạm thời trỏ href #, sẽ xử lý URL khi click Xem đánh giá -->
+            <a href="{% url 'cskh:chi_tiet_danh_gia' sp.MaSP %}" class="btn-view-review">Xem Đánh giá</a>
+        </div>
+        {% empty %}
+        <div style="text-align: center; padding: 40px; color: #777;">
+            Chưa có sản phẩm nào.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<!-- Nút Chat nổi -->
+<div class="floating-chat">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path
+            d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+        </path>
+        <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
+        <circle cx="8" cy="12" r="1.5" fill="currentColor"></circle>
+        <circle cx="16" cy="12" r="1.5" fill="currentColor"></circle>
+    </svg>
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const navLinks = document.querySelectorAll('.nav-container .nav a');
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.textContent.trim() === 'Đánh giá') {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+{% endblock %}
+

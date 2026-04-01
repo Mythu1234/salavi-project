@@ -1,0 +1,122 @@
+{% extends 'products/product_list.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Giữ nguyên nội dung danh sách phía sau mờ đi -->
+{{ block.super }}
+
+<style>
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.4); /* Overlay tối nhẹ giống thiết kế */
+        backdrop-filter: blur(2px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        box-sizing: border-box;
+    }
+
+    .delete-modal-content {
+        background-color: #fff;
+        width: 480px;
+        max-width: 90%;
+        border-radius: 16px;
+        padding: 35px 40px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        color: #333;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    .delete-icon {
+        width: 50px;
+        height: 50px;
+        margin: 0 auto 15px;
+        border-radius: 50%;
+        border: 2px solid #ef6262; /* Màu viền đỏ cam cho icon !! */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #ef6262;
+    }
+
+    .delete-title {
+        font-size: 22px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        color: #000;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    .delete-desc {
+        font-size: 17px;
+        color: #333;
+        margin-bottom: 25px;
+        line-height: 1.4;
+    }
+
+    .delete-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+
+    .btn-action {
+        padding: 12px 0;
+        border-radius: 6px;
+        border: none;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: none;
+        display: block;
+        width: 100%;
+        text-align: center;
+        transition: opacity 0.2s;
+    }
+
+    .btn-action:hover {
+        opacity: 0.85;
+    }
+
+    .btn-cancel {
+        background-color: #dcdcdc; /* Xanh xám nhạt */
+        color: #666;
+    }
+
+    .btn-confirm {
+        background-color: #ed8484; /* Hồng đỏ giống ảnh mẫu */
+        color: #fff;
+    }
+</style>
+
+<div class="modal-overlay">
+    <div class="delete-modal-content">
+        <!-- Vòng tròn bo viền chấm than -->
+        <div class="delete-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <line x1="12" y1="5" x2="12" y2="15"></line>
+                <circle cx="12" cy="19" r="1.5" fill="currentColor"></circle>
+            </svg>
+        </div>
+        
+        <div class="delete-title">XÁC NHẬN XÓA</div>
+        <div class="delete-desc">Bạn có chắc chắn muốn xoá sản phẩm này<br>không?</div>
+        
+        <form method="post" action="{% url 'products:delete_product' product.MaSP %}">
+            {% csrf_token %}
+            <div class="delete-actions">
+                <a href="{% url 'products:product_list' %}" class="btn-action btn-cancel">Huỷ</a>
+                <button type="submit" class="btn-action btn-confirm">Đồng ý</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

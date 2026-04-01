@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block title %}Salavi – Quản lý đổi trả{% endblock %}
+
+{% block content %}
+<main class="main-container max-w-[1200px] mx-auto py-10 px-5 relative z-10">
+
+    <div class="flex flex-col md:flex-row justify-between items-end mb-10">
+        <div class="flex items-center gap-4">
+            <div class="w-14 h-14 bg-[#f2a5a4] rounded-2xl flex items-center justify-center text-white text-2xl shadow-sm">
+                <i class="fas fa-home"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Quản lý đổi - trả</h1>
+                <p class="text-gray-500 text-sm mt-1">Quản lý và chăm sóc khách hàng</p>
+            </div>
+        </div>
+
+        <div class="flex gap-3 mt-6 md:mt-0">
+            <button class="px-6 py-2 bg-[#fbe7e6] text-[#e58f8b] font-semibold rounded-xl text-sm border border-[#f5d5d4] shadow-sm">Tất cả</button>
+            <button class="px-6 py-2 bg-[#f8f9fa] text-gray-600 font-medium rounded-xl text-sm border border-gray-200 hover:bg-gray-100 transition shadow-sm">Chưa duyệt</button>
+            <button class="px-6 py-2 bg-[#f8f9fa] text-gray-600 font-medium rounded-xl text-sm border border-gray-200 hover:bg-gray-100 transition shadow-sm">Đã duyệt</button>
+            <button class="px-6 py-2 bg-[#f8f9fa] text-gray-600 font-medium rounded-xl text-sm border border-gray-200 hover:bg-gray-100 transition shadow-sm">Từ chối</button>
+        </div>
+    </div>
+
+    <!-- DANH SÁCH MÃ ĐƠN -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        {% for item in doitra_list %}
+        
+        <!-- Khối thẻ Đổi trả -->
+        <div onclick="openModal('{{ forloop.counter }}')" class="bg-white rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.03)] border border-gray-100 relative overflow-hidden flex flex-col h-full cursor-pointer hover:shadow-md transition">
+            <div class="absolute top-0 left-0 right-0 h-2 bg-[#e83b40]"></div>
+            
+            <div class="p-6 pt-7 flex-1">
+                <div class="flex justify-between items-start mb-6">
+                    <div class="w-12 h-12 bg-[#ffe8e8] text-[#ff7b7b] rounded-full flex items-center justify-center text-xl">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    
+                    {% if item.status_code == 'DONE' or item.TrangThai == 'DONE' or item.TrangThai == 'Đã xử lý' %}
+                        <span class="px-4 py-1.5 rounded-full text-[13px] font-semibold bg-[#8ce39c] text-white">Đã xử lý</span>
+                    {% elif item.status_code == 'PENDING' or item.TrangThai == 'PENDING' or item.TrangThai == 'Chờ xử lý' %}
+                        <span class="px-4 py-1.5 rounded-full text-[13px] font-semibold bg-[#fef0b3] text-[#cf9b17]">Chờ xử lý</span>
+                    {% elif item.status_code == 'REJECT' or item.TrangThai == 'REJECT' or item.TrangThai == 'Từ chối' %}
+                        <span class="px-4 py-1.5 rounded-full text-[13px] font-semibold bg-[#fff] border border-[#ff8e91] text-[#e83b40]">Từ chối</span>
+                    {% else %}
+                        <span class="px-4 py-1.5 rounded-full text-[13px] font-semibold bg-[#f8f9fa] text-gray-500">{{ item.status_code|default:item.TrangThai }}</span>
+                    {% endif %}
+                </div>
+                
+                <ul class="space-y-3 text-[15px] text-[#2b2b2b] font-medium">
+                    <li class="flex items-center gap-3"><i class="far fa-clipboard text-gray-700 w-4 text-center"></i> Mã đơn: {{ item.id|default:item.MaCTDH.MaDonHang.MaDonHang }}</li>
+                    <li class="flex items-center gap-3"><i class="far fa-user text-gray-700 w-4 text-center"></i> Loại: {{ item.loai|default:item.get_LoaiYeuCau_display|default:item.LoaiYeuCau }}</li>
+                    <li class="flex items-center gap-3"><i class="far fa-calendar-alt text-gray-700 w-4 text-center"></i> Ngày gửi: {{ item.date|default:item.NgayYeuCau|date:"d/m/Y" }}</li>
+                </ul>
+            </div>
+            
+            <div class="border-t border-gray-100 h-14 bg-white"></div>
+        </div>
+
+        <!-- KHỐI POPUP CHI TIẾT (Bị ẩn) -->
+        <div id="modal-{{ forloop.counter }}" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+            
+            <!-- Nền đen che mờ -->
+            <div class="fixed inset-0 bg-black/40 backdrop-blur-[2px] transition-all" onclick="closeModal('{{ forloop.counter }}')"></div>
+            
+            <!-- Khung Modal -->
+            <div class="bg-white rounded-3xl overflow-hidden w-full max-w-[700px] shadow-2xl relative flex flex-col max-h-[90vh]">
+                <!-- Thanh Header Hồng -->
+                <div class="bg-[#ef8f8d] text-white p-5 text-center">
+                    <h1 class="text-2xl font-bold tracking-wide">Chi tiết yêu cầu đổi trả</h1>
+                </div>
+
+                <div class="p-6 space-y-6 flex-1 overflow-y-auto">
+                    
+                    <!-- Bảng Trạng thái Động màu sắc -->
+                    {% if item.status_code == 'DONE' or item.TrangThai == 'DONE' or item.TrangThai == 'Đã xử lý' %}
+                        <div class="bg-[#e9f7ea] py-3 rounded-xl text-center shadow-sm w-4/5 mx-auto border border-[#b2e5bc]">
+                            <p class="text-[#2b9044] text-sm mb-1">Trạng thái yêu cầu</p>
+                            <p class="text-[#2b9044] font-medium text-lg">Đã xử lý</p>
+                        </div>
+                    {% elif item.status_code == 'REJECT' or item.TrangThai == 'REJECT' or item.TrangThai == 'Từ chối' %}
+                        <div class="bg-[#fcf0f0] py-3 rounded-xl text-center shadow-sm w-4/5 mx-auto border border-[#f5babb]">
+                            <p class="text-[#e83b40] text-sm mb-1">Trạng thái yêu cầu</p>
+                            <p class="text-[#e83b40] font-medium text-lg">Từ chối</p>
+                        </div>
+                    {% else %}
+                        <div class="bg-[#fff9d2] py-3 rounded-xl text-center shadow-sm w-4/5 mx-auto border border-[#ffec8b]">
+                            <p class="text-[#f5a623] text-sm mb-1">Trạng thái yêu cầu</p>
+                            <p class="text-[#f5a623] font-medium text-lg">{{ item.status_code|default:item.TrangThai|default:"Chờ xử lý" }}</p>
+                        </div>
+                    {% endif %}
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <h3 class="text-[15px] font-bold mb-2 text-black">Thông tin khách hàng:</h3>
+                            <div class="border border-gray-400 rounded-lg p-4 space-y-2 h-[100px] flex flex-col justify-center">
+                                <p class="text-black text-[14px]">Khách hàng: {{ item.MaKH.HoTen|default:"Nguyễn Văn A" }}</p>
+                                <p class="text-black text-[14px]">SĐT: {{ item.MaKH.SDT|default:"0846166245" }}</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-[15px] font-bold mb-2 text-black">Thông tin sản phẩm:</h3>
+                            <div class="border border-gray-400 rounded-lg p-4 space-y-2 h-[100px] flex flex-col justify-center">
+                                <p class="text-black text-[14px]">Mã đơn: {{ item.id|default:item.MaCTDH.MaDonHang.MaDonHang }}</p>
+                                <p class="text-black text-[14px]">Ngày mua: {{ item.MaCTDH.MaDonHang.NgayDat|date:"d/m/Y"|default:"10/01/2021" }}</p>
+                                <p class="text-black text-[14px]">Ngày giao: {{ item.MaCTDH.MaDonHang.NgayGiao|date:"d/m/Y"|default:"15/01/2021" }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch border-t border-gray-100 pt-5">
+                        <div>
+                            <h3 class="text-[15px] font-bold mb-2 text-black">Hình ảnh minh chứng</h3>
+                            <div class="overflow-hidden flex items-center justify-center border border-gray-200 rounded-md">
+                                {% if item.HinhAnh %}
+                                    <img src="/media/doitra_images/{{ item.HinhAnh }}" onerror="this.onerror=null; this.src='{{ item.HinhAnh.url }}';" alt="Minh chứng" class="w-full h-[220px] object-cover opacity-95">
+                                {% else %}
+                                    <img src="https://i.pinimg.com/736x/21/cf/3e/21cf3ee85d9eb39589d89ab57930ef58.jpg" alt="Minh chứng" class="w-full h-[220px] object-cover opacity-95">
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col h-full">
+                            <h3 class="text-[15px] font-bold mb-2 text-black">Chi tiết yêu cầu</h3>
+                            <div class="border border-gray-400 rounded-lg p-4 space-y-2 flex-1">
+                                <p class="text-black text-[14px]">Loại yêu cầu: {{ item.loai|default:item.get_LoaiYeuCau_display|default:item.LoaiYeuCau }}</p>
+                                <p class="text-black text-[14px]">Lý do: {{ item.LyDo|default:"Sản phẩm không giống mô tả" }}</p>
+                                <p class="text-black text-[14px]">Ngày gửi: {{ item.date|default:item.NgayYeuCau|date:"d/m/Y" }}</p>
+                            </div>
+                            
+                            <h3 class="text-[15px] font-bold mt-4 mb-2 text-black">Ghi chú xử lý:</h3>
+                            <div class="w-full">
+                                <input type="text" placeholder="Ghi chú" class="w-full border border-gray-300 rounded-xl p-2.5 focus:outline-none focus:border-gray-500 text-[14px]">
+                            </div>
+
+                            <div class="flex justify-between items-center mt-4 gap-2">
+                                <button type="button" onclick="actionSuccess('approve', '{{ forloop.counter }}')" class="px-4 py-2 bg-[#81b979] text-white font-semibold text-[14px] rounded-full hover:bg-green-600 transition shadow-sm w-full border border-transparent">Duyệt</button>
+                                <button type="button" onclick="actionSuccess('reject', '{{ forloop.counter }}')" class="px-4 py-2 bg-[#f05c2f] text-white font-semibold text-[14px] rounded-full hover:bg-red-600 transition shadow-sm w-full border border-transparent">Từ chối</button>
+                                <button type="button" onclick="closeModal('{{ forloop.counter }}')" class="px-4 py-2 bg-white text-black font-semibold text-[14px] rounded-full border border-gray-400 hover:bg-gray-100 transition shadow-sm w-full">Huỷ</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- ================== THÔNG BÁO NHANH (TOAST ALERTS) ================== -->
+    <!-- Khi Duyệt Thành công (Background kem trắng) -->
+    <div id="toast-approve" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-black/30 backdrop-blur-[2px] transition-all pointer-events-none"></div>
+        <div class="bg-[#f6f6f6] rounded-3xl px-10 py-8 shadow-2xl relative z-10 flex flex-col items-center pointer-events-auto border border-gray-200 transform transition-all scale-100">
+            <div class="w-[50px] h-[50px] bg-[#6cc16b] rounded-full flex items-center justify-center mb-4 shadow-sm">
+                <i class="fas fa-check text-white text-2xl"></i>
+            </div>
+            <h2 class="text-[17px] font-bold text-[#333] text-center w-[220px] leading-snug tracking-tight">Duyệt yêu cầu đổi – trả<br>thành công!!</h2>
+        </div>
+    </div>
+
+    <!-- Khi Từ chối Thành công (Background kem hồng) -->
+    <div id="toast-reject" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-black/30 backdrop-blur-[2px] transition-all pointer-events-none"></div>
+        <div class="bg-[#fdf2f1] rounded-3xl px-10 py-8 shadow-2xl relative z-10 flex flex-col items-center pointer-events-auto border border-[#fadada] transform transition-all scale-100">
+            <div class="w-[50px] h-[50px] bg-[#6cc16b] rounded-full flex items-center justify-center mb-4 shadow-sm">
+                <i class="fas fa-check text-white text-2xl"></i>
+            </div>
+            <h2 class="text-[17px] font-bold text-[#333] text-center w-[220px] leading-snug tracking-tight">Từ chối yêu cầu đổi – trả<br>thành công!!</h2>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    function openModal(id) {
+        document.getElementById('modal-' + id).classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; 
+    }
+
+    function closeModal(id) {
+        document.getElementById('modal-' + id).classList.add('hidden');
+        document.body.style.overflow = 'auto'; 
+    }
+
+    function actionSuccess(type, id) {
+        // Đóng ngay Popup Chi tiết
+        closeModal(id);
+        
+        // Mở Bảng thông báo thành công màu sắc tương ứng
+        const toast = document.getElementById('toast-' + type);
+        toast.classList.remove('hidden');
+        
+        // Tự động tắt phăng đi sau 2.5 giây (Tiện lợi UX)
+        setTimeout(() => {
+            toast.classList.add('hidden');
+        }, 2200);
+    }
+</script>
+{% endblock %}

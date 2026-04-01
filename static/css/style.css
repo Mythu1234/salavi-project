@@ -1,0 +1,52 @@
+/* Reset & Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+body { background: #fafafa; color: #333; }
+.header-top-container { background: #fff; border-bottom: 1px solid #f0f0f0; }
+.header-top { max-width: 1440px; margin: 0 auto; padding: 16px 40px; display: flex; align-items: center; justify-content: space-between; }
+.logo { font-size: 24px; font-weight: 700; color: #e58f8b; letter-spacing: 1px; }
+.search-box { flex: 1; max-width: 500px; margin: 0 40px; }
+.search-box input { width: 100%; padding: 10px 20px; border-radius: 20px; border: 1px solid #eaeaea; background: #fdfdfd; color: #666; outline: none; }
+.header-icons { display: flex; align-items: center; gap: 24px; }
+.user-btn { display: flex; align-items: center; gap: 8px; padding: 6px 16px; border: 1px solid #eaeaea; border-radius: 20px; font-size: 14px; font-weight: 500; cursor: pointer; }
+.icon-list { display: flex; gap: 16px; color: #333; }
+.header-nav { background: #e58f8b; color: #fff; }
+.nav-container { max-width: 1440px; margin: 0 auto; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; }
+.nav { display: flex; justify-content: center; gap: 40px; flex: 1; }
+.nav a { color: #fff; text-decoration: none; font-size: 14px; font-weight: 500; padding: 14px 0; opacity: 0.9; cursor: pointer; }
+.nav a.active { font-weight: 800; color: #2b2b2b; opacity: 1; }
+.notification-bell { position: relative; padding: 14px 0; }
+.notification-bell .badge { position: absolute; top: 8px; right: -4px; background: #d32f2f; color: #fff; font-size: 10px; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.dashboard { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+.title { margin-bottom: 32px; }
+.title h1 { font-size: 24px; color: #2b2b2b; }
+.title p { margin-top: 6px; color: #888; font-size: 14px; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.stat-card { background: #fdf5f4; border-radius: 12px; padding: 24px 20px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); display: flex; gap: 16px; align-items: center; border: 1px solid #f9ebea; }
+.stat-icon { width: 40px; height: 40px; border-radius: 50%; background: #e58f8b; color: #fff; display: flex; align-items: center; justify-content: center; opacity: 0.8; }
+.stat-icon svg { width: 20px; height: 20px; fill: currentColor; }
+.stat-info h4 { font-size: 13px; color: #666; font-weight: 500; }
+.stat-info .number { font-size: 28px; font-weight: 600; color: #333; margin-top: 4px; }
+.content { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px; }
+.box { background: #fff; border-radius: 16px; padding: 28px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); }
+.box h2 { font-size: 16px; margin-bottom: 24px; color: #2b2b2b; }
+.chat-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid #f5f5f5; align-items: flex-start; }
+.chat-item:last-child { border-bottom: none; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; background: #d88c89; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0; }
+.chat-content { flex: 1; }
+.chat-name { font-weight: 600; font-size: 14px; color: #333; }
+.chat-preview { font-size: 13px; color: #888; margin-top: 6px; }
+.chat-status { font-size: 11px; padding: 6px 12px; border-radius: 20px; font-weight: 500; }
+.unread { background: #fce8e6; color: #d88c89; }
+.replied { background: #e6f4ea; color: #5c9970; }
+.care-item { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid #f5f5f5; }
+.care-item:last-child { border-bottom: none; }
+.care-icon { width: 36px; height: 36px; border-radius: 50%; background: #fdf5f4; display: flex; align-items: center; justify-content: center; color: #888; }
+.care-icon svg { width: 16px; height: 16px; fill: currentColor; }
+.care-text { font-size: 14px; font-weight: 500; color: #333; }
+.care-text span { display: block; font-size: 12px; color: #999; margin-top: 4px; font-weight: 400; }
+.actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 32px; }
+.action-btn { background: #d88c89; color: #fff; padding: 12px; text-align: center; border-radius: 10px; font-size: 13px; font-weight: 500; cursor: pointer; transition: opacity 0.2s; }
+.action-btn:hover { opacity: 0.9; }
+.support-btn { position: fixed; right: 40px; bottom: 40px; width: 64px; height: 64px; border-radius: 50%; background: #ecc2c0; border: 2px solid #333; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.support-btn svg { width: 32px; height: 32px; fill: none; stroke: #333; stroke-width: 1.5; }
