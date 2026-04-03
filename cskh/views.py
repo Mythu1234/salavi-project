@@ -90,10 +90,10 @@ def diem_tich_luy_view(request):
     phone = request.GET.get('phone', '')
     if phone:
         # TenDangNhap lưu số điện thoại theo như dữ liệu template yêu cầu
-        danh_sach_tich_diem = TichDiem.objects.select_related('MaKH', 'MaKH__MaTK').filter(
-            MaKH__MaTK__TenDangNhap__icontains=phone)
+        danh_sach_tich_diem = TichDiem.objects.select_related('MaKH', 'MaKH__user').filter(
+            MaKH__user__username__icontains=phone)
     else:
-        danh_sach_tich_diem = TichDiem.objects.select_related('MaKH', 'MaKH__MaTK').all()
+        danh_sach_tich_diem = TichDiem.objects.select_related('MaKH', 'MaKH__user').all()
 
     context = {
         'danh_sach_tich_diem': danh_sach_tich_diem
@@ -103,7 +103,7 @@ def diem_tich_luy_view(request):
 
 def api_chi_tiet_tich_diem(request, ma_kh):
     try:
-        td = TichDiem.objects.select_related('MaKH', 'MaKH__MaTK').get(MaKH__MaKH=ma_kh)
+        td = TichDiem.objects.select_related('MaKH', 'MaKH__user').get(MaKH__MaKH=ma_kh)
         lich_su = LichSuTichDiem.objects.filter(MaKH__MaKH=ma_kh).order_by('NgayThucHien')
 
         ls_data = []
@@ -123,7 +123,7 @@ def api_chi_tiet_tich_diem(request, ma_kh):
         data = {
             'ho_ten': td.MaKH.HoTen,
             'ma_kh': td.MaKH.MaKH,
-            'sdt': td.MaKH.MaTK.TenDangNhap,
+            'sdt': td.MaKH.user.username,
             'tong_diem': td.TongDiem,
             'lich_su': ls_data
         }

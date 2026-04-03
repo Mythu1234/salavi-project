@@ -11,7 +11,7 @@ class SanPham(models.Model):
     def __str__(self):
         return self.TenSP
 
-class ChiTietSanPham(models.Model):
+class BienTheSanPham(models.Model):
     Size_CHOICES = [
         ('SX', 'SX'),
         ('S', 'S'),
@@ -20,14 +20,14 @@ class ChiTietSanPham(models.Model):
         ('XL', 'XL'),
         ('XXL','XXL')
     ]
-    MaCTSP = models.CharField(max_length=10, primary_key=True)
+    MaBTSP = models.CharField(max_length=10, primary_key=True)
     MaSP = models.ForeignKey(SanPham, on_delete=models.CASCADE)
     MauSac = models.CharField(max_length=50)
     Size = models.CharField(max_length=20, choices=Size_CHOICES)
     SoLuongTon = models.IntegerField()
 
     def __str__(self):
-        return self.MaCTSP
+        return self.MaBTSP
 
 class DanhGia(models.Model):
     MaDanhGia = models.CharField(max_length=10, primary_key=True)
