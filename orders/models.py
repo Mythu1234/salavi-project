@@ -12,7 +12,7 @@ class DonHang(models.Model):
 
     MaDonHang = models.CharField(max_length=10, primary_key=True)
     MaKH = models.ForeignKey(KhachHang, on_delete=models.CASCADE)
-    MaKM = models.ForeignKey(KhuyenMai, on_delete=models.SET_NULL, null=True)
+    MaKM = models.ForeignKey(KhuyenMai, on_delete=models.SET_NULL, null=True, blank=True)
     NgayDat = models.DateField()
     NgayGiao = models.DateField(null=True, blank=True)
     TongTien = models.DecimalField(max_digits=18, decimal_places=2)
