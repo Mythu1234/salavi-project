@@ -8,13 +8,13 @@ from .models import KhachHang
 
 
 def _get_customer_table_data(query=''):
-    customer_queryset = KhachHang.objects.select_related('MaTK').order_by('MaKH')
+    customer_queryset = KhachHang.objects.select_related('user').order_by('MaKH')
 
     if query:
         customer_queryset = customer_queryset.filter(
             Q(HoTen__icontains=query)
             | Q(MaKH__icontains=query)
-            | Q(MaTK__TenDangNhap__icontains=query)
+            | Q(user__username__icontains=query)
             | Q(DiaChi__icontains=query)
         )
 
@@ -23,7 +23,7 @@ def _get_customer_table_data(query=''):
             'stt': index,
             'name': customer.HoTen,
             'code': customer.MaKH,
-            'phone': customer.MaTK.TenDangNhap,
+            'phone': customer.user.username,
             'address': customer.DiaChi,
         }
         for index, customer in enumerate(customer_queryset, start=1)
@@ -72,7 +72,7 @@ def customer_create_view(request):
 
 def customer_edit_view(request, customer_code):
     customer = get_object_or_404(
-        KhachHang.objects.select_related('MaTK'),
+        KhachHang.objects.select_related('user'),
         MaKH=customer_code,
     )
     context = _get_customer_table_data()
@@ -82,7 +82,7 @@ def customer_edit_view(request, customer_code):
         'customer_form': {
             'code': customer.MaKH,
             'name': customer.HoTen,
-            'phone': customer.MaTK.TenDangNhap,
+            'phone': customer.user.username,
             'address': customer.DiaChi,
         },
         'save_label': 'Lưu',
@@ -92,7 +92,7 @@ def customer_edit_view(request, customer_code):
 
 def customer_delete_view(request, customer_code):
     customer = get_object_or_404(
-        KhachHang.objects.select_related('MaTK'),
+        KhachHang.objects.select_related('user'),
         MaKH=customer_code,
     )
     context = _get_customer_table_data()
@@ -107,7 +107,7 @@ def customer_delete_view(request, customer_code):
 
 def customer_detail_view(request, customer_code):
     customer = get_object_or_404(
-        KhachHang.objects.select_related('MaTK'),
+        KhachHang.objects.select_related('user'),
         MaKH=customer_code,
     )
     point_total = (
@@ -150,7 +150,7 @@ def customer_detail_view(request, customer_code):
         'customer': {
             'code': customer.MaKH,
             'name': customer.HoTen,
-            'phone': customer.MaTK.TenDangNhap,
+            'phone': customer.user.username,
             'address': customer.DiaChi,
             'avatar_text': (customer.HoTen[:1] or 'K').upper(),
             'point_total': point_total,

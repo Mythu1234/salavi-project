@@ -60,47 +60,15 @@
     }
 
 
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: #f7f3f3; /* Màu xám kem nền cho hàng lẻ giống thiết kế */
+    /* ===== CẤU HÌNH BẢNG DÙNG CHUNG ===== */
+    .table-uudai tbody tr:nth-child(even) {
+        background-color: #f2efeb; 
     }
-
-
-    .data-table thead th {
-        background-color: #EF8989;
-        color: white;
-        padding: 15px;
-        font-weight: 500;
-        border-right: 1px solid rgba(255,255,255,0.4);
+    .table-uudai tbody tr:nth-child(odd) {
+        background-color: #ffffff;
     }
-
-
-    .data-table thead th:last-child {
-        border-right: none;
-    }
-
-
-    .data-table td {
-        padding: 15px;
-        text-align: center;
-        color: #444;
-        border-bottom: 2px solid #ffffff; /* Viền trắng mảnh cách hàng */
-    }
-
-
-    .bg-light {
-        background-color: #ffffff; /* Nền trắng cho hàng chẵn */
-    }
-
-
-    .data-table tbody tr {
-        cursor: pointer;
-    }
-
-
-    .data-table tbody tr:hover {
-        background-color: #ffe8e8;
+    .table-uudai th:not(:last-child) {
+        border-right: 1px solid rgba(255, 255, 255, 0.7);
     }
 
 
@@ -417,32 +385,38 @@
     </div>
 
 
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th style="width: 60px;">STT</th>
-                <th>Tên khách hàng</th>
-                <th>Mã khách hàng</th>
-                <th>Số điện thoại</th>
-                <th>Điểm tích lũy</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for tich_diem in danh_sach_tich_diem %}
-            <tr class="{% cycle 'bg-light' '' %}" onclick="openModal('{{ tich_diem.MaKH.MaKH }}')" id="row-{{ tich_diem.MaKH.MaKH }}">
-                <td>{{ forloop.counter }}</td>
-                <td>{{ tich_diem.MaKH.HoTen }}</td>
-                <td>{{ tich_diem.MaKH.MaKH }}</td>
-                <td>{{ tich_diem.MaKH.MaTK.TenDangNhap }}</td>
-                <td>{{ tich_diem.TongDiem }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5">Chưa có dữ liệu tích điểm nào.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <!-- BẢNG BIỂU -->
+    <div class="w-full shadow-sm overflow-hidden rounded-md border border-gray-100">
+        <table class="w-full text-center border-collapse table-uudai">
+            <thead class="bg-[#e58f8b] text-white">
+                <tr>
+                    <th class="py-4 font-bold text-[15px] w-24">STT</th>
+                    <th class="py-4 font-bold text-[15px]">Tên khách hàng</th>
+                    <th class="py-4 font-bold text-[15px]">Mã khách hàng</th>
+                    <th class="py-4 font-bold text-[15px]">Số điện thoại</th>
+                    <th class="py-4 font-bold text-[15px]">Điểm tích lũy</th>
+                </tr>
+            </thead>
+            <tbody class="text-[#2b2b2b] text-[17px]">
+                {% for tich_diem in danh_sach_tich_diem %}
+                <tr class="hover:bg-[#fceeed] transition cursor-pointer group" onclick="openModal('{{ tich_diem.MaKH.MaKH }}')" id="row-{{ tich_diem.MaKH.MaKH }}">
+                    <td class="py-5 font-medium">{{ forloop.counter }}</td>
+                    <td class="py-5">{{ tich_diem.MaKH.HoTen }}</td>
+                    <td class="py-5">{{ tich_diem.MaKH.MaKH }}</td>
+                    <td class="py-5">{{ tich_diem.MaKH.user.username }}</td>
+                    <td class="py-5">{{ tich_diem.TongDiem }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="py-10 text-gray-400">
+                        <i class="fas fa-box-open text-4xl mb-3"></i>
+                        <p>Chưa có dữ liệu tích điểm nào.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 

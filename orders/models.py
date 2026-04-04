@@ -1,6 +1,6 @@
 from django.db import models
 from accounts.models import KhachHang, NhanVien
-from products.models import ChiTietSanPham
+from products.models import BienTheSanPham
 from cskh.models import KhuyenMai
 
 class DonHang(models.Model):
@@ -23,15 +23,17 @@ class DonHang(models.Model):
         return self.MaDonHang
 
 class ChiTietDonHang(models.Model):
-    MaCTDH = models.CharField(max_length=10, primary_key=True)
     MaDonHang = models.ForeignKey(DonHang, on_delete=models.CASCADE)
-    MaCTSP = models.ForeignKey(ChiTietSanPham, on_delete=models.CASCADE)
+    MaBTSP = models.ForeignKey(BienTheSanPham, on_delete=models.CASCADE)
     SoLuong = models.IntegerField(default=0)
     DonGia = models.DecimalField(max_digits=18, decimal_places=2)
     ThanhTien = models.DecimalField(max_digits=18, decimal_places=2)
 
+    class Meta:
+        unique_together = (('MaDonHang', 'MaBTSP'),)
+
     def __str__(self):
-        return self.MaCTDH
+        return f"{self.MaDonHang} - {self.MaBTSP}"
 
 class DoiTra(models.Model):
     LOAI_CHOICES = [

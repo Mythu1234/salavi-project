@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import KhachHang
+from accounts.models import KhachHang, NhanVien
 
 class KhuyenMai(models.Model):
     MaKM = models.CharField(max_length=10, primary_key=True)
@@ -50,9 +50,11 @@ class HoiThoaiTuVan(models.Model):
 class TinNhanTuVan(models.Model):
     MaTinNhan = models.CharField(max_length=10, primary_key=True)
     MaHoiThoai = models.ForeignKey(HoiThoaiTuVan, on_delete=models.CASCADE)
-    NguoiGui = models.CharField(max_length=50)
+    MaNV = models.ForeignKey(NhanVien, on_delete=models.SET_NULL, null=True, blank=True)
     NoiDung = models.CharField(max_length=200)
     ThoiGianGui = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.MaTinNhan
+
+

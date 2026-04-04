@@ -106,56 +106,15 @@
         box-shadow: 0 12px 20px rgba(239, 137, 137, 0.22);
     }
 
-    .customer-table-shell {
-        overflow: hidden;
-        background: #fff;
+    /* ===== CẤU HÌNH BẢNG DÙNG CHUNG ===== */
+    .table-uudai tbody tr:nth-child(even) {
+        background-color: #f2efeb; 
     }
-
-    .customer-table {
-        width: 100%;
-        border-collapse: collapse;
+    .table-uudai tbody tr:nth-child(odd) {
+        background-color: #ffffff;
     }
-
-    .customer-table thead tr {
-        background: #ef8989;
-        color: #fff;
-    }
-
-    .customer-table th {
-        padding: 14px 18px;
-        border-right: 1px solid rgba(255, 255, 255, 0.45);
-        font-size: 15px;
-        font-weight: 700;
-        text-align: center;
-    }
-
-    .customer-table th:last-child {
-        border-right: none;
-    }
-
-    .customer-table td {
-        padding: 18px 18px;
-        font-size: 16px;
-        color: #2f2f2f;
-        text-align: center;
-        transition: background 0.2s ease;
-    }
-
-    .customer-table tbody tr:nth-child(odd) {
-        background: #f2eded;
-    }
-
-    .customer-table tbody tr:nth-child(even) {
-        background: #fbf8f8;
-    }
-
-    .customer-table tbody tr:hover td {
-        background: #f8dede;
-    }
-
-    .customer-table td.customer-name {
-        text-align: left;
-        padding-left: 48px;
+    .table-uudai th:not(:last-child) {
+        border-right: 1px solid rgba(255, 255, 255, 0.7);
     }
 
     .row-link {
@@ -258,44 +217,40 @@
         </a>
     </div>
 
-    <div class="customer-table-shell">
-        <table class="customer-table">
-            <thead>
+    <!-- BẢNG BIỂU -->
+    <div class="w-full shadow-sm overflow-hidden rounded-md border border-gray-100">
+        <table class="w-full text-center border-collapse table-uudai">
+            <thead class="bg-[#e58f8b] text-white">
                 <tr>
-                    <th style="width: 72px;">STT</th>
-                    <th>Tên khách hàng</th>
-                    <th>Mã khách hàng</th>
-                    <th>Số điện thoại</th>
-                    <th>Địa chỉ</th>
-                    <th style="width: 180px;">Hành động</th>
+                    <th class="py-4 font-bold text-[15px] w-24">STT</th>
+                    <th class="py-4 font-bold text-[15px]">Tên khách hàng</th>
+                    <th class="py-4 font-bold text-[15px]">Mã khách hàng</th>
+                    <th class="py-4 font-bold text-[15px]">Số điện thoại</th>
+                    <th class="py-4 font-bold text-[15px]">Địa chỉ</th>
+                    <th class="py-4 font-bold text-[15px] w-40">Hành động</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-[#2b2b2b] text-[17px]">
                 {% for customer in customers %}
-                <tr>
-                    <td><a class="row-link" href="{% url 'accounts:customer_detail' customer.code %}">{{ customer.stt }}</a></td>
-                    <td class="customer-name"><a class="row-link" href="{% url 'accounts:customer_detail' customer.code %}">{{ customer.name }}</a></td>
-                    <td><a class="row-link" href="{% url 'accounts:customer_detail' customer.code %}">{{ customer.code }}</a></td>
-                    <td><a class="row-link" href="{% url 'accounts:customer_detail' customer.code %}">{{ customer.phone }}</a></td>
-                    <td><a class="row-link" href="{% url 'accounts:customer_detail' customer.code %}">{{ customer.address }}</a></td>
-                    <td>
-                        <div class="action-icons">
-                            <a href="{% url 'accounts:customer_edit' customer.code %}" aria-label="Chỉnh sửa {{ customer.name }}">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-                                </svg>
-                            </a>
-                            <button type="button" aria-label="Xóa {{ customer.name }}">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                                </svg>
-                            </button>
+                <tr class="hover:bg-[#fceeed] transition cursor-pointer group">
+                    <td class="py-5 font-medium"><a class="row-link block" href="{% url 'accounts:customer_detail' customer.code %}">{{ customer.stt }}</a></td>
+                    <td class="py-5"><a class="row-link block" href="{% url 'accounts:customer_detail' customer.code %}">{{ customer.name }}</a></td>
+                    <td class="py-5"><a class="row-link block" href="{% url 'accounts:customer_detail' customer.code %}">{{ customer.code }}</a></td>
+                    <td class="py-5"><a class="row-link block" href="{% url 'accounts:customer_detail' customer.code %}">{{ customer.phone }}</a></td>
+                    <td class="py-5"><a class="row-link block" href="{% url 'accounts:customer_detail' customer.code %}">{{ customer.address }}</a></td>
+                    <td class="py-5">
+                        <div class="flex justify-center items-center gap-6 text-xl">
+                            <a href="{% url 'accounts:customer_edit' customer.code %}" class="text-gray-700 hover:text-[#df8480] transition"><i class="fas fa-pencil-alt"></i></a>
+                            <button type="button" class="text-gray-700 hover:text-red-500 transition"><i class="far fa-trash-alt"></i></button>
                         </div>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="empty-state">Không tìm thấy khách hàng phù hợp trong cơ sở dữ liệu.</td>
+                    <td colspan="6" class="py-10 text-gray-400">
+                        <i class="fas fa-users text-4xl mb-3"></i>
+                        <p>Không tìm thấy khách hàng phù hợp trong cơ sở dữ liệu.</p>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
