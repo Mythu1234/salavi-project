@@ -1,5 +1,9 @@
+import re
 from django.db.models import Q
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 
 from cskh.models import LichSuTichDiem, TichDiem
 from orders.models import DonHang
@@ -34,11 +38,91 @@ def _get_customer_table_data(query=''):
     }
 
 
+def _generate_next_customer_code():
+    customers = KhachHang.objects.all()
+    max_num = 0
+    for c in customers:
+        if c.MaKH.startswith('KH'):
+            try:
+                num = int(c.MaKH[2:])
+                if num > max_num:
+                    max_num = num
+            except ValueError:
+                continue
+    return f"KH{max_num + 1:05d}"
+
+
 def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        try:
+            # 3a. Kiểm tra tài khoản tồn tại
+            if not User.objects.filter(username=username).exists():
+                messages.error(request, 'Tài khoản không tồn tại.', extra_tags='username')
+                return render(request, 'accounts/login/login.html')
+            
+            # 3b. Kiểm tra mật khẩu
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('cskh:dashboard')
+            else:
+                messages.error(request, 'Mật khẩu không chính xác.', extra_tags='password')
+                return render(request, 'accounts/login/login.html')
+                
+        except Exception:
+            # 3c. Xử lý lỗi hệ thống
+            messages.error(request, 'Hệ thống đang lỗi, không thể đăng nhập.')
+            return render(request, 'accounts/login/login.html')
+
     return render(request, 'accounts/login/login.html')
 
 
+def logout_view(request):
+    logout(request)
+    return redirect('accounts:login')
+
+
 def register_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        password_confirm = request.POST.get('password_confirm')
+
+        try:
+            # 3a. Kiểm tra tài khoản tồn tại
+            if User.objects.filter(username=username).exists():
+                messages.error(request, 'Tài khoản đã tồn tại. Vui lòng nhập lại', extra_tags='username')
+                return render(request, 'accounts/login/register.html')
+
+            # 3b. Kiểm tra tên đăng nhập không hợp lệ (số điện thoại gồm 10 số)
+            if not re.match(r'^\d{10}$', username):
+                messages.error(request, 'Tên đăng nhập không hợp lệ. Vui lòng nhập lại', extra_tags='username')
+                return render(request, 'accounts/login/register.html')
+
+            # 4a/5a. Kiểm tra mật khẩu (Hoa, thường, số, ký tự đặc biệt)
+            password_regex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&].*$'
+            if not re.match(password_regex, password):
+                messages.error(request, 'Mật khẩu không hợp lệ.', extra_tags='password')
+                return render(request, 'accounts/login/register.html')
+
+            # 5b. Mật khẩu xác nhận không khớp
+            if password != password_confirm:
+                messages.error(request, 'Mật khẩu xác nhận không khớp với mật khẩu', extra_tags='password_confirm')
+                return render(request, 'accounts/login/register.html')
+
+            # Tạo tài khoản
+            User.objects.create_user(username=username, password=password)
+            messages.success(request, 'Tạo tài khoản thành công')
+            return redirect('accounts:login')
+
+        except Exception:
+            # 6b. Hệ thống lỗi
+            messages.error(request, 'Hệ thống đang lỗi, không thể tạo tài khoản')
+            return render(request, 'accounts/login/register.html')
+
     return render(request, 'accounts/login/register.html')
 
 
@@ -55,15 +139,46 @@ def forgot_password_view(request):
 
 
 def customer_create_view(request):
+    if request.method == 'POST':
+        code = _generate_next_customer_code()
+        name = request.POST.get('name', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        address = request.POST.get('address', '').strip()
+        
+        # 8a. Nếu thông tin bắt buộc bị bỏ trống
+        if not name or not phone:
+            messages.error(request, 'Không được để trống thông tin', extra_tags='customer_form')
+            # Return same view with context to show form again
+        # 8b. Nếu số điện thoại không hợp lệ
+        elif not re.match(r'^\d{10}$', phone):
+            messages.error(request, 'Số điện thoại chưa hợp lệ', extra_tags='phone')
+        # Quy tắc: Số điện thoại không được trùng
+        elif User.objects.filter(username=phone).exists():
+            messages.error(request, 'Số điện thoại đã tồn tại', extra_tags='phone')
+        else:
+            try:
+                user = User.objects.create_user(username=phone, password='Salavi123@password') # Default password
+                KhachHang.objects.create(
+                    MaKH=code,
+                    user=user,
+                    HoTen=name,
+                    DiaChi=address
+                )
+                messages.success(request, 'Thêm khách hàng thành công')
+                return redirect('accounts:customer_list')
+            except Exception:
+                messages.error(request, 'Không thể thêm khách hàng, vui lòng thử lại sau', extra_tags='system')
+
     context = _get_customer_table_data()
     context.update({
         'page_title': 'Salavi - Thêm khách hàng',
         'form_title': 'Thêm khách hàng',
+        'confirm_title': 'XÁC NHẬN THÊM KHÁCH HÀNG',
         'customer_form': {
-            'code': 'KH010',
-            'name': '',
-            'phone': '',
-            'address': '',
+            'code': _generate_next_customer_code(),
+            'name': request.POST.get('name', '') if request.method == 'POST' else '',
+            'phone': request.POST.get('phone', '') if request.method == 'POST' else '',
+            'address': request.POST.get('address', '') if request.method == 'POST' else '',
         },
         'save_label': 'Lưu',
     })
@@ -75,15 +190,51 @@ def customer_edit_view(request, customer_code):
         KhachHang.objects.select_related('user'),
         MaKH=customer_code,
     )
+
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        address = request.POST.get('address', '').strip()
+        
+        # 9a. Nếu thông tin bắt buộc bị bỏ trống
+        if not name or not phone:
+            messages.error(request, 'Không được để trống thông tin', extra_tags='customer_form')
+        # 9b. Nếu số điện thoại không hợp lệ
+        elif not re.match(r'^\d{10}$', phone):
+            messages.error(request, 'Số điện thoại chưa hợp lệ', extra_tags='phone')
+        else:
+            try:
+                if customer.user.username != phone:
+                    # Check if new phone already taken by another user
+                    if User.objects.filter(username=phone).exclude(pk=customer.user.pk).exists():
+                        messages.error(request, 'Số điện thoại đã tồn tại', extra_tags='phone')
+                    else:
+                        customer.user.username = phone
+                        customer.user.save()
+                        customer.HoTen = name
+                        customer.DiaChi = address
+                        customer.save()
+                        messages.success(request, 'Cập nhật thông tin khách hàng thành công')
+                        return redirect('accounts:customer_list')
+                else:
+                    customer.HoTen = name
+                    customer.DiaChi = address
+                    customer.save()
+                    messages.success(request, 'Cập nhật thông tin khách hàng thành công')
+                    return redirect('accounts:customer_list')
+            except Exception:
+                messages.error(request, 'Không thể cập nhật thông tin, vui lòng thử lại sau', extra_tags='system')
+
     context = _get_customer_table_data()
     context.update({
         'page_title': 'Salavi - Chỉnh sửa thông tin khách hàng',
         'form_title': 'Chỉnh sửa thông tin khách hàng',
+        'confirm_title': 'XÁC NHẬN CẬP NHẬT THÔNG TIN KHÁCH HÀNG',
         'customer_form': {
             'code': customer.MaKH,
-            'name': customer.HoTen,
-            'phone': customer.user.username,
-            'address': customer.DiaChi,
+            'name': request.POST.get('name', customer.HoTen) if request.method == 'POST' else customer.HoTen,
+            'phone': request.POST.get('phone', customer.user.username) if request.method == 'POST' else customer.user.username,
+            'address': request.POST.get('address', customer.DiaChi) if request.method == 'POST' else customer.DiaChi,
         },
         'save_label': 'Lưu',
     })
@@ -95,6 +246,26 @@ def customer_delete_view(request, customer_code):
         KhachHang.objects.select_related('user'),
         MaKH=customer_code,
     )
+
+    if request.method == 'POST':
+        reason = request.POST.get('reason', '').strip()
+        
+        # 7a. Nếu người dùng bỏ trống ô lý do
+        if not reason:
+            messages.error(request, 'Không được để trống lý do xóa khách hàng', extra_tags='reason')
+        # Quy tắc: Không cho phép xóa khách hàng đang phát sinh giao dịch
+        elif DonHang.objects.filter(MaKH=customer).exists():
+            messages.error(request, 'Không cho phép xóa khách hàng đang phát sinh giao dịch', extra_tags='system')
+        else:
+            try:
+                user = customer.user
+                customer.delete()
+                user.delete()
+                messages.success(request, 'Xóa khách hàng thành công')
+                return redirect('accounts:customer_list')
+            except Exception:
+                messages.error(request, 'Không thể xóa, vui lòng thử lại sau', extra_tags='system')
+
     context = _get_customer_table_data()
     context.update({
         'delete_customer': {

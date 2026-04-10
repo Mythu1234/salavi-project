@@ -241,15 +241,15 @@
                     <td class="py-5">
                         <div class="flex justify-center items-center gap-6 text-xl">
                             <a href="{% url 'accounts:customer_edit' customer.code %}" class="text-gray-700 hover:text-[#df8480] transition"><i class="fas fa-pencil-alt"></i></a>
-                            <button type="button" class="text-gray-700 hover:text-red-500 transition"><i class="far fa-trash-alt"></i></button>
+                            <a href="{% url 'accounts:customer_delete' customer.code %}" class="text-gray-700 hover:text-red-500 transition"><i class="far fa-trash-alt"></i></a>
                         </div>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
                     <td colspan="6" class="py-10 text-gray-400">
-                        <i class="fas fa-users text-4xl mb-3"></i>
-                        <p>Không tìm thấy khách hàng phù hợp trong cơ sở dữ liệu.</p>
+                        <svg class="mx-auto mb-3" style="width: 48px; height: 48px; color: #f88e8e;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        <p style="color: #666; font-weight: 500;">Không tìm thấy khách hàng phù hợp.</p>
                     </td>
                 </tr>
                 {% endfor %}
