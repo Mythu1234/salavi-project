@@ -11,6 +11,96 @@
 
     <!-- TỆP CSS DÙNG CHUNG -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}?v=5">
+    <style>
+        .logout-wrapper { position: relative; display: flex; align-items: center; }
+        .logout-icon-btn { cursor: pointer; transition: opacity 0.2s; }
+        .logout-icon-btn:hover { opacity: 0.7; }
+        .logout-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 1000;
+            border: 1px solid #f0f0f0;
+            min-width: 140px;
+            overflow: hidden;
+        }
+        .logout-dropdown.show { display: block; }
+        .dropdown-item {
+            padding: 12px 20px;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .dropdown-item:hover { background: #fdf5f4; color: #e58f8b; }
+
+        /* Logout Confirm Modal Styles */
+        .confirm-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .confirm-modal {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 320px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        .confirm-icon {
+            width: 42px;
+            height: 42px;
+            border: 2px solid #ed6c6c;
+            border-radius: 50%;
+            color: #ed6c6c;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 500;
+            margin: 0 auto 16px;
+        }
+        .confirm-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2b2b2b;
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+        .confirm-actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .confirm-btn {
+            min-width: 104px;
+            height: 38px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .confirm-btn-no { background: #e0e0e0; color: #666; }
+        .confirm-btn-yes { background: #ef8989; color: #fff; text-decoration: none; }
+    </style>
 </head>
 
 <body>
@@ -44,11 +134,21 @@
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                        <polyline points="16 17 21 12 16 7"></polyline>
-                        <line x1="21" y1="12" x2="9" y2="12"></line>
-                    </svg>
+                    <div class="logout-wrapper">
+                        <div class="logout-icon-btn" id="logoutIconBtn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                        </div>
+                        <div class="logout-dropdown" id="logoutDropdown">
+                            <div class="dropdown-item" id="startLogout">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Đăng xuất
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -89,6 +189,84 @@
         </svg>
     </a>
 
+    {% if messages %}
+    <div class="fixed bottom-5 right-5 z-50 flex flex-col gap-2">
+        {% for message in messages %}
+        <div class="toast flex items-center gap-3 px-5 py-3 min-w-[280px] bg-[#8ef0ba] text-[#111] rounded shadow-lg transform transition-all duration-300 translate-x-0">
+            <svg class="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span class="font-bold text-[15px]">{{ message }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const toasts = document.querySelectorAll('.toast');
+            toasts.forEach(toast => {
+                setTimeout(() => {
+                    toast.classList.add('opacity-0', 'translate-x-[120%]');
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            });
+        });
+    </script>
+    {% endif %}
+
+    <!-- Logout Confirmation Modal -->
+    <div class="confirm-overlay" id="logoutConfirmOverlay">
+        <div class="confirm-modal">
+            <div class="confirm-icon">!</div>
+            <div class="confirm-title">XÁC NHẬN ĐĂNG XUẤT</div>
+            <div class="confirm-actions">
+                <button type="button" class="confirm-btn confirm-btn-no" id="btnCancelLogout">Hủy</button>
+                <a href="{% url 'accounts:logout' %}" class="confirm-btn confirm-btn-yes">Xác nhận</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const logoutIconBtn = document.getElementById('logoutIconBtn');
+            const logoutDropdown = document.getElementById('logoutDropdown');
+            const startLogout = document.getElementById('startLogout');
+            const logoutConfirmOverlay = document.getElementById('logoutConfirmOverlay');
+            const btnCancelLogout = document.getElementById('btnCancelLogout');
+
+            if (logoutIconBtn && logoutDropdown) {
+                logoutIconBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    logoutDropdown.classList.toggle('show');
+                });
+
+                document.addEventListener('click', function() {
+                    logoutDropdown.classList.remove('show');
+                });
+
+                logoutDropdown.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+
+            if (startLogout && logoutConfirmOverlay) {
+                startLogout.addEventListener('click', function() {
+                    logoutDropdown.classList.remove('show');
+                    logoutConfirmOverlay.style.display = 'flex';
+                });
+            }
+
+            if (btnCancelLogout && logoutConfirmOverlay) {
+                btnCancelLogout.addEventListener('click', function() {
+                    logoutConfirmOverlay.style.display = 'none';
+                });
+            }
+
+            // Close modal when clicking outside
+            logoutConfirmOverlay.addEventListener('click', function(e) {
+                if (e.target === logoutConfirmOverlay) {
+                    logoutConfirmOverlay.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

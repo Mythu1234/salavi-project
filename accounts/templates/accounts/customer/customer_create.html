@@ -269,6 +269,79 @@
         background: #ef8989;
         color: #fff;
     }
+    .confirm-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .confirm-modal {
+        background: #fff;
+        border-radius: 12px;
+        padding: 24px 20px;
+        text-align: center;
+        width: 100%;
+        max-width: 320px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .confirm-icon {
+        width: 42px;
+        height: 42px;
+        border: 2px solid #ed6c6c;
+        border-radius: 50%;
+        color: #ed6c6c;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 500;
+        margin: 0 auto 16px;
+    }
+
+    .confirm-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #2b2b2b;
+        margin-bottom: 24px;
+        line-height: 1.4;
+    }
+
+    .confirm-actions {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .confirm-btn {
+        min-width: 104px;
+        height: 38px;
+        border: none;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .confirm-btn-no {
+        background: #e0e0e0;
+        color: #666;
+    }
+
+    .confirm-btn-yes {
+        background: #ef8989;
+        color: #fff;
+    }
+    .toast {
+        display: none !important;
+    }
 </style>
 
 <div class="customer-page is-muted">
@@ -321,11 +394,11 @@
                                         <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
                                     </svg>
                                 </a>
-                                <button type="button">
+                                <a href="{% url 'accounts:customer_delete' customer.code %}">
                                     <svg viewBox="0 0 24 24">
                                         <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
                                     </svg>
-                                </button>
+                                </a>
                             </div>
                         </td>
                     </tr>
@@ -337,39 +410,92 @@
 </div>
 
 <div class="modal-overlay">
-    <div class="modal-content">
+    <form method="POST" class="modal-content">
+        {% csrf_token %}
         <div class="modal-header">
             {{ form_title }}
         </div>
+
+        {% for message in messages %}
+            {% if 'customer_form' in message.tags or 'system' in message.tags %}
+                <div style="padding: 10px 20px; background: #fff1f1; color: #d32f2f; font-size: 13px; font-weight: 600; text-align: center; border-bottom: 1px solid #f9dcdc; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
 
         <div class="modal-body">
             <div class="input-grid">
                 <div class="form-group">
                     <label>Mã khách hàng</label>
-                    <input type="text" value="{{ customer_form.code }}" placeholder="Nhập mã khách hàng">
+                    <input type="text" name="code" value="{{ customer_form.code }}" placeholder="Nhập mã khách hàng" readonly style="background-color: #f2eded; cursor: not-allowed; color: #666;">
                 </div>
 
                 <div class="form-group">
                     <label>Tên khách hàng <span>*</span></label>
-                    <input type="text" value="{{ customer_form.name }}" placeholder="Nhập tên khách hàng">
+                    <input type="text" name="name" required value="{{ customer_form.name }}" placeholder="Nhập tên khách hàng">
                 </div>
 
                 <div class="form-group">
                     <label>Số điện thoại <span>*</span></label>
-                    <input type="text" value="{{ customer_form.phone }}" placeholder="Nhập số điện thoại">
+                    <input type="text" name="phone" required value="{{ customer_form.phone }}" placeholder="Nhập số điện thoại">
+                    {% for message in messages %}
+                        {% if 'phone' in message.tags %}
+                            <p style="color: #d32f2f; font-size: 12px; margin-top: 4px; font-weight: 600;">{{ message }}</p>
+                        {% endif %}
+                    {% endfor %}
                 </div>
 
                 <div class="form-group">
                     <label>Địa chỉ</label>
-                    <input type="text" value="{{ customer_form.address }}" placeholder="Nhập địa chỉ khách hàng">
+                    <input type="text" name="address" value="{{ customer_form.address }}" placeholder="Nhập địa chỉ khách hàng">
                 </div>
             </div>
         </div>
 
         <div class="modal-footer">
             <a href="{% url 'accounts:customer_list' %}" class="btn-action btn-cancel">Hủy</a>
-            <button type="button" class="btn-action btn-save">{{ save_label }}</button>
+            <button type="submit" class="btn-action btn-save">{{ save_label }}</button>
+        </div>
+    </form>
+</div>
+<div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-modal">
+        <div class="confirm-icon">!</div>
+        <div class="confirm-title">{{ confirm_title }}</div>
+        <div class="confirm-actions">
+            <button type="button" class="confirm-btn confirm-btn-no" id="btnConfirmNo">Không</button>
+            <button type="button" class="confirm-btn confirm-btn-yes" id="btnConfirmYes">Xác nhận</button>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.querySelector("form.modal-content");
+        const confirmOverlay = document.getElementById("confirmOverlay");
+        const btnConfirmNo = document.getElementById("btnConfirmNo");
+        const btnConfirmYes = document.getElementById("btnConfirmYes");
+        let isConfirmed = false;
+
+        if (form && confirmOverlay) {
+            form.addEventListener("submit", function(e) {
+                if (!isConfirmed) {
+                    e.preventDefault();
+                    confirmOverlay.style.display = "flex";
+                }
+            });
+
+            btnConfirmNo.addEventListener("click", function() {
+                confirmOverlay.style.display = "none";
+            });
+
+            btnConfirmYes.addEventListener("click", function() {
+                isConfirmed = true;
+                form.submit();
+            });
+        }
+    });
+</script>
 {% endblock %}

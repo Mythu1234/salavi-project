@@ -252,6 +252,80 @@
         background: #ef8989;
         color: #fff;
     }
+
+    .confirm-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .confirm-modal {
+        background: #fff;
+        border-radius: 12px;
+        padding: 24px 20px;
+        text-align: center;
+        width: 100%;
+        max-width: 320px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .confirm-icon {
+        width: 42px;
+        height: 42px;
+        border: 2px solid #ed6c6c;
+        border-radius: 50%;
+        color: #ed6c6c;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 500;
+        margin: 0 auto 16px;
+    }
+
+    .confirm-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #2b2b2b;
+        margin-bottom: 24px;
+        line-height: 1.4;
+    }
+
+    .confirm-actions {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .confirm-btn {
+        min-width: 104px;
+        height: 38px;
+        border: none;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .confirm-btn-no {
+        background: #e0e0e0;
+        color: #666;
+    }
+
+    .confirm-btn-yes {
+        background: #ef8989;
+        color: #fff;
+    }
+    .toast {
+        display: none !important;
+    }
 </style>
 
 <div class="customer-page is-muted">
@@ -320,15 +394,73 @@
 </div>
 
 <div class="delete-overlay">
-    <div class="delete-card">
+    <form method="POST" class="delete-card" id="deleteForm">
+        {% csrf_token %}
         <div class="delete-header">Vui lòng nhập lý do xóa khách hàng</div>
+        
+        {% for message in messages %}
+            {% if 'system' in message.tags %}
+                <div style="padding: 10px 20px; background: #fff1f1; color: #d32f2f; font-size: 13px; font-weight: 600; text-align: center; border-bottom: 1px solid #f9dcdc; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+
         <div class="delete-body">
-            <textarea class="delete-reason" placeholder="Nhập lý do xóa khách hàng"></textarea>
+            <textarea class="delete-reason" name="reason" placeholder="Nhập lý do xóa khách hàng" required></textarea>
+            {% for message in messages %}
+                {% if 'reason' in message.tags %}
+                    <p style="color: #d32f2f; font-size: 13px; margin-top: 8px; font-weight: 600; text-align: left; display: flex; align-items: center; gap: 4px;">
+                        <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        {{ message }}
+                    </p>
+                {% endif %}
+            {% endfor %}
         </div>
         <div class="delete-footer">
             <a href="{% url 'accounts:customer_list' %}" class="delete-btn cancel">Hủy</a>
-            <button type="button" class="delete-btn confirm">Xác nhận</button>
+            <button type="submit" class="delete-btn confirm">Xác nhận</button>
+        </div>
+    </form>
+</div>
+
+<div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-modal">
+        <div class="confirm-icon">!</div>
+        <div class="confirm-title">XÁC NHẬN XÓA KHÁCH HÀNG</div>
+        <div class="confirm-actions">
+            <button type="button" class="confirm-btn confirm-btn-no" id="btnConfirmNo">Không</button>
+            <button type="button" class="confirm-btn confirm-btn-yes" id="btnConfirmYes">Xác nhận</button>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.getElementById("deleteForm");
+        const confirmOverlay = document.getElementById("confirmOverlay");
+        const btnConfirmNo = document.getElementById("btnConfirmNo");
+        const btnConfirmYes = document.getElementById("btnConfirmYes");
+        let isConfirmed = false;
+
+        if (form && confirmOverlay) {
+            form.addEventListener("submit", function(e) {
+                if (!isConfirmed) {
+                    e.preventDefault();
+                    confirmOverlay.style.display = "flex";
+                }
+            });
+
+            btnConfirmNo.addEventListener("click", function() {
+                confirmOverlay.style.display = "none";
+            });
+
+            btnConfirmYes.addEventListener("click", function() {
+                isConfirmed = true;
+                form.submit();
+            });
+        }
+    });
+</script>
 {% endblock %}
