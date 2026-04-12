@@ -13,18 +13,19 @@ class SanPham(models.Model):
 
 class BienTheSanPham(models.Model):
     Size_CHOICES = [
-        ('SX', 'SX'),
-        ('S', 'S'),
-        ('M', 'M'),
-        ('L', 'L'),
-        ('XL', 'XL'),
-        ('XXL','XXL')
+        ('SX', 'SX'), ('S', 'S'), ('M', 'M'),
+        ('L', 'L'), ('XL', 'XL'), ('XXL','XXL')
     ]
+    # Đổi tên từ MaCTSP thành MaBTSP cho đúng ý bạn
     MaBTSP = models.CharField(max_length=10, primary_key=True)
     MaSP = models.ForeignKey(SanPham, on_delete=models.CASCADE)
     MauSac = models.CharField(max_length=50)
     Size = models.CharField(max_length=20, choices=Size_CHOICES)
     SoLuongTon = models.IntegerField()
+
+    class Meta:
+        # Tên bảng mới bạn muốn thay thế
+        db_table = 'products_bienthesanpham'
 
     def __str__(self):
         return self.MaBTSP

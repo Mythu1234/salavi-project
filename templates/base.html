@@ -62,41 +62,16 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
         .confirm-icon {
-            width: 42px;
-            height: 42px;
-            border: 2px solid #ed6c6c;
-            border-radius: 50%;
-            color: #ed6c6c;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: 500;
-            margin: 0 auto 16px;
+            width: 42px; height: 42px; border: 2px solid #ed6c6c; border-radius: 50%;
+            color: #ed6c6c; display: inline-flex; align-items: center; justify-content: center;
+            font-size: 24px; font-weight: 500; margin: 0 auto 16px;
         }
-        .confirm-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #2b2b2b;
-            margin-bottom: 24px;
-            line-height: 1.4;
-        }
-        .confirm-actions {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
+        .confirm-title { font-size: 16px; font-weight: 700; color: #2b2b2b; margin-bottom: 24px; line-height: 1.4; }
+        .confirm-actions { display: flex; justify-content: center; gap: 20px; }
         .confirm-btn {
-            min-width: 104px;
-            height: 38px;
-            border: none;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
+            min-width: 104px; height: 38px; border: none; border-radius: 6px;
+            font-size: 15px; font-weight: 700; cursor: pointer; display: inline-flex;
+            justify-content: center; align-items: center;
         }
         .confirm-btn-no { background: #e0e0e0; color: #666; }
         .confirm-btn-yes { background: #ef8989; color: #fff; text-decoration: none; }
@@ -109,7 +84,11 @@
         <div class="header-top">
             <div class="logo">SALAVI</div>
             <div class="search-box">
-                <input type="text" placeholder="Tìm kiếm sản phẩm...">
+                <!-- Cập nhật Search Form -->
+                <form action="{% url 'products:product_list' %}" method="GET" style="display: flex; width: 100%;">
+                    <input type="text" name="q" placeholder="Tìm kiếm sản phẩm..." value="{{ request.GET.q|default:'' }}">
+                    <button type="submit" style="display: none;"></button>
+                </form>
             </div>
             <div class="header-icons">
                 <div class="user-btn">

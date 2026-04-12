@@ -4,12 +4,12 @@
 
 {% block content %}
 <style>
-    /* Tổng quan container */
+    /* Tổng quan container - Thu nhỏ nhẹ theo yêu cầu */
     .cskh-chat-container {
         display: flex;
         width: 100%;
-        max-width: 950px;
-        height: 550px;
+        max-width: 850px; /* Thu nhỏ thêm chút */
+        height: 480px;    /* Thu nhỏ thêm chút */
         margin: 20px auto;
         background-color: #fff;
         border-radius: 12px;
@@ -22,7 +22,7 @@
 
     /* BÊN TRÁI: DANH SÁCH KHÁCH HÀNG */
     .chat-sidebar {
-        width: 320px;
+        width: 280px; /* Thu nhỏ từ 300px */
         background-color: #e8e8e8;
         display: flex;
         flex-direction: column;
@@ -31,56 +31,58 @@
 
 
     .sidebar-header {
-        padding: 20px 20px 10px;
+        padding: 15px 15px 5px;
     }
 
 
     .sidebar-title {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 800;
         color: #111;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
 
 
     .sidebar-filter, .sidebar-search {
         width: 100%;
-        padding: 10px 15px;
-        margin-bottom: 10px;
+        padding: 8px 12px;
+        margin-bottom: 8px;
         border: 1px solid #ddd;
         border-radius: 4px;
         outline: none;
         box-sizing: border-box;
-        font-size: 14px;
+        font-size: 13px;
         background-color: #f8f8f8;
         color: #333;
     }
-   
+
     .sidebar-search {
         background-color: #fff;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
 
 
     .thread-list {
         flex-grow: 1;
         overflow-y: auto;
-        -ms-overflow-style: none; /* Ẩn thanh cuộn IE/Edge */
-        scrollbar-width: none; /* Ẩn thanh cuộn Firefox */
+        scrollbar-width: none;
     }
    
     .thread-list::-webkit-scrollbar {
-        display: none; /* Ẩn thanh cuộn Chrome/Safari */
+        display: none;
     }
 
 
     .thread-item {
-        padding: 15px 20px;
+        padding: 12px 15px;
         border-bottom: 1px solid #e0e0e0;
         cursor: pointer;
         background-color: transparent;
-        transition: background-color 0.2s;
+        transition: none;
         position: relative;
+        text-decoration: none;
+        display: block;
+        color: inherit;
     }
 
 
@@ -98,57 +100,48 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 5px;
+        margin-bottom: 3px;
     }
 
 
     .thread-name {
         font-weight: bold;
         color: #111;
-        font-size: 15px;
+        font-size: 14px;
     }
 
 
     .thread-time {
-        font-size: 12px;
+        font-size: 11px;
         color: #888;
     }
 
 
     .thread-snippet {
-        font-size: 14px;
+        font-size: 13px;
         color: #666;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        margin-bottom: 5px;
+        margin-bottom: 3px;
     }
 
 
     .thread-status {
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 500;
         display: flex;
         align-items: center;
         gap: 5px;
+        margin-top: 5px;
     }
 
 
     .status-dot {
-        width: 8px;
-        height: 8px;
+        width: 7px;
+        height: 7px;
         border-radius: 50%;
     }
-
-
-    .status-red { color: #f44336; }
-    .status-red .status-dot { background-color: #f44336; }
-   
-    .status-yellow { color: #ffb300; }
-    .status-yellow .status-dot { background-color: #fbc02d; }
-   
-    .status-green { color: #4caf50; }
-    .status-green .status-dot { background-color: #4caf50; }
 
 
     /* BÊN PHẢI: KHUNG CHAT CHÍNH */
@@ -162,7 +155,7 @@
 
     .chat-header {
         background-color: #e8e8e8;
-        padding: 20px 30px;
+        padding: 15px 25px;
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
@@ -173,156 +166,129 @@
     .chat-header-info {
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 3px;
     }
 
 
     .chat-header-name {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: bold;
         color: #111;
     }
 
 
     .chat-header-status {
-        font-size: 13px;
+        font-size: 12px;
         color: #777;
-    }
-
-
-    .chat-header-time {
-        font-size: 14px;
-        color: #888;
     }
 
 
     .chat-messages {
         flex-grow: 1;
-        padding: 30px;
+        padding: 20px;
         overflow-y: auto;
         display: flex;
         flex-direction: column;
-        -ms-overflow-style: none; /* Ẩn thanh cuộn IE/Edge */
-        scrollbar-width: none; /* Ẩn thanh cuộn Firefox */
+        scrollbar-width: none;
     }
 
 
     .chat-messages::-webkit-scrollbar {
-        display: none; /* Ẩn thanh cuộn Chrome/Safari */
+        display: none;
     }
 
 
     .message-bubble-wrapper {
         display: flex;
         flex-direction: column;
-        margin-bottom: 15px;
+        margin-bottom: 12px;
         max-width: 85%;
     }
 
 
-    /* Bubble của Khách hàng */
+    /* Bubble của Khách hàng - Luôn bên trái */
+    .message-wrapper-customer {
+        align-self: flex-start;
+    }
+
+
     .message-bubble.customer {
         background-color: #fff;
-        padding: 15px 20px;
+        padding: 10px 15px;
         border-radius: 12px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.03);
         border: 1px solid #f0f0f0;
-        align-self: flex-start;
-    }
-
-
-    /* Bubble của Shop */
-    .message-bubble.shop {
-        background-color: #f18686; /* Nền màu hồng đỏ */
-        padding: 15px 20px;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(241, 134, 134, 0.2);
-        align-self: flex-start;
-    }
-
-
-    .message-text {
-        font-size: 15px;
-        line-height: 1.4;
-        margin-bottom: 8px;
-    }
-
-
-    .message-bubble.customer .message-text {
         color: #111;
     }
 
 
-    .message-bubble.shop .message-text {
-        color: #fff; /* Chữ màu trắng */
+    /* Bubble của Shop - Chuyển sang bên PHẢI */
+    .message-wrapper-shop {
+        align-self: flex-end;
+        align-items: flex-end;
+    }
+
+
+    .message-bubble.shop {
+        background-color: #f18686;
+        padding: 10px 15px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(241, 134, 134, 0.2);
+        color: #fff;
+    }
+
+
+    .message-text {
+        font-size: 14px;
+        line-height: 1.4;
+        margin-bottom: 5px;
     }
 
 
     .message-time {
-        font-size: 12px;
+        font-size: 11px;
     }
 
 
-    .message-bubble.customer .message-time {
-        color: #999;
-    }
+    .message-wrapper-customer .message-time { color: #999; text-align: left; }
+    .message-wrapper-shop .message-time { color: rgba(255, 255, 255, 0.8); text-align: right; }
 
 
-    .message-bubble.shop .message-time {
-        color: rgba(255, 255, 255, 0.8);
-    }
-
-
-    /* Trạng thái đã gửi nằm riêng bên ngoài bubble nhưng căn lề phải cục bộ so với độ dài của shop bubble */
-    .message-bubble-wrapper-shop {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start; /* Giữ bubble bên trái */
-        margin-bottom: 20px;
-    }
-
-
-    .send-status {
-        width: 100%;
-        text-align: right; /* Căn phải nội dung "Đã gửi" nhưng chỉ phụ thuộc khối của mình */
-        font-size: 12px;
+    .send-status-right {
+        font-size: 11px;
         color: #aaa;
-        margin-top: 5px;
-        padding-right: 5px;
+        margin-top: 3px;
+        text-align: right;
+        width: 100%;
     }
 
 
     /* KHU VỰC NHẬP TIN NHẮN */
     .chat-input-area {
         background-color: #fff;
-        padding: 20px 30px;
+        padding: 15px 25px;
         border-top: 1px solid #eaeaea;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
     }
 
 
     .chat-input-row {
         display: flex;
-        gap: 15px;
+        gap: 12px;
         align-items: center;
     }
 
 
     .chat-input {
         flex-grow: 1;
-        padding: 12px 20px;
+        padding: 10px 18px;
         border: 1px solid #e0e0e0;
         border-radius: 30px;
         outline: none;
-        font-size: 15px;
+        font-size: 14px;
         color: #333;
-    }
-
-
-    .chat-input::placeholder {
-        color: #aaa;
     }
 
 
@@ -330,12 +296,12 @@
         background-color: #f18686;
         color: #fff;
         border: none;
-        padding: 12px 30px;
+        padding: 10px 25px;
         border-radius: 30px;
-        font-size: 15px;
+        font-size: 14px;
         font-weight: bold;
         cursor: pointer;
-        transition: background-color 0.2s;
+        transition: none;
     }
 
 
@@ -344,121 +310,92 @@
     }
 
 
-    .chat-note {
-        font-size: 12px;
-        color: #999;
-        padding-left: 10px;
-    }
-
-
 </style>
 
 
 <div class="cskh-chat-container">
-    <!-- Cột danh sách -->
     <div class="chat-sidebar">
         <div class="sidebar-header">
             <div class="sidebar-title">Yêu cầu tư vấn</div>
-            <select class="sidebar-filter">
-                <option>Tất cả trạng thái</option>
-                <option>Chưa phản hồi</option>
-                <option>Đang trao đổi</option>
-                <option>Đã phản hồi</option>
-            </select>
-            <input type="text" class="sidebar-search" placeholder="Tìm khách hàng...">
+            <!-- Ô TÌM KIẾM KHÁCH HÀNG -->
+            <form method="GET">
+                <input type="text" name="search" class="sidebar-search" placeholder="Tìm khách hàng..." value="{{ search_query }}">
+            </form>
         </div>
        
         <div class="thread-list">
-            <!-- Item 1: Đang trao đổi (Đang chọn) -->
-            <div class="thread-item active">
+            {% for kh in khach_hang_list %}
+            <a href="?ma_kh={{ kh.MaKH.MaKH }}" class="thread-item {% if kh.MaKH.MaKH == current_customer.MaKH %}active{% endif %}">
                 <div class="thread-top">
-                    <span class="thread-name">Nguyễn Thị Lan</span>
-                    <span class="thread-time">09:15</span>
+                    <span class="thread-name">{{ kh.MaKH.HoTen }}</span>
+                    <span class="thread-time">{{ kh.last_time|date:"H:i" }}</span>
                 </div>
-                <div class="thread-snippet">Shop cho em hỏi áo này còn size M kh...</div>
-                <div class="thread-status status-yellow">
-                    <span class="status-dot"></span> Đang trao đổi
+                <div class="thread-snippet">
+                    {{ kh.snippet|default:"[Chưa có tin nhắn]" }}
                 </div>
-            </div>
-
-
-            <!-- Item 2: Đang trao đổi -->
-            <div class="thread-item">
-                <div class="thread-top">
-                    <span class="thread-name">Khách vãng lai</span>
-                    <span class="thread-time">Hôm qua</span>
+                <div class="thread-status">
+                    {% if kh.TrangThai == 'Đã tư vấn' %}
+                        <span class="status-dot" style="background-color: #2ecc71;"></span> {{ kh.TrangThai }}
+                    {% elif kh.TrangThai == 'Đang tư vấn' and kh.MaKH.MaKH == current_customer.MaKH %}
+                        <span class="status-dot" style="background-color: #fbc02d;"></span> {{ kh.TrangThai }}
+                    {% else %}
+                        <span class="status-dot" style="background-color: #ff4d4d;"></span> Chưa tư vấn
+                    {% endif %}
                 </div>
-                <div class="thread-snippet">Thời gian giao hàng bao lâu?</div>
-                <div class="thread-status status-yellow">
-                    <span class="status-dot"></span> Đang trao đổi
-                </div>
-            </div>
-
-
-            <!-- Item 3: Đã phản hồi -->
-            <div class="thread-item">
-                <div class="thread-top">
-                    <span class="thread-name">Trần Văn Minh</span>
-                    <span class="thread-time">20/01</span>
-                </div>
-                <div class="thread-snippet">Cảm ơn shop tư vấn rất nhiệt tình</div>
-                <div class="thread-status status-green">
-                    <span class="status-dot"></span> Đã phản hồi
-                </div>
-            </div>
+            </a>
+            {% endfor %}
         </div>
     </div>
 
 
-    <!-- Khung Chat Chính -->
     <div class="chat-main">
-        <!-- Header -->
         <div class="chat-header">
             <div class="chat-header-info">
-                <div class="chat-header-name">Nguyễn Thị Lan</div>
-                <div class="chat-header-status">Trạng thái: Chưa phản hồi</div>
+                <div class="chat-header-name">{{ current_customer.HoTen }}</div>
+                <div class="chat-header-status">Trạng thái: {{ header_status }}</div>
             </div>
-            <div class="chat-header-time">
-                Yêu cầu lúc 09:12
-            </div>
+            <div style="font-weight: bold; color: #f18686;">Salavi</div>
         </div>
 
 
-        <!-- Khung Tin nhắn -->
-        <div class="chat-messages">
-            <!-- Tin nhắn của Khách hàng -->
-            <div class="message-bubble-wrapper">
-                <div class="message-bubble customer">
-                    <div class="message-text">Shop cho em hỏi áo thun cổ tròn còn size M không ạ?</div>
-                    <div class="message-time">09:12</div>
+        <div class="chat-messages" id="chatMessages">
+            {% for msg in tin_nhan_list %}
+                {% if msg.NguoiGui == 'NV' %}
+                <div class="message-bubble-wrapper message-wrapper-shop">
+                    <div class="message-bubble shop">
+                        <div class="message-text">{{ msg.NoiDung }}</div>
+                        <div class="message-time">{{ msg.ThoiGianGui|date:"H:i" }}</div>
+                    </div>
+                    <div class="send-status-right">Đã gửi</div>
                 </div>
-            </div>
-
-
-            <!-- Tin nhắn trả lời của Shop -->
-            <div class="message-bubble-wrapper-shop">
-                <div class="message-bubble shop">
-                    <div class="message-text">Chào bạn Lan 🌸 Áo hiện tại shop còn đủ size M nhé!</div>
-                    <div class="message-time">09:16</div>
+                {% else %}
+                <div class="message-bubble-wrapper message-wrapper-customer">
+                    <div class="message-bubble customer">
+                        <div class="message-text">{{ msg.NoiDung }}</div>
+                        <div class="message-time">{{ msg.ThoiGianGui|date:"H:i" }}</div>
+                    </div>
                 </div>
-                <div class="send-status">Đã gửi</div>
-            </div>
+                {% endif %}
+            {% endfor %}
         </div>
 
 
-        <!-- Khu vực nhập tin -->
-        <div class="chat-input-area">
+        <form class="chat-input-area" method="POST">
+            {% csrf_token %}
             <div class="chat-input-row">
-                <input type="text" class="chat-input" placeholder="Nhập nội dung phản hồi...">
-                <button class="chat-send-btn">Gửi</button>
+                <input type="text" name="NoiDung" class="chat-input" placeholder="Nhập nội dung phản hồi..." required autocomplete="off">
+                <button type="submit" class="chat-send-btn">Gửi</button>
             </div>
-            <div class="chat-note">* Nội dung phản hồi sẽ được lưu vào lịch sử tư vấn</div>
-        </div>
+            <div style="font-size: 12px; color: #999; padding-left: 10px; margin-top: 5px;">* Nội dung phản hồi sẽ được lưu vào lịch sử tư vấn</div>
+        </form>
     </div>
 </div>
 
 
+<script>
+    var chatMessages = document.getElementById('chatMessages');
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+</script>
+
+
 {% endblock %}
-
-
-

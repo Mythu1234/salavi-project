@@ -52,9 +52,8 @@ class TinNhanTuVan(models.Model):
     MaHoiThoai = models.ForeignKey(HoiThoaiTuVan, on_delete=models.CASCADE)
     MaNV = models.ForeignKey(NhanVien, on_delete=models.SET_NULL, null=True, blank=True)
     NoiDung = models.CharField(max_length=200)
+    NguoiGui = models.CharField(max_length=10, default='NV') # Thêm mặc định để tránh lỗi
     ThoiGianGui = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.MaTinNhan
-
-
