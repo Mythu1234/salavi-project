@@ -318,6 +318,20 @@ def chi_tiet_danh_gia_view(request, ma_sp):
     san_pham = get_object_or_404(SanPham, MaSP=ma_sp)
     danh_gia_list = DanhGia.objects.filter(MaSP=ma_sp).select_related('MaKH').order_by('-NgayDanhGia')
 
+    # Xử lý Bộ lọc
+    sao = request.GET.get('sao')
+    if sao and sao != 'all':
+        danh_gia_list = danh_gia_list.filter(SoSao=sao)
+        
+    thoi_gian = request.GET.get('thoi_gian')
+    if thoi_gian == 'month':
+        current_month = date.today().month
+        current_year = date.today().year
+        danh_gia_list = danh_gia_list.filter(NgayDanhGia__month=current_month, NgayDanhGia__year=current_year)
+    elif thoi_gian == 'year':
+        current_year = date.today().year
+        danh_gia_list = danh_gia_list.filter(NgayDanhGia__year=current_year)
+
     tong_danh_gia = danh_gia_list.count()
     sao_trung_binh = danh_gia_list.aggregate(Avg('SoSao'))['SoSao__avg'] or 0
     sao_trung_binh = round(sao_trung_binh, 1)

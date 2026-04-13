@@ -520,11 +520,11 @@
 <div class="modal-overlay" id="editPointsModal" style="z-index: 1005;" onclick="closeEditModal(event)">
     <div class="delete-modal" onclick="event.stopPropagation()">
         <div class="delete-header">
-            Vui lòng nhập số điểm cần sửa
+            Vui lòng nhập lượng điểm muốn cập nhật
             <span class="close-btn" onclick="closeEditModal(true)">&times;</span>
         </div>
         <div class="delete-body">
-            <input type="number" id="editInput" class="delete-input" placeholder="Nhập số điểm cần sửa">
+            <input type="number" id="editInput" class="delete-input" placeholder="Nhập thêm (VD: 100) hoặc bớt (VD: -50)">
             <div class="delete-actions">
                 <button class="btn-cancel" onclick="closeEditModal(true)">Hủy</button>
                 <button class="btn-confirm" onclick="openConfirmEditModal()">Sửa</button>
@@ -696,9 +696,7 @@
 
 
     function openEditModal() {
-        const currentPointsText = document.getElementById('modalDiem').textContent;
-        const currentPoints = currentPointsText.replace(/[^0-9]/g, '');
-        document.getElementById('editInput').value = currentPoints;
+        document.getElementById('editInput').value = '';
         document.getElementById('editPointsModal').classList.add('active');
     }
 
@@ -711,9 +709,9 @@
 
 
     function openConfirmEditModal() {
-        const diemMoi = document.getElementById('editInput').value;
-        if (diemMoi === '' || diemMoi < 0) {
-            alert('Vui lòng nhập số điểm hợp lệ.');
+        const diemDoi = document.getElementById('editInput').value;
+        if (diemDoi === '' || isNaN(diemDoi) || parseInt(diemDoi) === 0) {
+            alert('Vui lòng nhập số điểm muốn thay đổi (phải khác 0).');
             return;
         }
         document.getElementById('confirmEditPointsModal').classList.add('active');
@@ -728,9 +726,18 @@
 
 
     function executeEditPoints() {
-        const diemMoi = document.getElementById('editInput').value;
-        if (!currentMaKH) return;
+        const inputVal = parseInt(document.getElementById('editInput').value);
+        if (!currentMaKH || isNaN(inputVal)) return;
 
+        const currentPointsText = document.getElementById('modalDiem').textContent;
+        const currentPoints = parseInt(currentPointsText.replace(/[^0-9]/g, ''));
+        const diemMoi = currentPoints + inputVal;
+
+        if (diemMoi < 0) {
+            alert('Điểm sau khi bớt bị âm, vui lòng kiểm tra lại!');
+            closeConfirmEditModal(true);
+            return;
+        }
 
         fetch(`/diem-tich-luy/api/${currentMaKH}/sua-diem/`, {
             method: 'POST',

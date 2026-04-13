@@ -294,16 +294,22 @@
 
         <div class="box">
             <h3>Bộ lọc</h3>
-            <select class="filter-input">
-                <option>Tất cả sao</option>
-                <option>5 sao</option>
-                <option>4 sao</option>
-            </select>
-            <select class="filter-input">
-                <option>Tất cả thời gian</option>
-                <option>Tháng này</option>
-            </select>
-            <button class="btn-filter">Lọc</button>
+            <form method="GET" action="">
+                <select name="sao" class="filter-input">
+                    <option value="all" {% if request.GET.sao == 'all' or not request.GET.sao %}selected{% endif %}>Tất cả sao</option>
+                    <option value="5" {% if request.GET.sao == '5' %}selected{% endif %}>5 sao</option>
+                    <option value="4" {% if request.GET.sao == '4' %}selected{% endif %}>4 sao</option>
+                    <option value="3" {% if request.GET.sao == '3' %}selected{% endif %}>3 sao</option>
+                    <option value="2" {% if request.GET.sao == '2' %}selected{% endif %}>2 sao</option>
+                    <option value="1" {% if request.GET.sao == '1' %}selected{% endif %}>1 sao</option>
+                </select>
+                <select name="thoi_gian" class="filter-input">
+                    <option value="all" {% if request.GET.thoi_gian == 'all' or not request.GET.thoi_gian %}selected{% endif %}>Tất cả thời gian</option>
+                    <option value="month" {% if request.GET.thoi_gian == 'month' %}selected{% endif %}>Tháng này</option>
+                    <option value="year" {% if request.GET.thoi_gian == 'year' %}selected{% endif %}>Năm nay</option>
+                </select>
+                <button type="submit" class="btn-filter">Lọc</button>
+            </form>
         </div>
     </div>
 
@@ -361,7 +367,7 @@
         {% if page_obj.has_other_pages %}
         <div class="pagination">
             {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}">&lsaquo;</a>
+                <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.sao %}&sao={{ request.GET.sao }}{% endif %}{% if request.GET.thoi_gian %}&thoi_gian={{ request.GET.thoi_gian }}{% endif %}">&lsaquo;</a>
             {% else %}
                 <span class="disabled">&lsaquo;</span>
             {% endif %}
@@ -371,14 +377,14 @@
                 {% if page_obj.number == i %}
                     <span class="active">{{ i }}</span>
                 {% else %}
-                    <a href="?page={{ i }}">{{ i }}</a>
+                    <a href="?page={{ i }}{% if request.GET.sao %}&sao={{ request.GET.sao }}{% endif %}{% if request.GET.thoi_gian %}&thoi_gian={{ request.GET.thoi_gian }}{% endif %}">{{ i }}</a>
                 {% endif %}
             {% endfor %}
 
 
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">&rsaquo;</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">..</a>
+                <a href="?page={{ page_obj.next_page_number }}{% if request.GET.sao %}&sao={{ request.GET.sao }}{% endif %}{% if request.GET.thoi_gian %}&thoi_gian={{ request.GET.thoi_gian }}{% endif %}">&rsaquo;</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.sao %}&sao={{ request.GET.sao }}{% endif %}{% if request.GET.thoi_gian %}&thoi_gian={{ request.GET.thoi_gian }}{% endif %}">..</a>
             {% else %}
                 <span class="disabled">&rsaquo;</span>
                 <span class="disabled">..</span>
