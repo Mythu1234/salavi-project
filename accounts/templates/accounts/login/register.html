@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salavi - Tạo tài khoản</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -163,7 +164,7 @@
         </div>
 
         {% for message in messages %}
-            {% if 'username' not in message.tags and 'password' not in message.tags and 'password_confirm' not in message.tags %}
+            {% if message.level_tag != 'success' and 'username' not in message.tags and 'password' not in message.tags and 'password_confirm' not in message.tags %}
                 <div style="margin-bottom: 20px; padding: 12px 16px; background: #fff1f1; color: #d32f2f; font-size: 14px; font-weight: 600; border-radius: 8px; border: 1px solid #f9dcdc; display: flex; align-items: center; gap: 10px;">
                     <svg style="width: 18px; height: 18px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                     <span>{{ message }}</span>
@@ -255,7 +256,29 @@
                     });
                 }
             });
+
+            // Toast logic
+            const toasts = document.querySelectorAll('.toast');
+            toasts.forEach(toast => {
+                setTimeout(() => {
+                    toast.classList.add('opacity-0', 'translate-x-[120%]');
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            });
         });
     </script>
+
+    {% if messages %}
+    <div class="fixed bottom-5 right-5 z-50 flex flex-col gap-2">
+        {% for message in messages %}
+            {% if message.level_tag == 'success' %}
+            <div class="toast flex items-center gap-3 px-5 py-3 min-w-[280px] bg-[#8ef0ba] text-[#111] rounded shadow-lg transform transition-all duration-300 translate-x-0">
+                <svg class="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span class="font-bold text-[15px]">{{ message }}</span>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
 </body>
 </html>

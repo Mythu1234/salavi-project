@@ -128,10 +128,66 @@ def register_view(request):
 
 def forgot_password_view(request):
     step = request.GET.get('step', 'account')
-    valid_steps = {'account', 'otp', 'reset'}
+    valid_steps = {'account', 'reset'}
     if step not in valid_steps:
         step = 'account'
 
+    if request.method == 'POST':
+        if step == 'account':
+            username = request.POST.get('username', '').strip()
+            
+            # Kiểm tra tên đăng nhập không hợp lệ (Business rules: 10 số)
+            if not re.match(r'^\d{10}$', username):
+                messages.error(request, 'Tên đăng nhập không hợp lệ. Vui lòng nhập lại', extra_tags='username')
+                return render(request, 'accounts/login/forgot_password.html', {'step': 'account'})
+            
+            # 3a. Kiểm tra tài khoản không tồn tại
+            if not User.objects.filter(username=username).exists():
+                messages.error(request, 'Tài khoản không tồn tại', extra_tags='username')
+                return render(request, 'accounts/login/forgot_password.html', {'step': 'account'})
+            
+            # Thành công -> qua bước đổi mật khẩu
+            request.session['reset_username'] = username
+            return redirect(f"{request.path}?step=reset")
+            
+        elif step == 'reset':
+            username = request.session.get('reset_username')
+            if not username:
+                return redirect(f"{request.path}?step=account")
+                
+            password = request.POST.get('password', '')
+            password_confirm = request.POST.get('password_confirm', '')
+            
+            # 8a. Kiểm tra mật khẩu (Hoa, thường, số, đặc biệt)
+            password_regex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&].*$'
+            if not re.match(password_regex, password):
+                messages.error(request, 'Mật khẩu không hợp lệ. Vui lòng nhập lại', extra_tags='password')
+                return render(request, 'accounts/login/forgot_password.html', {'step': 'reset'})
+                
+            # 9b. Mật khẩu xác nhận không khớp
+            if password != password_confirm:
+                messages.error(request, 'Mật khẩu xác nhận không khớp với mật khẩu mới. Vui lòng nhập lại', extra_tags='password_confirm')
+                return render(request, 'accounts/login/forgot_password.html', {'step': 'reset'})
+            
+            try:
+                user = User.objects.get(username=username)
+                user.set_password(password)
+                user.save()
+                
+                # Xóa session và thông báo thành công
+                if 'reset_username' in request.session:
+                    del request.session['reset_username']
+                messages.success(request, 'Cập nhật mật khẩu thành công')
+                return redirect('accounts:login')
+            except Exception:
+                # 10b. Hệ thống lỗi
+                messages.error(request, 'Hệ thống đang lỗi, không thể đổi mật khẩu')
+                return render(request, 'accounts/login/forgot_password.html', {'step': 'reset'})
+
+    # GET request logic
+    if step == 'account' and 'reset_username' in request.session:
+        del request.session['reset_username']
+            
     context = {
         'step': step,
     }
