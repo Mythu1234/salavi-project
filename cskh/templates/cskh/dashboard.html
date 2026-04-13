@@ -66,7 +66,7 @@
         <div class="box">
             <h2>Tin nhắn tư vấn</h2>
             {% for chat in recent_chats %}
-            <a href="{% url 'cskh:chat_reply' %}?id={{ chat.MaHoiThoai }}" class="chat-item" style="text-decoration:none; color:inherit;">
+            <a href="{% url 'cskh:chat_reply' %}?ma_kh={{ chat.MaKH.MaKH }}" class="chat-item" style="text-decoration:none; color:inherit;">
                 <div class="avatar">{{ chat.MaKH.HoTen|make_list|first|upper }}</div>
                 <div class="chat-content">
                     <div class="chat-name">{{ chat.MaKH.HoTen }}</div>

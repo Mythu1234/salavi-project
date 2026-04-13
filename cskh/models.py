@@ -47,7 +47,7 @@ class HoiThoaiTuVan(models.Model):
     def __str__(self):
         return self.MaHoiThoai
 
-class TinNhanTuVan(models.Model):
+class TinNhanTuVan(models.Model): 
     MaTinNhan = models.CharField(max_length=10, primary_key=True)
     MaHoiThoai = models.ForeignKey(HoiThoaiTuVan, on_delete=models.CASCADE)
     MaNV = models.ForeignKey(NhanVien, on_delete=models.SET_NULL, null=True, blank=True)
@@ -56,5 +56,3 @@ class TinNhanTuVan(models.Model):
 
     def __str__(self):
         return self.MaTinNhan
-
-

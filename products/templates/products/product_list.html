@@ -62,7 +62,7 @@
     /* Header */
     .product-list-header {
         display: grid;
-        grid-template-columns: 1fr 2fr 1.5fr 1fr 1fr; /* Thu hẹp cột tên (2fr) và nới Rộng Giá bán (1.5fr) kéo nó về bên trái */
+        grid-template-columns: 1fr 2fr 1.5fr 1fr 1fr;
         align-items: center;
         background-color: #fff;
         padding: 15px 30px;
@@ -76,9 +76,9 @@
 
     .header-name {
         text-align: left;
-        width: 280px; /* Định mức độ rộng để khung đồng đều */
-        justify-self: center; /* Canh khối box ở giữa cột */
-        padding-left: 10px; /* Lệch phải thêm xíu cho hình và chữ vô giữa hẳn */
+        width: 280px;
+        justify-self: center;
+        padding-left: 10px;
     }
 
     .add-product-btn {
@@ -106,7 +106,7 @@
 
     .product-card {
         display: grid;
-        grid-template-columns: 1fr 2fr 1.5fr 1fr 1fr; /* Map with header */
+        grid-template-columns: 1fr 2fr 1.5fr 1fr 1fr;
         align-items: center;
         background-color: #fff;
         padding: 15px 30px;
@@ -136,9 +136,9 @@
         display: flex;
         align-items: center;
         gap: 15px;
-        justify-content: flex-start; /* Giữ ảnh thẳng hàng trái tăm tắp */
-        width: 280px; /* Fixed width giống header */
-        justify-self: center; /* Gom cả cục sang phải (center) */
+        justify-content: flex-start;
+        width: 280px;
+        justify-self: center;
         padding-left: 10px;
         text-decoration: none;
         color: inherit;
@@ -163,14 +163,14 @@
     }
 
     .header-price {
-        text-align: left; /* Canh trái nhẹ để nhích qua trái */
+        text-align: left;
         padding-left: 20%;
     }
 
     .product-price {
         font-weight: normal;
         color: #000;
-        text-align: left; /* Canh trái nhẹ để nhích qua trái */
+        text-align: left;
         padding-left: 20%;
     }
 
@@ -183,11 +183,6 @@
         justify-content: center;
         align-items: center;
         gap: 2px;
-    }
-
-    .product-rating svg {
-        margin: 0;
-        flex-shrink: 0;
     }
 
     .product-actions {
@@ -213,10 +208,6 @@
         color: #f47879;
     }
 
-    .action-icon.edit {
-        color: #555;
-    }
-
     .action-icon.edit:hover {
         color: #333;
     }
@@ -224,31 +215,28 @@
     .action-icon:hover {
         opacity: 0.7;
     }
-
-    /* Footer added inside block to complete the design */
 </style>
 
-<!-- Sub Navigation -->
+<!-- Sub Navigation with filtering URLs -->
 <div class="sub-nav-container">
     <div class="sub-nav">
-        <a href="#" class="active">Tất cả</a>
-        <a href="#">Áo</a>
-        <a href="#">Quần</a>
-        <a href="#">Váy</a>
-        <a href="#">Phụ kiện</a>
+        <a href="{% url 'products:product_list' %}?loai=Tất cả" class="{% if not request.GET.loai or request.GET.loai == 'Tất cả' %}active{% endif %}">Tất cả</a>
+        <a href="{% url 'products:product_list' %}?loai=Áo" class="{% if request.GET.loai == 'Áo' %}active{% endif %}">Áo</a>
+        <a href="{% url 'products:product_list' %}?loai=Quần" class="{% if request.GET.loai == 'Quần' %}active{% endif %}">Quần</a>
+        <a href="{% url 'products:product_list' %}?loai=Váy" class="{% if request.GET.loai == 'Váy' %}active{% endif %}">Váy</a>
+        <a href="{% url 'products:product_list' %}?loai=Phụ kiện" class="{% if request.GET.loai == 'Phụ kiện' %}active{% endif %}">Phụ kiện</a>
     </div>
 </div>
 
 <div class="product-layout">
-    <div class="product-list-title">Danh sách sản phẩm</div>
+    <div class="product-list-title">Danh sách sản phẩm: {{ request.GET.loai|default:"Tất cả" }}</div>
 
     <div class="product-list-header">
         <div>Mã sản phẩm</div>
         <div class="header-name">Tên sản phẩm</div>
         <div class="header-price">Giá bán</div>
         <div class="header-rating">Đánh giá</div>
-        <a href="{% url 'products:add_product' %}" class="add-product-btn"
-            style="text-decoration: none; text-align: center;">+ Thêm sản phẩm</a>
+        <a href="{% url 'products:add_product' %}" class="add-product-btn">+ Thêm sản phẩm</a>
     </div>
 
     <div class="product-cards-container">
@@ -259,37 +247,26 @@
                 {% if product.HinhAnh %}
                 <img src="{{ product.HinhAnh.url }}" alt="{{ product.TenSP }}" class="product-image">
                 {% else %}
-                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=60&h=60"
-                    alt="{{ product.TenSP }}" class="product-image">
+                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=60&h=60" alt="{{ product.TenSP }}" class="product-image">
                 {% endif %}
-                <div class="product-name" style="transition: color 0.2s;">{{ product.TenSP }}</div>
+                <div class="product-name">{{ product.TenSP }}</div>
             </a>
             <div class="product-price">{{ product.Gia|floatformat:0 }}đ</div>
             <div class="product-rating">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="#facc15" stroke="#facc15" stroke-width="2">
-                    <polygon
-                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                    </polygon>
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                 </svg>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="#facc15" stroke="#facc15" stroke-width="2">
-                    <polygon
-                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                    </polygon>
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                 </svg>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="#facc15" stroke="#facc15" stroke-width="2">
-                    <polygon
-                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                    </polygon>
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                 </svg>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="#facc15" stroke="#facc15" stroke-width="2">
-                    <polygon
-                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                    </polygon>
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                 </svg>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="#facc15" stroke="#facc15" stroke-width="2">
-                    <polygon
-                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                    </polygon>
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                 </svg>
             </div>
             <div class="product-actions">
@@ -299,17 +276,16 @@
                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                     </svg>
                 </a>
-                <button class="action-icon delete" title="Xóa">
+                <a class="action-icon delete" title="Xóa" href="{% url 'products:delete_product' product.MaSP %}">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="3 6 5 6 21 6"></polyline>
                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                     </svg>
-                </button>
+                </a>
             </div>
         </div>
         {% empty %}
-        <div style="text-align: center; padding: 20px; color: #666; font-style: italic;">Chưa có sản phẩm nào trong cơ
-            sở dữ liệu.</div>
+        <div style="text-align: center; padding: 40px; color: #999;">Không tìm thấy sản phẩm nào phù hợp.</div>
         {% endfor %}
     </div>
 </div>
