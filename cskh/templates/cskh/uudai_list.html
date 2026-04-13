@@ -21,17 +21,17 @@
 <main class="max-w-[1200px] mx-auto mt-10 px-4 pb-20">
     
     <div class="flex justify-between items-center mb-8">
-        <div class="flex items-center gap-4 w-1/2">
-            <input type="text" placeholder="Tìm kiếm ưu đãi..." class="flex-1 border border-gray-200 rounded-full px-6 py-3 text-gray-700 outline-none focus:border-[#e58f8b]">
-            <button class="bg-[#e58f8b] hover:bg-[#d88c89] transition-colors text-white w-12 h-12 rounded-xl flex items-center justify-center text-lg shadow-sm">
+        <form method="GET" action="{% url 'cskh:uudai_list' %}" class="flex items-center gap-4 w-1/2">
+            <input type="text" name="q" value="{{ search_query }}" placeholder="Tìm kiếm tên ưu đãi hoặc mã..." class="flex-1 border border-gray-200 rounded-full px-6 py-3 text-gray-700 outline-none focus:border-[#e58f8b]">
+            <button type="submit" class="bg-[#e58f8b] hover:bg-[#d88c89] transition-colors text-white w-12 h-12 rounded-xl flex items-center justify-center text-lg shadow-sm">
                 <i class="fas fa-search"></i>
             </button>
-        </div>
+        </form>
         
-        <button onclick="openModal('create')" class="bg-[#e58f8b] hover:bg-[#d88c89] transition-colors text-white px-8 py-3 rounded-xl font-bold text-[15px] flex items-center gap-2 shadow-sm">
+        <a href="{% url 'cskh:uudai_create' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="bg-[#e58f8b] hover:bg-[#d88c89] transition-colors text-white px-8 py-3 rounded-xl font-bold text-[15px] flex items-center gap-2 shadow-sm inline-flex">
             <i class="fas fa-plus-circle text-lg"></i>
             Tạo thông báo ưu đãi
-        </button>
+        </a>
     </div>
 
     <!-- BẢNG BIỂU -->
@@ -42,6 +42,7 @@
                 <tr>
                     <th class="py-4 font-bold text-[15px] w-24">STT</th>
                     <th class="py-4 font-bold text-[15px]">Tên</th>
+                    <th class="py-4 font-bold text-[15px]">Phần trăm giảm</th>
                     <th class="py-4 font-bold text-[15px]">Ngày bắt đầu</th>
                     <th class="py-4 font-bold text-[15px]">Ngày kết thúc</th>
                     <th class="py-4 font-bold text-[15px] w-40">Hành động</th>
@@ -51,105 +52,22 @@
             <tbody class="text-[#2b2b2b] text-[17px]">
                 
                 {% for item in uudai_list %}
-                <tr class="hover:bg-[#fceeed] transition cursor-pointer group" onclick="openModal('detail-{{ item.MaKM }}')">
+                <tr class="hover:bg-[#fceeed] transition cursor-pointer group" onclick="window.location.href='{% url 'cskh:uudai_detail' item.MaKM %}{% if search_query %}?q={{ search_query }}{% endif %}'">
                     <td class="py-5 font-medium">{{ forloop.counter }}</td>
                     <td class="py-5">{{ item.TenKhuyenMai }}</td>
+                    <td class="py-5">{{ item.PhanTramGiam|stringformat:"s"|default:"0" }}%</td>
                     <td class="py-5">{{ item.NgayBatDau|date:"d/m/Y" }}</td>
                     <td class="py-5">{{ item.NgayKetThuc|date:"d/m/Y" }}</td>
                     <td class="py-5">
                         <div class="flex justify-center items-center gap-6 text-xl">
-                            <i class="fas fa-pencil-alt text-gray-700 hover:text-[#df8480] transition" onclick="event.stopPropagation(); openModal('edit-{{ item.MaKM }}')"></i>
-                            <i class="far fa-trash-alt text-gray-700 hover:text-red-500 transition" onclick="event.stopPropagation(); confirmDelete('{{ item.MaKM }}')"></i>
+                            <a href="{% url 'cskh:uudai_edit' item.MaKM %}{% if search_query %}?q={{ search_query }}{% endif %}" class="fas fa-pencil-alt text-gray-700 hover:text-[#df8480] transition" onclick="event.stopPropagation();"></a>
+                            <a href="{% url 'cskh:uudai_delete' item.MaKM %}{% if search_query %}?q={{ search_query }}{% endif %}" class="far fa-trash-alt text-gray-700 hover:text-red-500 transition" onclick="event.stopPropagation();"></a>
                         </div>
                     </td>
                 </tr>
-
-                <!-- === MODAL CHI TIẾT ƯU ĐÃI === -->
-                <div id="modal-detail-{{ item.MaKM }}" class="hidden fixed inset-0 z-[50] flex items-center justify-center p-4">
-                    <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] transition-all" onclick="closeModal('detail-{{ item.MaKM }}')"></div>
-                    <div class="bg-white rounded-[24px] overflow-hidden w-full max-w-[700px] shadow-2xl relative z-10 flex flex-col scale-100 transition-transform border border-gray-100">
-                        <div class="bg-[#e58f8b] text-white py-5 relative flex justify-center items-center border-b border-[#df8480]">
-                            <h2 class="text-[22px] font-bold tracking-wider uppercase">Chi tiết ưu đãi</h2>
-                            <button onclick="closeModal('detail-{{ item.MaKM }}')" class="absolute right-6 text-3xl hover:text-gray-200 transition"><i class="fas fa-times"></i></button>
-                        </div>
-                        <div class="p-8 flex items-stretch gap-8 bg-white">
-                            <div class="w-[200px] bg-[#fbf0ef] rounded-[18px] flex items-center justify-center p-4 h-full min-h-[180px]">
-                                <div class="w-36 h-36 bg-[#fcdcdc] rounded-full flex items-center justify-center relative shadow-[inset_0_2px_10px_rgba(255,255,255,0.8)]">
-                                    <i class="fas fa-bullhorn text-[#df8480] text-[55px] -rotate-12 transform"></i>
-                                </div>
-                            </div>
-                            <div class="flex-1 flex flex-col justify-between">
-                                <div class="flex border-b border-gray-200 pb-3 mt-1">
-                                    <span class="w-36 font-bold text-gray-900 text-[16px]">Mã ưu đãi:</span>
-                                    <span class="text-gray-600 text-[16px]">{{ item.MaKM }}</span>
-                                </div>
-                                <div class="flex border-b border-gray-200 py-3">
-                                    <span class="w-36 font-bold text-gray-900 text-[16px] mt-1">Tên:</span>
-                                    <span class="font-extrabold text-black text-[22px] leading-none">{{ item.TenKhuyenMai }}</span>
-                                </div>
-                                <div class="flex border-b border-gray-200 py-3">
-                                    <span class="w-36 font-bold text-gray-900 text-[16px]">Nội dung:</span>
-                                    <span class="text-gray-700 text-[15px] flex-1 leading-snug">{{ item.MoTa|default:"Giảm giá đặc biệt cho sản phẩm." }}</span>
-                                </div>
-                                <div class="flex border-b border-gray-200 py-3">
-                                    <span class="w-36 font-bold text-gray-900 text-[16px]">Ngày bắt đầu:</span>
-                                    <span class="text-gray-700 text-[16px]">{{ item.NgayBatDau|date:"d/m/Y" }}</span>
-                                </div>
-                                <div class="flex py-3 mb-1">
-                                    <span class="w-36 font-bold text-gray-900 text-[16px]">Ngày kết thúc:</span>
-                                    <span class="text-gray-700 text-[16px]">{{ item.NgayKetThuc|date:"d/m/Y" }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- === MODAL SỬA ƯU ĐÃI === -->
-                <div id="modal-edit-{{ item.MaKM }}" class="hidden fixed inset-0 z-[50] flex items-center justify-center p-4">
-                    <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] transition-all" onclick="confirmCancelEdit('{{ item.MaKM }}')"></div>
-                    <div class="bg-white rounded-[24px] overflow-hidden w-full max-w-[700px] shadow-2xl relative z-10 flex flex-col scale-100 transition-transform">
-                        <div class="bg-[#e58f8b] text-white py-5 relative flex justify-center items-center cursor-default">
-                            <h2 class="text-[22px] font-bold tracking-wider uppercase">Sửa thông báo ưu đãi</h2>
-                        </div>
-                        <div class="p-8 flex items-stretch gap-8 pb-6 bg-white cursor-default">
-                            <div class="w-[200px] bg-[#fbf0ef] rounded-[18px] flex items-center justify-center p-4 h-full min-h-[200px]">
-                                <div class="w-36 h-36 bg-[#fcdcdc] rounded-full flex items-center justify-center relative shadow-[inset_0_2px_10px_rgba(255,255,255,0.8)]">
-                                    <i class="fas fa-bullhorn text-[#df8480] text-[55px] -rotate-12 transform"></i>
-                                </div>
-                            </div>
-                            <div class="flex-1 space-y-4">
-                                <div class="flex items-center">
-                                    <span class="w-32 font-bold text-gray-900 text-[15px]">Mã ưu đãi:</span>
-                                    <input type="text" value="{{ item.MaKM }}" readonly class="flex-1 bg-[#cfcfcf] text-gray-600 rounded-lg px-4 py-2 text-[15px] outline-none">
-                                </div>
-                                <div class="flex items-center">
-                                    <span class="w-32 font-bold text-gray-900 text-[15px]">Tên:</span>
-                                    <input type="text" value="{{ item.TenKhuyenMai }}" class="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-gray-800 text-[15px] outline-none focus:border-[#e58f8b]">
-                                </div>
-                                <div class="flex items-start">
-                                    <span class="w-32 font-bold text-gray-900 text-[15px] mt-2">Nội dung:</span>
-                                    <textarea rows="2" class="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-gray-800 text-[15px] outline-none focus:border-[#e58f8b] resize-none">{{ item.MoTa }}</textarea>
-                                </div>
-                                <div class="flex items-center">
-                                    <span class="w-32 font-bold text-gray-900 text-[15px]">Ngày bắt đầu:</span>
-                                    <input type="text" value="{{ item.NgayBatDau|date:'d/m/Y' }}" class="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-gray-800 text-[15px] outline-none focus:border-[#e58f8b]">
-                                </div>
-                                <div class="flex items-center">
-                                    <span class="w-32 font-bold text-gray-900 text-[15px]">Ngày kết thúc:</span>
-                                    <input type="text" value="{{ item.NgayKetThuc|date:'d/m/Y' }}" class="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-gray-800 text-[15px] outline-none focus:border-[#e58f8b]">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="px-8 pb-8 pt-2 flex justify-center gap-10 bg-white">
-                            <button type="button" onclick="confirmCancelEdit('{{ item.MaKM }}')" class="w-[180px] py-2.5 bg-[#e5e5e5] text-[#8e8e8e] font-bold rounded-lg hover:bg-gray-300 transition text-[16px]">Hủy thao tác</button>
-                            <button type="button" class="w-[180px] py-2.5 bg-[#df8480] text-white font-bold rounded-xl hover:bg-[#d88c89] transition shadow-sm text-[16px]">Lưu</button>
-                        </div>
-                    </div>
-                </div>
-
                 {% empty %}
                 <tr>
-                    <td colspan="5" class="py-10 text-gray-400">
+                    <td colspan="6" class="py-10 text-gray-400">
                         <i class="fas fa-box-open text-4xl mb-3"></i>
                         <p>Hiện tại hệ thống chưa có chương trình ưu đãi nào.</p>
                     </td>
@@ -159,138 +77,218 @@
             </tbody>
         </table>
     </div>
-
-    <!-- === MODAL TẠO ƯU ĐÃI (Dùng chung bên ngoài) === -->
-    <div id="modal-create" class="hidden fixed inset-0 z-[50] flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] transition-all" onclick="confirmCancelCreate()"></div>
-        <div class="bg-white rounded-[24px] overflow-hidden w-full max-w-[700px] shadow-2xl relative z-10 flex flex-col scale-100 transition-transform">
+ 
+    {% if action == 'detail' %}
+    <!-- === MODAL CHI TIẾT ƯU ĐÃI === -->
+    <div class="fixed inset-0 z-[50] flex items-center justify-center p-4">
+        <a href="{% url 'cskh:uudai_list' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="absolute inset-0 bg-black/40 backdrop-blur-[2px] transition-all cursor-default"></a>
+        <div class="bg-white rounded-[24px] overflow-hidden w-full max-w-[620px] shadow-2xl relative z-10 flex flex-col scale-100 transition-transform">
+            <div class="bg-[#e58f8b] text-white py-5 relative flex justify-center items-center border-b border-[#df8480]">
+                <h2 class="text-[22px] font-bold tracking-wider uppercase">Chi tiết ưu đãi</h2>
+                <a href="{% url 'cskh:uudai_list' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="absolute right-6 text-3xl text-white hover:text-gray-200 transition"><i class="fas fa-times"></i></a>
+            </div>
+            <div class="p-8 flex items-stretch gap-6 bg-white">
+                <div class="w-[160px] bg-[#fbf0ef] rounded-[18px] flex items-center justify-center p-4 h-full min-h-[180px]">
+                    <div class="w-28 h-28 bg-[#fcdcdc] rounded-full flex items-center justify-center relative shadow-[inset_0_2px_10px_rgba(255,255,255,0.8)]">
+                        <i class="fas fa-bullhorn text-[#df8480] text-[40px] -rotate-12 transform"></i>
+                    </div>
+                </div>
+                <div class="flex-1 flex flex-col justify-between">
+                    <div class="flex border-b border-gray-200 pb-3 mt-1">
+                        <span class="w-36 font-bold text-gray-900 text-[16px]">Mã ưu đãi:</span>
+                        <span class="text-gray-600 text-[16px]">{{ selected_uudai.MaKM }}</span>
+                    </div>
+                    <div class="flex border-b border-gray-200 py-3">
+                        <span class="w-36 font-bold text-gray-900 text-[16px] mt-1">Tên:</span>
+                        <span class="font-extrabold text-black text-[22px] leading-none">{{ selected_uudai.TenKhuyenMai }}</span>
+                    </div>
+                    <div class="flex border-b border-gray-200 py-3">
+                        <span class="w-36 font-bold text-gray-900 text-[16px]">Phần trăm giảm:</span>
+                        <span class="text-gray-700 text-[15px] flex-1 leading-snug">{{ selected_uudai.PhanTramGiam|stringformat:"s"|default:"0" }}%</span>
+                    </div>
+                    <div class="flex border-b border-gray-200 py-3">
+                        <span class="w-36 font-bold text-gray-900 text-[16px]">Nội dung:</span>
+                        <span class="text-gray-700 text-[15px] flex-1 leading-snug">{{ selected_uudai.MoTa|default:"Chưa có mô tả" }}</span>
+                    </div>
+                    <div class="flex border-b border-gray-200 py-3">
+                        <span class="w-36 font-bold text-gray-900 text-[16px]">Ngày bắt đầu:</span>
+                        <span class="text-gray-700 text-[16px]">{{ selected_uudai.NgayBatDau|date:"d/m/Y" }}</span>
+                    </div>
+                    <div class="flex py-3 mb-1">
+                        <span class="w-36 font-bold text-gray-900 text-[16px]">Ngày kết thúc:</span>
+                        <span class="text-gray-700 text-[16px]">{{ selected_uudai.NgayKetThuc|date:"d/m/Y" }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% elif action == 'edit' %}
+    <!-- === MODAL SỬA ƯU ĐÃI === -->
+    <div class="fixed inset-0 z-[50] flex items-center justify-center p-4">
+        <a href="{% url 'cskh:uudai_list' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="absolute inset-0 bg-black/40 backdrop-blur-[2px] transition-all cursor-default"></a>
+        <div class="bg-white rounded-[24px] overflow-hidden w-full max-w-[620px] shadow-2xl relative z-10 flex flex-col scale-100 transition-transform">
+            <div class="bg-[#e58f8b] text-white py-5 relative flex justify-center items-center cursor-default">
+                <h2 class="text-[22px] font-bold tracking-wider uppercase">Sửa thông báo ưu đãi</h2>
+            </div>
+            <form method="POST" action="{% url 'cskh:uudai_edit' selected_uudai.MaKM %}{% if search_query %}?q={{ search_query }}{% endif %}">
+                {% csrf_token %}
+                <div class="p-8 flex items-stretch gap-6 pb-6 bg-white cursor-default">
+                    <div class="w-[160px] bg-[#fbf0ef] rounded-[18px] flex items-center justify-center p-4 h-full min-h-[290px]">
+                        <div class="w-28 h-28 bg-[#fcdcdc] rounded-full flex items-center justify-center relative shadow-[inset_0_2px_10px_rgba(255,255,255,0.8)]">
+                            <i class="fas fa-bullhorn text-[#df8480] text-[40px] -rotate-12 transform"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 space-y-4">
+                        <div class="flex items-center">
+                            <span class="w-32 font-bold text-gray-900 text-[15px]">Mã ưu đãi:</span>
+                            <input type="text" name="makm" value="{{ selected_uudai.MaKM }}" readonly class="flex-1 w-full bg-[#f3f3f3] border border-gray-200 text-gray-600 rounded-lg px-4 py-2 text-[15px] outline-none">
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-32 font-bold text-gray-900 text-[15px]">Tên:</span>
+                            {{ form.TenKhuyenMai }}
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-32 font-bold text-gray-900 text-[15px]">Phần trăm:</span>
+                            {{ form.PhanTramGiam }}
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-32 font-bold text-gray-900 text-[15px] mt-2">Nội dung:</span>
+                            {{ form.MoTa }}
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-32 font-bold text-gray-900 text-[15px]">Ngày bắt đầu:</span>
+                            {{ form.NgayBatDau }}
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-32 font-bold text-gray-900 text-[15px]">Ngày kết thúc:</span>
+                            {{ form.NgayKetThuc }}
+                        </div>
+                    </div>
+                </div>
+                <div class="px-8 pb-8 pt-2 flex justify-center gap-10 bg-white">
+                    <a href="{% url 'cskh:uudai_list' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="w-[180px] block text-center py-2.5 bg-[#e5e5e5] text-[#8e8e8e] font-bold rounded-lg hover:bg-gray-300 transition text-[16px]">Hủy thao tác</a>
+                    <button type="submit" class="w-[180px] py-2.5 bg-[#df8480] text-white font-bold rounded-xl hover:bg-[#d88c89] transition shadow-sm text-[16px]">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% elif action == 'create' %}
+    <!-- === MODAL TẠO ƯU ĐÃI === -->
+    <div class="fixed inset-0 z-[50] flex items-center justify-center p-4">
+        <a href="{% url 'cskh:uudai_list' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="absolute inset-0 bg-black/40 backdrop-blur-[2px] transition-all cursor-default"></a>
+        <div class="bg-white rounded-[24px] overflow-hidden w-full max-w-[620px] shadow-2xl relative z-10 flex flex-col scale-100 transition-transform">
             <div class="bg-[#e58f8b] text-white py-5 relative flex justify-center items-center cursor-default">
                 <h2 class="text-[22px] font-bold tracking-wider uppercase">Tạo thông báo ưu đãi</h2>
             </div>
-            <div class="p-8 flex items-stretch gap-8 pb-6 bg-white cursor-default">
-                <div class="w-[200px] bg-[#fbf0ef] rounded-[18px] flex items-center justify-center p-4 h-full min-h-[200px]">
-                    <div class="w-36 h-36 bg-[#fcdcdc] rounded-full flex items-center justify-center relative shadow-[inset_0_2px_10px_rgba(255,255,255,0.8)]">
-                        <i class="fas fa-bullhorn text-[#df8480] text-[55px] -rotate-12 transform"></i>
+            <form method="POST" action="{% url 'cskh:uudai_create' %}{% if search_query %}?q={{ search_query }}{% endif %}">
+                {% csrf_token %}
+                <div class="p-8 flex items-stretch gap-6 pb-6 bg-white cursor-default">
+                    <div class="w-[160px] bg-[#fbf0ef] rounded-[18px] flex items-center justify-center p-4 h-full min-h-[290px]">
+                        <div class="w-28 h-28 bg-[#fcdcdc] rounded-full flex items-center justify-center relative shadow-[inset_0_2px_10px_rgba(255,255,255,0.8)]">
+                            <i class="fas fa-bullhorn text-[#df8480] text-[40px] -rotate-12 transform"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 space-y-4">
+                        <div class="flex items-center">
+                            <span class="w-32 font-bold text-gray-900 text-[15px]">Mã ưu đãi:</span>
+                            <input type="text" name="makm" value="{{ temp_makm }}" readonly class="flex-1 w-full bg-[#f3f3f3] border border-gray-200 text-gray-600 rounded-lg px-4 py-2 text-[15px] outline-none">
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-32 font-bold text-gray-900 text-[15px]">Tên:</span>
+                            {{ form.TenKhuyenMai }}
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-32 font-bold text-gray-900 text-[15px]">Phần trăm:</span>
+                            {{ form.PhanTramGiam }}
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-32 font-bold text-gray-900 text-[15px] mt-2">Nội dung:</span>
+                            {{ form.MoTa }}
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-32 font-bold text-gray-900 text-[15px]">Ngày bắt đầu:</span>
+                            {{ form.NgayBatDau }}
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-32 font-bold text-gray-900 text-[15px]">Ngày kết thúc:</span>
+                            {{ form.NgayKetThuc }}
+                        </div>
                     </div>
                 </div>
-                <div class="flex-1 space-y-4">
-                    <div class="flex items-center">
-                        <span class="w-32 font-bold text-gray-900 text-[15px]">Mã ưu đãi:</span>
-                        <input type="text" value="UD0009" readonly class="flex-1 bg-[#cfcfcf] text-gray-600 rounded-lg px-4 py-2 text-[15px] outline-none">
-                    </div>
-                    <div class="flex items-center">
-                        <span class="w-32 font-bold text-gray-900 text-[15px]">Tên:</span>
-                        <input type="text" placeholder="Nhập tên ưu đãi" class="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-gray-800 text-[15px] outline-none focus:border-[#e58f8b] placeholder-gray-400">
-                    </div>
-                    <div class="flex items-center">
-                        <span class="w-32 font-bold text-gray-900 text-[15px]">Nội dung:</span>
-                        <input type="text" placeholder="Nhập nội dung ưu đãi" class="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-gray-800 text-[15px] outline-none focus:border-[#e58f8b] placeholder-gray-400">
-                    </div>
-                    <div class="flex items-center">
-                        <span class="w-32 font-bold text-gray-900 text-[15px]">Ngày bắt đầu:</span>
-                        <input type="text" placeholder="Nhập ngày bắt đầu" class="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-gray-800 text-[15px] outline-none focus:border-[#e58f8b] placeholder-gray-400">
-                    </div>
-                    <div class="flex items-center">
-                        <span class="w-32 font-bold text-gray-900 text-[15px]">Ngày kết thúc:</span>
-                        <input type="text" placeholder="Nhập ngày kết thúc" class="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-gray-800 text-[15px] outline-none focus:border-[#e58f8b] placeholder-gray-400">
-                    </div>
+                <div class="px-8 pb-8 pt-2 flex justify-center gap-10 bg-white">
+                    <a href="{% url 'cskh:uudai_list' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="w-[180px] block text-center py-2.5 bg-[#e5e5e5] text-[#8e8e8e] font-bold rounded-lg hover:bg-gray-300 transition text-[16px]">Hủy thao tác</a>
+                    <button type="submit" class="w-[180px] py-2.5 bg-[#df8480] text-white font-bold rounded-lg hover:bg-[#d88c89] transition shadow-sm text-[16px]">Lưu/Tạo Mới</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% elif action == 'delete' %}
+    <!-- === MODAL XÁC NHẬN XÓA (BACKEND) === -->
+    <div class="fixed inset-0 z-[70] flex items-center justify-center p-4">
+        <a href="{% url 'cskh:uudai_list' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="absolute inset-0 bg-black/40 backdrop-blur-[2px] transition-all cursor-default"></a>
+        <form method="POST" action="{% url 'cskh:uudai_delete' selected_uudai.MaKM %}{% if search_query %}?q={{ search_query }}{% endif %}">
+            {% csrf_token %}
+            <div class="bg-white rounded-[24px] w-full max-w-[360px] shadow-2xl relative z-10 flex flex-col items-center p-8 scale-100 transition-transform">
+                <div class="w-[45px] h-[45px] rounded-full border-[1.5px] border-[#df8480] text-[#df8480] flex items-center justify-center text-[22px] mb-4 font-semibold pb-0.5">
+                    !
+                </div>
+                <h3 class="text-[17px] font-bold text-center uppercase text-black mb-1.5 tracking-wide">XÁC NHẬN XÓA</h3>
+                <p class="text-[14px] text-gray-600 text-center mb-6 whitespace-pre-line leading-snug">Bạn có chắc chắn muốn xóa ưu đãi<br><b>{{ selected_uudai.TenKhuyenMai }}</b> không?</p>
+                
+                <div class="flex gap-4 w-full">
+                    <a href="{% url 'cskh:uudai_list' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="flex-1 py-1.5 bg-[#e4e4e4] text-[#666] font-bold text-[15px] text-center rounded-md hover:bg-gray-300 transition shadow-sm block">Không</a>
+                    <button type="submit" class="flex-1 py-1.5 bg-[#e1908d] text-white font-bold text-[15px] rounded-md hover:bg-[#d88c89] transition shadow-sm">Đồng ý</button>
                 </div>
             </div>
-            <div class="px-8 pb-8 pt-2 flex justify-center gap-10 bg-white">
-                <button type="button" onclick="confirmCancelCreate()" class="w-[180px] py-2.5 bg-[#e5e5e5] text-[#8e8e8e] font-bold rounded-lg hover:bg-gray-300 transition text-[16px]">Hủy thao tác</button>
-                <button type="button" class="w-[180px] py-2.5 bg-[#df8480] text-white font-bold rounded-lg hover:bg-[#d88c89] transition shadow-sm text-[16px]">Gửi thông báo</button>
-            </div>
-        </div>
+        </form>
     </div>
+    {% endif %}
 
-
-    <!-- === MODAL XÁC NHẬN CHUNG (Sử dụng JS để chạy nền) === -->
-    <div id="modal-confirm" class="hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] transition-all" onclick="closeConfirmModal()"></div>
-        <div class="bg-white rounded-[24px] w-full max-w-[360px] shadow-2xl relative z-10 flex flex-col items-center p-8 scale-100 transition-transform">
-            
-            <div class="w-[45px] h-[45px] rounded-full border-[1.5px] border-[#df8480] text-[#df8480] flex items-center justify-center text-[22px] mb-4 font-semibold pb-0.5">
-                !
+    <!-- ================== THÔNG BÁO NHANH BẰNG PURE CSS VÀ DJANGO MESSAGES ================== -->
+    <style>
+        @keyframes autoFadeOut {
+            0% { opacity: 0; transform: scale(0.9); }
+            10% { opacity: 1; transform: scale(1); }
+            80% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.9); pointer-events: none; visibility: hidden; }
+        }
+        .pure-css-toast {
+            animation: autoFadeOut 2.5s forwards ease-in-out;
+        }
+    </style>
+    
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.message == 'create_success' %}
+            <div class="fixed inset-0 z-[80] flex items-center justify-center p-4 pure-css-toast pointer-events-none">
+                <div class="bg-[#f6f6f6] rounded-3xl px-10 py-8 shadow-2xl relative flex flex-col items-center border border-gray-200">
+                    <div class="w-[50px] h-[50px] bg-[#6cc16b] rounded-full flex items-center justify-center mb-4 shadow-sm">
+                        <i class="fas fa-check text-white text-2xl"></i>
+                    </div>
+                    <h2 class="text-[17px] font-bold text-[#333] text-center w-[220px] leading-snug tracking-tight">Tạo ưu đãi<br>thành công!!</h2>
+                </div>
             </div>
-            
-            <h3 id="confirm-title" class="text-[17px] font-bold uppercase text-black mb-1.5 tracking-wide">XÁC NHẬN HỦY</h3>
-            <p id="confirm-message" class="text-[14px] text-gray-600 text-center mb-6 whitespace-pre-line leading-snug">Bạn có chắc chắn muốn hủy tạo ưu<br>đãi này không?</p>
-            
-            <div class="flex gap-4 w-full">
-                <button onclick="closeConfirmModal()" class="flex-1 py-1.5 bg-[#e4e4e4] text-[#666] font-bold text-[15px] rounded-md hover:bg-gray-300 transition shadow-sm">Không</button>
-                <button id="confirm-yes-btn" class="flex-1 py-1.5 bg-[#e1908d] text-white font-bold text-[15px] rounded-md hover:bg-[#d88c89] transition shadow-sm">Đồng ý</button>
+            {% elif message.message == 'edit_success' %}
+            <div class="fixed inset-0 z-[80] flex items-center justify-center p-4 pure-css-toast pointer-events-none">
+                <div class="bg-[#f6f6f6] rounded-3xl px-10 py-8 shadow-2xl relative flex flex-col items-center border border-gray-200">
+                    <div class="w-[50px] h-[50px] bg-[#6cc16b] rounded-full flex items-center justify-center mb-4 shadow-sm">
+                        <i class="fas fa-check text-white text-2xl"></i>
+                    </div>
+                    <h2 class="text-[17px] font-bold text-[#333] text-center w-[220px] leading-snug tracking-tight">Cập nhật ưu đãi<br>thành công!!</h2>
+                </div>
             </div>
-
-        </div>
-    </div>
+            {% elif message.message == 'delete_success' %}
+            <div class="fixed inset-0 z-[80] flex items-center justify-center p-4 pure-css-toast pointer-events-none">
+                <div class="bg-[#fdf2f1] rounded-3xl px-10 py-8 shadow-2xl relative flex flex-col items-center border border-[#fadada]">
+                    <div class="w-[50px] h-[50px] bg-[#6cc16b] rounded-full flex items-center justify-center mb-4 shadow-sm">
+                        <i class="fas fa-check text-white text-2xl"></i>
+                    </div>
+                    <h2 class="text-[17px] font-bold text-[#333] text-center w-[220px] leading-snug tracking-tight">Xóa ưu đãi<br>thành công!!</h2>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 
 </main>
-
-
-<!-- KỊCH BẢN JAVASCRIPT XỬ LÝ ẨN/HIỆN MODAL -->
-<script>
-    // --- 1. Nhóm hàm Toggle Cơ bản ---
-    function openModal(id) {
-        document.getElementById('modal-' + id).classList.remove('hidden');
-        document.body.style.overflow = 'hidden'; 
-    }
-
-    function closeModal(id) {
-        document.getElementById('modal-' + id).classList.add('hidden');
-        document.body.style.overflow = 'auto'; 
-    }
-
-
-    /* --- 2. Nhóm hàm xác nhận hành động --- */
-    function confirmCancelCreate() {
-        showConfirm('XÁC NHẬN HỦY', 'Bạn có chắc chắn muốn hủy tạo ưu\nđãi này không?', function() {
-            closeModal('create');
-        });
-    }
-
-    function confirmCancelEdit(id) {
-        showConfirm('XÁC NHẬN HỦY', 'Bạn có chắc chắn muốn hủy sửa ưu\nđãi này không?', function() {
-            closeModal('edit-' + id);
-        });
-    }
-
-    function confirmDelete(id) {
-        showConfirm('XÁC NHẬN XÓA', 'Bạn có chắc chắn muốn xóa ưu đãi\nnày không?', function() {
-            // Tạm thời hiển thị Alert Xóa Thành Công (khi nào có API Backend sẽ trỏ vào sau)
-            alert('Đã xóa bỏ thành công ưu đãi: ' + id);
-        });
-    }
-
-
-    /* --- 3. Động cơ (Engine) đẩy dữ liệu chữ vào Modal chung --- */
-    function showConfirm(title, message, yesCallback) {
-        const modal = document.getElementById('modal-confirm');
-        
-        // Cắm chữ vào các thẻ p/h3
-        document.getElementById('confirm-title').innerText = title;
-        document.getElementById('confirm-message').innerText = message;
-        
-        // Cắm tính năng vào nút "Đồng ý"
-        const yesBtn = document.getElementById('confirm-yes-btn');
-        // Kỹ thuật reset nút (Bóc tách listener rác của đơn cũ nếu có)
-        const newYesBtn = yesBtn.cloneNode(true);
-        yesBtn.parentNode.replaceChild(newYesBtn, yesBtn);
-        
-        newYesBtn.addEventListener('click', function() {
-            closeConfirmModal();
-            if (yesCallback) yesCallback();
-        });
-
-        // Kéo Modal lên mặt tiền
-        modal.classList.remove('hidden');
-        // Ép Body không cho sượng lại khi cuộn chuột
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeConfirmModal() {
-        document.getElementById('modal-confirm').classList.add('hidden');
-        // Không mở overflow vội nếu như Modal cha vẫn đang hiển thị, 
-        // nhưng thực tế hàm yesCallback thường gọi closeModalcha() phía trên.
-    }
-</script>
 {% endblock %}

@@ -34,13 +34,117 @@ def dashboard_view(request):
 
     return render(request, 'cskh/dashboard.html', context)
 
+from django.contrib import messages
+from django.shortcuts import redirect
+import random, string
+
 def uudai_list_view(request):
-    # Kéo toàn bộ danh sách Khuyến mãi từ Database, xếp cái mới nhất lên đầu
+    q = request.GET.get('q', '').strip()
     uudai_list = KhuyenMai.objects.all().order_by('-NgayBatDau')
+    if q:
+        from django.db.models import Q
+        uudai_list = uudai_list.filter(Q(TenKhuyenMai__icontains=q) | Q(MaKM__icontains=q))
+    return render(request, 'cskh/uudai_list.html', {'uudai_list': uudai_list, 'search_query': q})
 
-    return render(request, 'cskh/uudai_list.html', {'uudai_list': uudai_list})
+def uudai_detail_view(request, pk):
+    q = request.GET.get('q', '').strip()
+    uudai_list = KhuyenMai.objects.all().order_by('-NgayBatDau')
+    if q:
+        from django.db.models import Q
+        uudai_list = uudai_list.filter(Q(TenKhuyenMai__icontains=q) | Q(MaKM__icontains=q))
+    from django.shortcuts import get_object_or_404
+    uudai = get_object_or_404(KhuyenMai, pk=pk)
+    return render(request, 'cskh/uudai_list.html', {'uudai_list': uudai_list, 'action': 'detail', 'selected_uudai': uudai, 'search_query': q})
 
+from .forms import KhuyenMaiForm
 
+def uudai_create_view(request):
+    temp_makm = "UD" + "".join(random.choices(string.digits, k=4))
+    
+    if request.method == 'POST':
+        form = KhuyenMaiForm(request.POST)
+        if form.is_valid():
+            makm = request.POST.get('makm')
+            
+            km_instance = form.save(commit=False)
+            km_instance.MaKM = makm if makm else temp_makm
+            km_instance.save()
+            
+            q_post = request.GET.get('q')
+            from django.urls import reverse
+            url = reverse('cskh:uudai_list')
+            if q_post:
+                url += f"?q={q_post}"
+            return redirect(url)
+    else:
+        form = KhuyenMaiForm()
+
+    q = request.GET.get('q', '').strip()
+    uudai_list = KhuyenMai.objects.all().order_by('-NgayBatDau')
+    if q:
+        from django.db.models import Q
+        uudai_list = uudai_list.filter(Q(TenKhuyenMai__icontains=q) | Q(MaKM__icontains=q))
+        
+    return render(request, 'cskh/uudai_list.html', {
+        'uudai_list': uudai_list, 
+        'action': 'create', 
+        'temp_makm': temp_makm,
+        'form': form,
+        'search_query': q
+    })
+
+def uudai_edit_view(request, pk):
+    from django.shortcuts import get_object_or_404
+    uudai = get_object_or_404(KhuyenMai, pk=pk)
+    
+    if request.method == 'POST':
+        form = KhuyenMaiForm(request.POST, instance=uudai)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'edit_success')
+            q_post = request.GET.get('q')
+            from django.urls import reverse
+            url = reverse('cskh:uudai_list')
+            if q_post:
+                url += f"?q={q_post}"
+            return redirect(url)
+    else:
+        form = KhuyenMaiForm(instance=uudai)
+
+    q = request.GET.get('q', '').strip()
+    uudai_list = KhuyenMai.objects.all().order_by('-NgayBatDau')
+    if q:
+        from django.db.models import Q
+        uudai_list = uudai_list.filter(Q(TenKhuyenMai__icontains=q) | Q(MaKM__icontains=q))
+        
+    return render(request, 'cskh/uudai_list.html', {
+        'uudai_list': uudai_list, 
+        'action': 'edit', 
+        'selected_uudai': uudai,
+        'form': form,
+        'search_query': q
+    })
+
+def uudai_delete_view(request, pk):
+    from django.shortcuts import get_object_or_404
+    uudai = get_object_or_404(KhuyenMai, pk=pk)
+    if request.method == 'POST':
+        uudai.delete()
+        messages.success(request, 'delete_success')
+        q_post = request.GET.get('q')
+        from django.urls import reverse
+        url = reverse('cskh:uudai_list')
+        if q_post:
+            url += f"?q={q_post}"
+        return redirect(url)
+
+    q = request.GET.get('q', '').strip()
+    uudai_list = KhuyenMai.objects.all().order_by('-NgayBatDau')
+    if q:
+        from django.db.models import Q
+        uudai_list = uudai_list.filter(Q(TenKhuyenMai__icontains=q) | Q(MaKM__icontains=q))
+        
+    return render(request, 'cskh/uudai_list.html', {'uudai_list': uudai_list, 'action': 'delete', 'selected_uudai': uudai, 'search_query': q})
 from django.shortcuts import render, get_object_or_404
 from .models import HoiThoaiTuVan, TinNhanTuVan, TichDiem, LichSuTichDiem
 from django.http import JsonResponse
@@ -296,3 +400,52 @@ def chat_reply_view(request):
 def guest_home_view(request):
     # Trang chủ tĩnh dành cho khách chưa đăng nhập (Guest)
     return render(request, 'cskh/guest_home.html')
+
+def global_notifications(request):
+    notifications = []
+
+    try:
+        # 1. Tin nhắn mới nhất (từ cuộc hội thoại chưa phản hồi)
+        hoi_thoai_chua_tl = HoiThoaiTuVan.objects.filter(TrangThai__icontains='Chưa').first()
+        if hoi_thoai_chua_tl:
+            msg = TinNhanTuVan.objects.filter(MaHoiThoai=hoi_thoai_chua_tl).order_by('-ThoiGianGui').first()
+            if msg:
+                notifications.append({
+                    'type': 'msg',
+                    'tag': 'Tin nhắn mới',
+                    'author': msg.MaHoiThoai.MaKH.HoTen if msg.MaHoiThoai.MaKH else 'Khách hàng',
+                    'preview': (msg.NoiDung[:45] + '...') if len(msg.NoiDung) > 45 else msg.NoiDung,
+                    'time': msg.ThoiGianGui.strftime('%H:%M - %d/%m/%Y'),
+                    'link': '/cskh/chat/reply/'
+                })
+
+        # 2. Đổi trả mới nhất (Chờ xử lý)
+        dt = DoiTra.objects.filter(TrangThai='PENDING').order_by('-NgayYeuCau').first()
+        if dt:
+            notifications.append({
+                'type': 'return',
+                'tag': 'Yêu cầu đổi trả mới',
+                'author': dt.MaKH.HoTen if dt.MaKH else 'Khách hàng',
+                'preview': (dt.LyDo[:45] + '...') if len(dt.LyDo) > 45 else dt.LyDo,
+                'time': dt.NgayYeuCau.strftime('00:00 - %d/%m/%Y'),
+                'link': '/orders/doitra/'
+            })
+
+        # 3. Đánh giá mới nhất
+        dg = DanhGia.objects.order_by('-NgayDanhGia').first()
+        if dg:
+            notifications.append({
+                'type': 'review',
+                'tag': 'Đánh giá mới',
+                'author': dg.MaKH.HoTen if dg.MaKH else 'Khách hàng',
+                'preview': (dg.NoiDung[:45] + '...') if dg.NoiDung and len(dg.NoiDung) > 45 else (dg.NoiDung or "Không có nội dung"),
+                'time': dg.NgayDanhGia.strftime('00:00 - %d/%m/%Y'),
+                'link': '/cskh/danh-gia/'
+            })
+    except Exception:
+        pass # Fallback an toàn nếu thiếu DB model chưa migrate
+
+    return {
+        'nav_notifications': notifications,
+        'nav_notifications_count': sum(1 for n in notifications)
+    }

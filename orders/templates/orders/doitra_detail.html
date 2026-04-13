@@ -62,17 +62,20 @@
                     <p class="text-black text-[15px]">Ngày gửi: {{ doitra.NgayYeuCau|date:"d/m/Y"|default:"20/01/2021" }}</p>
                 </div>
                 
-                <h3 class="text-[17px] font-bold mt-6 mb-3 text-black">Ghi chú xử lý:</h3>
-                <div class="w-full">
-                    <input type="text" placeholder="Ghi chú" class="w-full border border-gray-400 rounded-3xl p-3 focus:outline-none focus:border-gray-600 text-[15px]">
-                </div>
+                <form method="POST" action="{% url 'orders:doitra_detail' doitra.pk %}">
+                    {% csrf_token %}
+                    <h3 class="text-[17px] font-bold mt-6 mb-3 text-black">Ghi chú xử lý:</h3>
+                    <div class="w-full">
+                        <input type="text" name="ghi_chu" value="{{ doitra.GhiChuXuLy|default:'' }}" placeholder="Ghi chú" class="w-full border border-gray-400 rounded-3xl p-3 focus:outline-none focus:border-gray-600 text-[15px]">
+                    </div>
 
-                <!-- Các nút bấm tương tác -->
-                <div class="flex justify-between items-center mt-8 gap-3">
-                    <button class="px-6 py-2 bg-[#81b979] text-white font-medium text-[15px] rounded-full hover:bg-green-600 transition shadow-sm w-full">Duyệt</button>
-                    <button class="px-6 py-2 bg-[#f05c2f] text-white font-medium text-[15px] rounded-full hover:bg-red-600 transition shadow-sm w-full">Từ chối</button>
-                    <button class="px-6 py-2 bg-white text-black font-medium text-[15px] rounded-full border border-black hover:bg-gray-100 transition shadow-sm w-full">Huỷ</button>
-                </div>
+                    <!-- Các nút bấm tương tác -->
+                    <div class="flex justify-between items-center mt-8 gap-3">
+                        <button type="submit" name="action" value="approve" class="px-6 py-2 bg-[#81b979] text-white font-medium text-[15px] rounded-full hover:bg-green-600 transition shadow-sm w-full">Duyệt</button>
+                        <button type="submit" name="action" value="reject" class="px-6 py-2 bg-[#f05c2f] text-white font-medium text-[15px] rounded-full hover:bg-red-600 transition shadow-sm w-full">Từ chối</button>
+                        <a href="{% url 'orders:doitra_list' %}" class="px-6 py-2 bg-white text-black font-medium text-[15px] text-center rounded-full border border-black hover:bg-gray-100 transition shadow-sm w-full block block">Huỷ</a>
+                    </div>
+                </form>
             </div>
         </div>
 
