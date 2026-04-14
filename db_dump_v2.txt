@@ -1,0 +1,1 @@
+[('DT00001', 'doitra_images/Ao.jpg'), ('DT00002', 'doitra_images/AO_DEN.jpg'), ('DT00003', 'doitra_images/AO_KIEU.jpg'), ('DT00004', 'doitra_images/Banh_mi.jpg'), ('DT00005', 'doitra_images/BODY_NU.jpg')]
