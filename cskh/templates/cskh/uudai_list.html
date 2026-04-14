@@ -20,8 +20,8 @@
 
 <main class="max-w-[1200px] mx-auto mt-10 px-4 pb-20">
     
-    <div class="flex justify-between items-center mb-8">
-        <form method="GET" action="{% url 'cskh:uudai_list' %}" class="flex items-center gap-4 w-1/2">
+    <div class="flex justify-center items-center mb-8 gap-6">
+        <form method="GET" action="{% url 'cskh:uudai_list' %}" class="flex items-center gap-3 w-[55%]">
             <input type="text" name="q" value="{{ search_query }}" placeholder="Tìm kiếm tên ưu đãi hoặc mã..." class="flex-1 border border-gray-200 rounded-full px-6 py-3 text-gray-700 outline-none focus:border-[#e58f8b]">
             <button type="submit" class="bg-[#e58f8b] hover:bg-[#d88c89] transition-colors text-white w-12 h-12 rounded-xl flex items-center justify-center text-lg shadow-sm">
                 <i class="fas fa-search"></i>
@@ -35,7 +35,7 @@
     </div>
 
     <!-- BẢNG BIỂU -->
-    <div class="w-full shadow-sm overflow-hidden rounded-md border border-gray-100">
+    <div class="w-full shadow-sm overflow-hidden rounded-none border border-gray-100">
         <table class="w-full text-center border-collapse table-uudai">
             
             <thead class="bg-[#e58f8b] text-white">
@@ -88,7 +88,7 @@
                 <a href="{% url 'cskh:uudai_list' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="absolute right-6 text-3xl text-white hover:text-gray-200 transition"><i class="fas fa-times"></i></a>
             </div>
             <div class="p-8 flex items-stretch gap-6 bg-white">
-                <div class="w-[160px] bg-[#fbf0ef] rounded-[18px] flex items-center justify-center p-4 h-full min-h-[180px]">
+                <div class="w-[160px] bg-[#fbf0ef] rounded-none flex items-center justify-center p-4 h-full min-h-[180px]">
                     <div class="w-28 h-28 bg-[#fcdcdc] rounded-full flex items-center justify-center relative shadow-[inset_0_2px_10px_rgba(255,255,255,0.8)]">
                         <i class="fas fa-bullhorn text-[#df8480] text-[40px] -rotate-12 transform"></i>
                     </div>
@@ -133,7 +133,7 @@
             <form method="POST" action="{% url 'cskh:uudai_edit' selected_uudai.MaKM %}{% if search_query %}?q={{ search_query }}{% endif %}">
                 {% csrf_token %}
                 <div class="p-8 flex items-stretch gap-6 pb-6 bg-white cursor-default">
-                    <div class="w-[160px] bg-[#fbf0ef] rounded-[18px] flex items-center justify-center p-4 h-full min-h-[290px]">
+                    <div class="w-[160px] bg-[#fbf0ef] rounded-none flex items-center justify-center p-4 h-full min-h-[290px]">
                         <div class="w-28 h-28 bg-[#fcdcdc] rounded-full flex items-center justify-center relative shadow-[inset_0_2px_10px_rgba(255,255,255,0.8)]">
                             <i class="fas fa-bullhorn text-[#df8480] text-[40px] -rotate-12 transform"></i>
                         </div>
@@ -183,7 +183,7 @@
             <form method="POST" action="{% url 'cskh:uudai_create' %}{% if search_query %}?q={{ search_query }}{% endif %}">
                 {% csrf_token %}
                 <div class="p-8 flex items-stretch gap-6 pb-6 bg-white cursor-default">
-                    <div class="w-[160px] bg-[#fbf0ef] rounded-[18px] flex items-center justify-center p-4 h-full min-h-[290px]">
+                    <div class="w-[160px] bg-[#fbf0ef] rounded-none flex items-center justify-center p-4 h-full min-h-[290px]">
                         <div class="w-28 h-28 bg-[#fcdcdc] rounded-full flex items-center justify-center relative shadow-[inset_0_2px_10px_rgba(255,255,255,0.8)]">
                             <i class="fas fa-bullhorn text-[#df8480] text-[40px] -rotate-12 transform"></i>
                         </div>
@@ -228,7 +228,7 @@
         <a href="{% url 'cskh:uudai_list' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="absolute inset-0 bg-black/40 backdrop-blur-[2px] transition-all cursor-default"></a>
         <form method="POST" action="{% url 'cskh:uudai_delete' selected_uudai.MaKM %}{% if search_query %}?q={{ search_query }}{% endif %}">
             {% csrf_token %}
-            <div class="bg-white rounded-[24px] w-full max-w-[360px] shadow-2xl relative z-10 flex flex-col items-center p-8 scale-100 transition-transform">
+            <div class="bg-white rounded-none w-full max-w-[360px] shadow-2xl relative z-10 flex flex-col items-center p-8 scale-100 transition-transform">
                 <div class="w-[45px] h-[45px] rounded-full border-[1.5px] border-[#df8480] text-[#df8480] flex items-center justify-center text-[22px] mb-4 font-semibold pb-0.5">
                     !
                 </div>

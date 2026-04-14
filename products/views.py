@@ -1,24 +1,32 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import SanPham, BienTheSanPham
 import re
-from django.db.models import Q
+from django.db.models import Q, Avg, Count
 
 def product_list(request):
     # Lấy tham số tìm kiếm từ ô tìm kiếm (q) và tham số lọc loại (loai)
     query = request.GET.get('q')
     loai_filter = request.GET.get('loai')
     
-    products = SanPham.objects.all().order_by('MaSP')
+    products_qs = SanPham.objects.annotate(
+        sao_trung_binh=Avg('danhgia__SoSao'),
+        co_danh_gia=Count('danhgia')
+    ).order_by('MaSP')
 
     # 1. Xử lý tìm kiếm theo từ khóa (Ô tìm kiếm)
     if query:
         products = products.filter(TenSP__icontains=query)
     
-    # 2. Xử lý lọc theo loại (Thanh menu)
     if loai_filter and loai_filter != 'Tất cả':
-        products = products.filter(TenSP__icontains=loai_filter)
+        products_qs = products_qs.filter(TenSP__icontains=loai_filter)
     else:
         loai_filter = 'Tất cả'
+
+    products = []
+    for p in products_qs:
+        p.sao_trung = p.sao_trung_binh or 0.0
+        p.star_percent = p.sao_trung * 20
+        products.append(p)
 
     return render(request, 'products/product_list.html', {
         'products': products,
