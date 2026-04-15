@@ -23,6 +23,7 @@ class DonHang(models.Model):
         return self.MaDonHang
 
 class ChiTietDonHang(models.Model):
+    MaCTDH = models.AutoField(primary_key=True)
     MaDonHang = models.ForeignKey(DonHang, on_delete=models.CASCADE)
     MaBTSP = models.ForeignKey(BienTheSanPham, on_delete=models.CASCADE)
     SoLuong = models.IntegerField(default=0)

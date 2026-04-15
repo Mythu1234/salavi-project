@@ -204,7 +204,9 @@
                 <a href="{% url 'cskh:dashboard' %}" class="{% if request.path == '/' %}active !text-gray-900{% endif %}">Trang chủ</a>
                 <a href="{% url 'accounts:customer_list' %}" class="{% if 'customers' in request.path or 'accounts' in request.path %}active !text-gray-900{% endif %}">Khách hàng</a>
                 <a href="{% url 'products:product_list' %}" class="{% if 'products' in request.path %}active !text-gray-900{% endif %}">Sản phẩm</a>
+                {% if user.is_superuser %}
                 <a href="{% url 'cskh:uudai_list' %}" class="{% if 'uudai' in request.path %}active !text-gray-900{% endif %}">Ưu đãi</a>
+                {% endif %}
                 <a href="{% url 'cskh:diem_tich_luy' %}" class="{% if 'tich-luy' in request.path %}active !text-gray-900{% endif %}">Tích điểm</a>
                 <a href="{% url 'cskh:quan_ly_danh_gia' %}" class="{% if 'danh-gia' in request.path %}active !text-gray-900{% endif %}">Đánh giá</a>
                 <a href="{% url 'orders:doitra_list' %}" class="{% if 'doitra' in request.path or 'orders' in request.path %}active !text-gray-900{% endif %}">Đổi trả</a>

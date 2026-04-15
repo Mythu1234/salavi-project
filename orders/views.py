@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import DoiTra
 from .forms import DoiTraForm
+from django.urls import reverse
 
 def doitra_list_view(request):
     status_filter = request.GET.get('status')
@@ -32,31 +33,34 @@ def doitra_detail_view(request, pk):
     try:
         doitra = DoiTra.objects.get(pk=pk)
     except DoiTra.DoesNotExist:
-        doitra = None # Gửi giá trị Rỗng sang Template để nó xài Data Fallback
+        doitra = None
 
     if request.method == 'POST' and doitra:
-        form = DoiTraForm(request.POST, instance=doitra)
-        if form.is_valid():
-            action = request.POST.get('action')
-            doitra_instance = form.save(commit=False)
-            
+        action = request.POST.get('action')
+        # Lấy ghi chú từ form, nếu không có thì giữ lại ghi chú cũ
+        ghi_chu = request.POST.get('GhiChuXuLy', doitra.GhiChuXuLy)
+
+        if action in ['approve', 'reject']:
             if action == 'approve':
-                doitra_instance.TrangThai = 'DONE'
-            elif action == 'reject':
-                doitra_instance.TrangThai = 'REJECT'
-                
-            doitra_instance.save()
-            messages.success(request, action)
+                doitra.TrangThai = 'DONE'
+                messages.success(request, f"Đã duyệt thành công yêu cầu '{doitra.MaDoiTra}'.")
+            else:  # 'reject'
+                doitra.TrangThai = 'REJECT'
+                messages.success(request, f"Đã từ chối yêu cầu '{doitra.MaDoiTra}'.")
+
+            doitra.GhiChuXuLy = ghi_chu
+            # Chỉ cập nhật các trường cần thiết để tránh lỗi foreign key
+            doitra.save(update_fields=['TrangThai', 'GhiChuXuLy'])
+
+            # Redirect về trang list, giữ nguyên bộ lọc status
             status_filter_post = request.GET.get('status')
-            from django.urls import reverse
             url = reverse('orders:doitra_list')
             if status_filter_post:
                 url += f"?status={status_filter_post}"
             return redirect(url)
-    else:
-        form = DoiTraForm(instance=doitra) if doitra else None
 
-    # Trả về cả list và selected_doitra để vẽ Modal đè lên trang List
+    # Logic cho GET request hoặc nếu POST không hợp lệ
+    form = DoiTraForm(instance=doitra) if doitra else None
     status_filter = request.GET.get('status')
     base_qs = DoiTra.objects.all().order_by('-NgayYeuCau')
     

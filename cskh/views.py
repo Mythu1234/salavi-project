@@ -18,11 +18,19 @@ from .forms import KhuyenMaiForm
 
 
 def dashboard_view(request):
+    # Lấy thống kê cơ bản
     chua_phan_hoi = HoiThoaiTuVan.objects.filter(TrangThai='Chưa xử lý').count()
     dang_tu_van = HoiThoaiTuVan.objects.filter(Q(TrangThai='Đang xử lý') | Q(TrangThai='Đã phản hồi')).count()
     don_can_ho_tro = DoiTra.objects.filter(TrangThai='PENDING').count()
     danh_gia_moi = DanhGia.objects.all().count()
-    recent_chats = HoiThoaiTuVan.objects.all()[:3]
+    
+    # Lấy danh sách tin nhắn gần đây có kèm nội dung tin nhắn cuối
+    last_msg_qs = TinNhanTuVan.objects.filter(MaHoiThoai=OuterRef('pk')).order_by('-ThoiGianGui')
+    recent_chats = HoiThoaiTuVan.objects.select_related('MaKH').annotate(
+        last_msg=Subquery(last_msg_qs.values('NoiDung')[:1]),
+        last_time=Subquery(last_msg_qs.values('ThoiGianGui')[:1])
+    ).order_by('-last_time')[:5]
+    
     khach_hang_tong = KhachHang.objects.count()
 
     context = {
@@ -32,6 +40,7 @@ def dashboard_view(request):
         'danh_gia_moi': danh_gia_moi,
         'recent_chats': recent_chats,
         'khach_hang_tong': khach_hang_tong,
+        'is_staff_view': not request.user.is_superuser
     }
     return render(request, 'cskh/dashboard.html', context)
 

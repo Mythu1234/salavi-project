@@ -70,7 +70,13 @@
                 <div class="avatar">{{ chat.MaKH.HoTen|make_list|first|upper }}</div>
                 <div class="chat-content">
                     <div class="chat-name">{{ chat.MaKH.HoTen }}</div>
-                    <div class="chat-preview">Mã hội thoại: {{ chat.MaHoiThoai }}</div>
+                    <div class="chat-preview">
+                        {% if chat.last_msg %}
+                            {{ chat.last_msg|truncatechars:40 }}
+                        {% else %}
+                            Mã hội thoại: {{ chat.MaHoiThoai }}
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="chat-status {% if 'Chưa' in chat.TrangThai %}unread{% elif 'Đang tư vấn' in chat.TrangThai or 'Đang' in chat.TrangThai %}in-progress{% else %}replied{% endif %}">
                     {{ chat.TrangThai }}
