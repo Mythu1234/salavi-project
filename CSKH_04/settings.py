@@ -79,11 +79,20 @@ WSGI_APPLICATION = 'CSKH_04.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }\
+import os
+import dj_database_url
+import dj_database_url
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.parse(
+        "postgresql://postgres.ctguatuzjdrgaxzvmgsw:SALAVI123_N4@aws-1-ap-south-1.pooler.supabase.com:6543/postgres"
+    )
 }
 
 

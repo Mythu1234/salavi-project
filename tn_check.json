@@ -1,0 +1,12 @@
+[
+  {
+    "model": "cskh.tinnhantuvan",
+    "pk": "TN00001",
+    "fields": {
+      "MaHoiThoai": "HT000001",
+      "MaNV": "Nhân viên",
+      "NoiDung": "Mình cần shop hỗ trợ gì ạ ?",
+      "ThoiGianGui": "2026-04-04T14:13:01.902Z"
+    }
+  }
+]

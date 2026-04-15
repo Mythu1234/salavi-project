@@ -10,6 +10,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunSQL(
+            'ALTER TABLE orders_doitra DROP CONSTRAINT IF EXISTS "orders_doitra_MaCTDH_id_9804d77c_fk_orders_chitietdonhang_id";'
+        ),
         migrations.RemoveField(
             model_name='chitietdonhang',
             name='id',

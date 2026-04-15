@@ -1,1 +1,2229 @@
-[{"model": "auth.permission", "pk": 1, "fields": {"name": "Can add log entry", "content_type": 1, "codename": "add_logentry"}}, {"model": "auth.permission", "pk": 2, "fields": {"name": "Can change log entry", "content_type": 1, "codename": "change_logentry"}}, {"model": "auth.permission", "pk": 3, "fields": {"name": "Can delete log entry", "content_type": 1, "codename": "delete_logentry"}}, {"model": "auth.permission", "pk": 4, "fields": {"name": "Can view log entry", "content_type": 1, "codename": "view_logentry"}}, {"model": "auth.permission", "pk": 5, "fields": {"name": "Can add permission", "content_type": 3, "codename": "add_permission"}}, {"model": "auth.permission", "pk": 6, "fields": {"name": "Can change permission", "content_type": 3, "codename": "change_permission"}}, {"model": "auth.permission", "pk": 7, "fields": {"name": "Can delete permission", "content_type": 3, "codename": "delete_permission"}}, {"model": "auth.permission", "pk": 8, "fields": {"name": "Can view permission", "content_type": 3, "codename": "view_permission"}}, {"model": "auth.permission", "pk": 9, "fields": {"name": "Can add group", "content_type": 2, "codename": "add_group"}}, {"model": "auth.permission", "pk": 10, "fields": {"name": "Can change group", "content_type": 2, "codename": "change_group"}}, {"model": "auth.permission", "pk": 11, "fields": {"name": "Can delete group", "content_type": 2, "codename": "delete_group"}}, {"model": "auth.permission", "pk": 12, "fields": {"name": "Can view group", "content_type": 2, "codename": "view_group"}}, {"model": "auth.permission", "pk": 13, "fields": {"name": "Can add user", "content_type": 4, "codename": "add_user"}}, {"model": "auth.permission", "pk": 14, "fields": {"name": "Can change user", "content_type": 4, "codename": "change_user"}}, {"model": "auth.permission", "pk": 15, "fields": {"name": "Can delete user", "content_type": 4, "codename": "delete_user"}}, {"model": "auth.permission", "pk": 16, "fields": {"name": "Can view user", "content_type": 4, "codename": "view_user"}}, {"model": "auth.permission", "pk": 17, "fields": {"name": "Can add content type", "content_type": 5, "codename": "add_contenttype"}}, {"model": "auth.permission", "pk": 18, "fields": {"name": "Can change content type", "content_type": 5, "codename": "change_contenttype"}}, {"model": "auth.permission", "pk": 19, "fields": {"name": "Can delete content type", "content_type": 5, "codename": "delete_contenttype"}}, {"model": "auth.permission", "pk": 20, "fields": {"name": "Can view content type", "content_type": 5, "codename": "view_contenttype"}}, {"model": "auth.permission", "pk": 21, "fields": {"name": "Can add session", "content_type": 6, "codename": "add_session"}}, {"model": "auth.permission", "pk": 22, "fields": {"name": "Can change session", "content_type": 6, "codename": "change_session"}}, {"model": "auth.permission", "pk": 23, "fields": {"name": "Can delete session", "content_type": 6, "codename": "delete_session"}}, {"model": "auth.permission", "pk": 24, "fields": {"name": "Can view session", "content_type": 6, "codename": "view_session"}}, {"model": "auth.permission", "pk": 25, "fields": {"name": "Can add khach hang", "content_type": 7, "codename": "add_khachhang"}}, {"model": "auth.permission", "pk": 26, "fields": {"name": "Can change khach hang", "content_type": 7, "codename": "change_khachhang"}}, {"model": "auth.permission", "pk": 27, "fields": {"name": "Can delete khach hang", "content_type": 7, "codename": "delete_khachhang"}}, {"model": "auth.permission", "pk": 28, "fields": {"name": "Can view khach hang", "content_type": 7, "codename": "view_khachhang"}}, {"model": "auth.permission", "pk": 29, "fields": {"name": "Can add nhan vien", "content_type": 8, "codename": "add_nhanvien"}}, {"model": "auth.permission", "pk": 30, "fields": {"name": "Can change nhan vien", "content_type": 8, "codename": "change_nhanvien"}}, {"model": "auth.permission", "pk": 31, "fields": {"name": "Can delete nhan vien", "content_type": 8, "codename": "delete_nhanvien"}}, {"model": "auth.permission", "pk": 32, "fields": {"name": "Can view nhan vien", "content_type": 8, "codename": "view_nhanvien"}}, {"model": "auth.permission", "pk": 33, "fields": {"name": "Can add san pham", "content_type": 11, "codename": "add_sanpham"}}, {"model": "auth.permission", "pk": 34, "fields": {"name": "Can change san pham", "content_type": 11, "codename": "change_sanpham"}}, {"model": "auth.permission", "pk": 35, "fields": {"name": "Can delete san pham", "content_type": 11, "codename": "delete_sanpham"}}, {"model": "auth.permission", "pk": 36, "fields": {"name": "Can view san pham", "content_type": 11, "codename": "view_sanpham"}}, {"model": "auth.permission", "pk": 37, "fields": {"name": "Can add danh gia", "content_type": 10, "codename": "add_danhgia"}}, {"model": "auth.permission", "pk": 38, "fields": {"name": "Can change danh gia", "content_type": 10, "codename": "change_danhgia"}}, {"model": "auth.permission", "pk": 39, "fields": {"name": "Can delete danh gia", "content_type": 10, "codename": "delete_danhgia"}}, {"model": "auth.permission", "pk": 40, "fields": {"name": "Can view danh gia", "content_type": 10, "codename": "view_danhgia"}}, {"model": "auth.permission", "pk": 41, "fields": {"name": "Can add bien the san pham", "content_type": 9, "codename": "add_bienthesanpham"}}, {"model": "auth.permission", "pk": 42, "fields": {"name": "Can change bien the san pham", "content_type": 9, "codename": "change_bienthesanpham"}}, {"model": "auth.permission", "pk": 43, "fields": {"name": "Can delete bien the san pham", "content_type": 9, "codename": "delete_bienthesanpham"}}, {"model": "auth.permission", "pk": 44, "fields": {"name": "Can view bien the san pham", "content_type": 9, "codename": "view_bienthesanpham"}}, {"model": "auth.permission", "pk": 45, "fields": {"name": "Can add chi tiet don hang", "content_type": 12, "codename": "add_chitietdonhang"}}, {"model": "auth.permission", "pk": 46, "fields": {"name": "Can change chi tiet don hang", "content_type": 12, "codename": "change_chitietdonhang"}}, {"model": "auth.permission", "pk": 47, "fields": {"name": "Can delete chi tiet don hang", "content_type": 12, "codename": "delete_chitietdonhang"}}, {"model": "auth.permission", "pk": 48, "fields": {"name": "Can view chi tiet don hang", "content_type": 12, "codename": "view_chitietdonhang"}}, {"model": "auth.permission", "pk": 49, "fields": {"name": "Can add doi tra", "content_type": 13, "codename": "add_doitra"}}, {"model": "auth.permission", "pk": 50, "fields": {"name": "Can change doi tra", "content_type": 13, "codename": "change_doitra"}}, {"model": "auth.permission", "pk": 51, "fields": {"name": "Can delete doi tra", "content_type": 13, "codename": "delete_doitra"}}, {"model": "auth.permission", "pk": 52, "fields": {"name": "Can view doi tra", "content_type": 13, "codename": "view_doitra"}}, {"model": "auth.permission", "pk": 53, "fields": {"name": "Can add don hang", "content_type": 14, "codename": "add_donhang"}}, {"model": "auth.permission", "pk": 54, "fields": {"name": "Can change don hang", "content_type": 14, "codename": "change_donhang"}}, {"model": "auth.permission", "pk": 55, "fields": {"name": "Can delete don hang", "content_type": 14, "codename": "delete_donhang"}}, {"model": "auth.permission", "pk": 56, "fields": {"name": "Can view don hang", "content_type": 14, "codename": "view_donhang"}}, {"model": "auth.permission", "pk": 57, "fields": {"name": "Can add khuyen mai", "content_type": 16, "codename": "add_khuyenmai"}}, {"model": "auth.permission", "pk": 58, "fields": {"name": "Can change khuyen mai", "content_type": 16, "codename": "change_khuyenmai"}}, {"model": "auth.permission", "pk": 59, "fields": {"name": "Can delete khuyen mai", "content_type": 16, "codename": "delete_khuyenmai"}}, {"model": "auth.permission", "pk": 60, "fields": {"name": "Can view khuyen mai", "content_type": 16, "codename": "view_khuyenmai"}}, {"model": "auth.permission", "pk": 61, "fields": {"name": "Can add hoi thoai tu van", "content_type": 15, "codename": "add_hoithoaituvan"}}, {"model": "auth.permission", "pk": 62, "fields": {"name": "Can change hoi thoai tu van", "content_type": 15, "codename": "change_hoithoaituvan"}}, {"model": "auth.permission", "pk": 63, "fields": {"name": "Can delete hoi thoai tu van", "content_type": 15, "codename": "delete_hoithoaituvan"}}, {"model": "auth.permission", "pk": 64, "fields": {"name": "Can view hoi thoai tu van", "content_type": 15, "codename": "view_hoithoaituvan"}}, {"model": "auth.permission", "pk": 65, "fields": {"name": "Can add lich su tich diem", "content_type": 17, "codename": "add_lichsutichdiem"}}, {"model": "auth.permission", "pk": 66, "fields": {"name": "Can change lich su tich diem", "content_type": 17, "codename": "change_lichsutichdiem"}}, {"model": "auth.permission", "pk": 67, "fields": {"name": "Can delete lich su tich diem", "content_type": 17, "codename": "delete_lichsutichdiem"}}, {"model": "auth.permission", "pk": 68, "fields": {"name": "Can view lich su tich diem", "content_type": 17, "codename": "view_lichsutichdiem"}}, {"model": "auth.permission", "pk": 69, "fields": {"name": "Can add thong bao khuyen mai", "content_type": 18, "codename": "add_thongbaokhuyenmai"}}, {"model": "auth.permission", "pk": 70, "fields": {"name": "Can change thong bao khuyen mai", "content_type": 18, "codename": "change_thongbaokhuyenmai"}}, {"model": "auth.permission", "pk": 71, "fields": {"name": "Can delete thong bao khuyen mai", "content_type": 18, "codename": "delete_thongbaokhuyenmai"}}, {"model": "auth.permission", "pk": 72, "fields": {"name": "Can view thong bao khuyen mai", "content_type": 18, "codename": "view_thongbaokhuyenmai"}}, {"model": "auth.permission", "pk": 73, "fields": {"name": "Can add tich diem", "content_type": 19, "codename": "add_tichdiem"}}, {"model": "auth.permission", "pk": 74, "fields": {"name": "Can change tich diem", "content_type": 19, "codename": "change_tichdiem"}}, {"model": "auth.permission", "pk": 75, "fields": {"name": "Can delete tich diem", "content_type": 19, "codename": "delete_tichdiem"}}, {"model": "auth.permission", "pk": 76, "fields": {"name": "Can view tich diem", "content_type": 19, "codename": "view_tichdiem"}}, {"model": "auth.permission", "pk": 77, "fields": {"name": "Can add tin nhan tu van", "content_type": 20, "codename": "add_tinnhantuvan"}}, {"model": "auth.permission", "pk": 78, "fields": {"name": "Can change tin nhan tu van", "content_type": 20, "codename": "change_tinnhantuvan"}}, {"model": "auth.permission", "pk": 79, "fields": {"name": "Can delete tin nhan tu van", "content_type": 20, "codename": "delete_tinnhantuvan"}}, {"model": "auth.permission", "pk": 80, "fields": {"name": "Can view tin nhan tu van", "content_type": 20, "codename": "view_tinnhantuvan"}}, {"model": "contenttypes.contenttype", "pk": 1, "fields": {"app_label": "admin", "model": "logentry"}}, {"model": "contenttypes.contenttype", "pk": 2, "fields": {"app_label": "auth", "model": "group"}}, {"model": "contenttypes.contenttype", "pk": 3, "fields": {"app_label": "auth", "model": "permission"}}, {"model": "contenttypes.contenttype", "pk": 4, "fields": {"app_label": "auth", "model": "user"}}, {"model": "contenttypes.contenttype", "pk": 5, "fields": {"app_label": "contenttypes", "model": "contenttype"}}, {"model": "contenttypes.contenttype", "pk": 6, "fields": {"app_label": "sessions", "model": "session"}}, {"model": "contenttypes.contenttype", "pk": 7, "fields": {"app_label": "accounts", "model": "khachhang"}}, {"model": "contenttypes.contenttype", "pk": 8, "fields": {"app_label": "accounts", "model": "nhanvien"}}, {"model": "contenttypes.contenttype", "pk": 9, "fields": {"app_label": "products", "model": "bienthesanpham"}}, {"model": "contenttypes.contenttype", "pk": 10, "fields": {"app_label": "products", "model": "danhgia"}}, {"model": "contenttypes.contenttype", "pk": 11, "fields": {"app_label": "products", "model": "sanpham"}}, {"model": "contenttypes.contenttype", "pk": 12, "fields": {"app_label": "orders", "model": "chitietdonhang"}}, {"model": "contenttypes.contenttype", "pk": 13, "fields": {"app_label": "orders", "model": "doitra"}}, {"model": "contenttypes.contenttype", "pk": 14, "fields": {"app_label": "orders", "model": "donhang"}}, {"model": "contenttypes.contenttype", "pk": 15, "fields": {"app_label": "cskh", "model": "hoithoaituvan"}}, {"model": "contenttypes.contenttype", "pk": 16, "fields": {"app_label": "cskh", "model": "khuyenmai"}}, {"model": "contenttypes.contenttype", "pk": 17, "fields": {"app_label": "cskh", "model": "lichsutichdiem"}}, {"model": "contenttypes.contenttype", "pk": 18, "fields": {"app_label": "cskh", "model": "thongbaokhuyenmai"}}, {"model": "contenttypes.contenttype", "pk": 19, "fields": {"app_label": "cskh", "model": "tichdiem"}}, {"model": "contenttypes.contenttype", "pk": 20, "fields": {"app_label": "cskh", "model": "tinnhantuvan"}}]
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$1200000$w4iwzoVixh8UInz4wu0Td5$WLWWLMbjYb778m+GbLl7dRocqGsfeSqxnIhPTaCyadk=",
+      "last_login": "2026-04-08T08:41:44.011Z",
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2026-04-03T18:25:22.158Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$1200000$lqPnJAoV0WmHKO9ctLOBiz$DhzT59BkWAOwbRn3tcN7HiTieTv0zT2J6zZYqKgV8Xo=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0985621584",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T14:57:38.012Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "password": "",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0321458796",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T14:57:58.209Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$1200000$WEqzRkg1DGjiO4VRNWvA8E$JXmJ0bvx4QNFqCihbF0IYRvee/J27j6HiJebu0xQulc=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0125479632",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T14:59:10.054Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 5,
+    "fields": {
+      "password": "",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0258749632",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T14:59:26.746Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 6,
+    "fields": {
+      "password": "",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0145823679",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T15:01:01.676Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$1200000$cZCpa6qvIIvOqZvw9htHv3$ftsau4vNTSb1L5l5L5C0AxK95upYHn5E9MTYjhRtams=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0853621478",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T15:02:34.459Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$1200000$dLAPg0p9pQ13KUNFrFCtCj$ji9RJrKtSw5/zNukgrFAb2KzBZZvcHdMegmqaZEwMxY=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0854332145",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T15:02:59.247Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$1200000$lOYBCv0MzEEzQgE1YvtbDM$T4f7kT4sWFstPltxAis4y/wjJ4oVCsttHCSTaPmDmmw=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0589456321",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T15:03:26.010Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$1200000$A2PEUboDBZbKrxurYCeQtH$nLibCJNfE8iKh/4eVdCzVOjkpLkTgSdjjqik7TB1kbs=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0145823678",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T15:03:44.932Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 11,
+    "fields": {
+      "password": "pbkdf2_sha256$1200000$NExCnIkXMKcLPllpfD9yaF$UvRWk7/YYkSOgXHonj9thUO4TbilX2ebeZbT7pItlc4=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0258749637",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T15:04:06.132Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 12,
+    "fields": {
+      "password": "pbkdf2_sha256$1200000$wbnQTrJafQwMP92bs33LmE$q1vojFoYAyn2NpyeaWJgSi/h0AIjlNArYMTPNN4lUqc=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0856942136",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T15:04:16.125Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 13,
+    "fields": {
+      "password": "pbkdf2_sha256$1200000$Hp56zSLXKzSGNY65pJ8KCR$86x0RM2YjcEyhCcUOJvegZAPops9+29Igc+MmLrfDkc=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0874596325",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T15:04:27.694Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 14,
+    "fields": {
+      "password": "pbkdf2_sha256$1200000$sPkyUGSoXNTYdqIkuMFvvi$j5timkCDd2micpHNsYdYCNS1iSnPOmihG/4HN7HkLi8=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0874596321",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T15:04:42.293Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 15,
+    "fields": {
+      "password": "",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0887946325",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T15:04:53.643Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 16,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0587412369",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 17,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0986325142",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 18,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0854763215",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 19,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0321458757",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 20,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0258749630",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 21,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0853621487",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 22,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0853621400",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 23,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0987563214",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 24,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0985746321",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 25,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0985632415",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 26,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0985632541",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 27,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0258749021",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 28,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0345823670",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 29,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0853621477",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 30,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0985632574",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 31,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0125479600",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 32,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0145823254",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 33,
+    "fields": {
+      "password": "123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "0854332147",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-04T22:05:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00001",
+    "fields": {
+      "user": 14,
+      "HoTen": "Nguyễn Việt Cường",
+      "DiaChi": "36 Bạch Đằng"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00002",
+    "fields": {
+      "user": 2,
+      "HoTen": "Nguyễn Thị Yến Nhi",
+      "DiaChi": "5 Mỹ An 1"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00003",
+    "fields": {
+      "user": 15,
+      "HoTen": "Hồ Nguyễn Anh Quân",
+      "DiaChi": "78 Nguyễn Văn Linh"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00004",
+    "fields": {
+      "user": 16,
+      "HoTen": "Trần Dược",
+      "DiaChi": "2 Nguyễn Văn Linh"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00005",
+    "fields": {
+      "user": 17,
+      "HoTen": "Trần Thị Mai Lan",
+      "DiaChi": "8 Lưu Quang Thuận"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00006",
+    "fields": {
+      "user": 18,
+      "HoTen": "Lê Viết Cường",
+      "DiaChi": "1 Trần Bạch Đằng"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00007",
+    "fields": {
+      "user": 19,
+      "HoTen": "Nguyễn Văn Nhật",
+      "DiaChi": "2 Võ Văn Kiệt"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00008",
+    "fields": {
+      "user": 20,
+      "HoTen": "Ma Văn Toàn",
+      "DiaChi": "78 Lê Hồng Phong"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00009",
+    "fields": {
+      "user": 21,
+      "HoTen": "Trần Thị Bảo Nhi",
+      "DiaChi": "54 Đỗ Quang"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00010",
+    "fields": {
+      "user": 22,
+      "HoTen": "Trần Việt Linh",
+      "DiaChi": "6 Bà Huyện Thanh Quan"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00011",
+    "fields": {
+      "user": 23,
+      "HoTen": "Mai Yến Nhi",
+      "DiaChi": "8 Đỗ Bá"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00012",
+    "fields": {
+      "user": 24,
+      "HoTen": "Trần Cường Việt",
+      "DiaChi": "7 Nguyễn Văn Thoại"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00013",
+    "fields": {
+      "user": 25,
+      "HoTen": "Hồ Sĩ Hậu",
+      "DiaChi": "234 Nguyễn Thiện Thuật"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00014",
+    "fields": {
+      "user": 26,
+      "HoTen": "Trần Thị My",
+      "DiaChi": "45 Hồ Xuân Hương"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00015",
+    "fields": {
+      "user": 27,
+      "HoTen": "Lê Văn Cường",
+      "DiaChi": "9 Nguyễn Văn Thoại"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00016",
+    "fields": {
+      "user": 28,
+      "HoTen": "Phạm Thị Ngân",
+      "DiaChi": "78 Đỗ Bá"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00017",
+    "fields": {
+      "user": 29,
+      "HoTen": "Lê Thị Hoài Nhi",
+      "DiaChi": "78 Ngô Quyền"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00018",
+    "fields": {
+      "user": 30,
+      "HoTen": "Mai Thị Ánh Loan",
+      "DiaChi": "98 Lê Văn Hưu"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00019",
+    "fields": {
+      "user": 31,
+      "HoTen": "Nguyễn Thị Thiên",
+      "DiaChi": "8 Lê Văn Hưu"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00020",
+    "fields": {
+      "user": 32,
+      "HoTen": "Phạm Văn Bảo",
+      "DiaChi": "9 Chương Dương"
+    }
+  },
+  {
+    "model": "accounts.khachhang",
+    "pk": "KH00021",
+    "fields": {
+      "user": 33,
+      "HoTen": "Trần Viết Bảo",
+      "DiaChi": "8 Đa Mặn 5"
+    }
+  },
+  {
+    "model": "accounts.nhanvien",
+    "pk": "NV00001",
+    "fields": {
+      "user": 4,
+      "HoTen": "Nguyễn Văn An"
+    }
+  },
+  {
+    "model": "accounts.nhanvien",
+    "pk": "NV00002",
+    "fields": {
+      "user": 5,
+      "HoTen": "Trần Văn An"
+    }
+  },
+  {
+    "model": "accounts.nhanvien",
+    "pk": "NV00003",
+    "fields": {
+      "user": 6,
+      "HoTen": "Nguyễn Thị Ánh Tuyết"
+    }
+  },
+  {
+    "model": "accounts.nhanvien",
+    "pk": "NV00004",
+    "fields": {
+      "user": 7,
+      "HoTen": "Phạm Kiên Cường"
+    }
+  },
+  {
+    "model": "accounts.nhanvien",
+    "pk": "NV00005",
+    "fields": {
+      "user": 8,
+      "HoTen": "Trần Diệu Hiền"
+    }
+  },
+  {
+    "model": "accounts.nhanvien",
+    "pk": "NV00006",
+    "fields": {
+      "user": 9,
+      "HoTen": "Hồ Sĩ Quan"
+    }
+  },
+  {
+    "model": "accounts.nhanvien",
+    "pk": "NV00007",
+    "fields": {
+      "user": 10,
+      "HoTen": "Nguyễn Thị Cao"
+    }
+  },
+  {
+    "model": "accounts.nhanvien",
+    "pk": "NV00008",
+    "fields": {
+      "user": 11,
+      "HoTen": "Lê Thị Hải Yến"
+    }
+  },
+  {
+    "model": "accounts.nhanvien",
+    "pk": "NV00009",
+    "fields": {
+      "user": 12,
+      "HoTen": "Nguyễn Cao Kỳ Duyên"
+    }
+  },
+  {
+    "model": "accounts.nhanvien",
+    "pk": "NV00010",
+    "fields": {
+      "user": 13,
+      "HoTen": "Dương Anh Đào"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00001",
+    "fields": {
+      "TenSP": "Áo thun nam basic trắng",
+      "MoTa": "Áo thun nam cổ tròn màu trắng, chất liệu cotton",
+      "Gia": "199000.00",
+      "HinhAnh": "sanpham/Áo.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00002",
+    "fields": {
+      "TenSP": "Áo thun nam basic đen",
+      "MoTa": "Áo thun nam cổ tròn màu đen, co giãn tốt",
+      "Gia": "199000.00",
+      "HinhAnh": "sanpham/ÁO_ĐEN.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00003",
+    "fields": {
+      "TenSP": "Áo sơ mi nam xanh nhạt",
+      "MoTa": "Áo sơ mi dài tay dành cho nam công sở",
+      "Gia": "249000.00",
+      "HinhAnh": "sanpham/SƠ_MI_XANH.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00004",
+    "fields": {
+      "TenSP": "Áo khoác bomber đen",
+      "MoTa": "Áo khoác bomber nữ màu đen cá tính",
+      "Gia": "219000.00",
+      "HinhAnh": "sanpham/BOMBER.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00005",
+    "fields": {
+      "TenSP": "Váy hoa nữ màu hồng",
+      "MoTa": "Váy hoa nữ tay ngắn phong cách nhẹ nhàng",
+      "Gia": "199000.00",
+      "HinhAnh": "sanpham/VÁY_HOA.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00006",
+    "fields": {
+      "TenSP": "Áo kiểu nữ tay phồng",
+      "MoTa": "Áo kiểu nữ màu kem, tay phồng thời trang",
+      "Gia": "159000.00",
+      "HinhAnh": "sanpham/ÁO_KIỂU.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00007",
+    "fields": {
+      "TenSP": "Quần jean nữ ống rộng",
+      "MoTa": "Quần jean nữ màu xanh đậm, form rộng",
+      "Gia": "199000.00",
+      "HinhAnh": "sanpham/JEAN.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00008",
+    "fields": {
+      "TenSP": "Chân váy chữ A đen",
+      "MoTa": "Chân váy ngắn màu đen phong cách trẻ trung",
+      "Gia": "129000.00",
+      "HinhAnh": "sanpham/VÁY_CHỮ_A.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00009",
+    "fields": {
+      "TenSP": "Áo len nữ màu nâu",
+      "MoTa": "Áo len nữ cổ tròn màu nâu ấm áp",
+      "Gia": "259000.00",
+      "HinhAnh": "sanpham/LEN_NÂU.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00010",
+    "fields": {
+      "TenSP": "Áo khoác jean nữ",
+      "MoTa": "Áo khoác jean nữ màu xanh nhạt cá tính",
+      "Gia": "235000.00",
+      "HinhAnh": "sanpham/KHOÁC_JEAN.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00011",
+    "fields": {
+      "TenSP": "Áo blazer nữ màu kem",
+      "MoTa": "Áo blazer nữ phong cách công sở",
+      "Gia": "359000.00",
+      "HinhAnh": "sanpham/BLAZER.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00012",
+    "fields": {
+      "TenSP": "Áo thun nữ oversize trắng",
+      "MoTa": "Áo thun nữ form rộng chất cotton",
+      "Gia": "129000.00",
+      "HinhAnh": "sanpham/THUN_NỮ.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00013",
+    "fields": {
+      "TenSP": "Áo sơ mi nữ trắng công sở",
+      "MoTa": "Áo sơ mi nữ tay dài màu trắng",
+      "Gia": "199000.00",
+      "HinhAnh": "sanpham/SƠ_MI_TRẮNG.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00014",
+    "fields": {
+      "TenSP": "Áo croptop nữ màu hồng",
+      "MoTa": "Áo croptop nữ trẻ trung màu hồng pastel",
+      "Gia": "125000.00",
+      "HinhAnh": "sanpham/CROPTOP.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00015",
+    "fields": {
+      "TenSP": "Chân váy xếp ly trắng",
+      "MoTa": "Chân váy nữ xếp ly phong cách năng động",
+      "Gia": "129000.00",
+      "HinhAnh": "sanpham/XẾP_LY.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00016",
+    "fields": {
+      "TenSP": "Váy maxi nữ hoa xanh",
+      "MoTa": "Váy maxi nữ dài phong cách đi biển",
+      "Gia": "158000.00",
+      "HinhAnh": "sanpham/MAXI.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00017",
+    "fields": {
+      "TenSP": "Set áo và chân váy nữ",
+      "MoTa": "Bộ set nữ gồm áo croptop và chân váy",
+      "Gia": "258000.00",
+      "HinhAnh": "sanpham/SET.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00018",
+    "fields": {
+      "TenSP": "Váy body nữ màu đen",
+      "MoTa": "Váy body ôm sát màu đen sang trọng",
+      "Gia": "179000.00",
+      "HinhAnh": "sanpham/BODY_NỮ.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00019",
+    "fields": {
+      "TenSP": "Quần legging nữ đen",
+      "MoTa": "Quần legging co giãn, phù hợp tập gym",
+      "Gia": "125000.00",
+      "HinhAnh": "sanpham/LEGING.jpg"
+    }
+  },
+  {
+    "model": "products.sanpham",
+    "pk": "SP00020",
+    "fields": {
+      "TenSP": "Áo khoác cardigan màu kem",
+      "MoTa": "Áo khoác cardigan nữ dáng dài",
+      "Gia": "233000.00",
+      "HinhAnh": "sanpham/cardigan.jpg"
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00001",
+    "fields": {
+      "MaSP": "SP00001",
+      "MauSac": "Trắng",
+      "Size": "L",
+      "SoLuongTon": 30
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00002",
+    "fields": {
+      "MaSP": "SP00002",
+      "MauSac": "Đen",
+      "Size": "XL",
+      "SoLuongTon": 54
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00003",
+    "fields": {
+      "MaSP": "SP00003",
+      "MauSac": "Xanh nhạt",
+      "Size": "XL",
+      "SoLuongTon": 45
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00004",
+    "fields": {
+      "MaSP": "SP00004",
+      "MauSac": "Đen",
+      "Size": "L",
+      "SoLuongTon": 30
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00005",
+    "fields": {
+      "MaSP": "SP00005",
+      "MauSac": "Hồng",
+      "Size": "L",
+      "SoLuongTon": 20
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00006",
+    "fields": {
+      "MaSP": "SP00006",
+      "MauSac": "Be",
+      "Size": "L",
+      "SoLuongTon": 30
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00007",
+    "fields": {
+      "MaSP": "SP00007",
+      "MauSac": "Xanh nhạt",
+      "Size": "L",
+      "SoLuongTon": 12
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00008",
+    "fields": {
+      "MaSP": "SP00008",
+      "MauSac": "Đen",
+      "Size": "M",
+      "SoLuongTon": 10
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00009",
+    "fields": {
+      "MaSP": "SP00009",
+      "MauSac": "Nâu",
+      "Size": "M",
+      "SoLuongTon": 15
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00010",
+    "fields": {
+      "MaSP": "SP00010",
+      "MauSac": "Xanh nhạt",
+      "Size": "M",
+      "SoLuongTon": 15
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00011",
+    "fields": {
+      "MaSP": "SP00011",
+      "MauSac": "Kem",
+      "Size": "L",
+      "SoLuongTon": 10
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00012",
+    "fields": {
+      "MaSP": "SP00012",
+      "MauSac": "Trắng",
+      "Size": "L",
+      "SoLuongTon": 14
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00013",
+    "fields": {
+      "MaSP": "SP00013",
+      "MauSac": "Trắng",
+      "Size": "M",
+      "SoLuongTon": 25
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00014",
+    "fields": {
+      "MaSP": "SP00014",
+      "MauSac": "Hồng",
+      "Size": "XL",
+      "SoLuongTon": 15
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00015",
+    "fields": {
+      "MaSP": "SP00015",
+      "MauSac": "Trắng",
+      "Size": "M",
+      "SoLuongTon": 26
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00016",
+    "fields": {
+      "MaSP": "SP00016",
+      "MauSac": "Xanh",
+      "Size": "M",
+      "SoLuongTon": 29
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00017",
+    "fields": {
+      "MaSP": "SP00017",
+      "MauSac": "Be",
+      "Size": "M",
+      "SoLuongTon": 28
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00018",
+    "fields": {
+      "MaSP": "SP00018",
+      "MauSac": "Đen",
+      "Size": "M",
+      "SoLuongTon": 36
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00019",
+    "fields": {
+      "MaSP": "SP00019",
+      "MauSac": "Đen",
+      "Size": "L",
+      "SoLuongTon": 45
+    }
+  },
+  {
+    "model": "products.bienthesanpham",
+    "pk": "CTSP00020",
+    "fields": {
+      "MaSP": "SP00020",
+      "MauSac": "Kem",
+      "Size": "L",
+      "SoLuongTon": 40
+    }
+  },
+  {
+    "model": "products.danhgia",
+    "pk": "DG00001",
+    "fields": {
+      "MaKH": "KH00003",
+      "MaSP": "SP00004",
+      "SoSao": 4,
+      "NoiDung": "Áo chất vải dày dặn, đứng form mặc đẹp lắm lun",
+      "HinhAnh": "danhgia/BOMBER.jpg",
+      "NgayDanhGia": "2026-04-02"
+    }
+  },
+  {
+    "model": "products.danhgia",
+    "pk": "DG00002",
+    "fields": {
+      "MaKH": "KH00001",
+      "MaSP": "SP00004",
+      "SoSao": 5,
+      "NoiDung": "Sản phẩm chất lượng tốt, giống hình ảnh",
+      "HinhAnh": "",
+      "NgayDanhGia": "2026-04-01"
+    }
+  },
+  {
+    "model": "products.danhgia",
+    "pk": "DG00003",
+    "fields": {
+      "MaKH": "KH00005",
+      "MaSP": "SP00016",
+      "SoSao": 5,
+      "NoiDung": "Sản phẩm chất lượng tốt, giống hình ảnh",
+      "HinhAnh": "danhgia/MAXI.jpg",
+      "NgayDanhGia": "2026-04-04"
+    }
+  },
+  {
+    "model": "products.danhgia",
+    "pk": "DG00004",
+    "fields": {
+      "MaKH": "KH00008",
+      "MaSP": "SP00001",
+      "SoSao": 5,
+      "NoiDung": "Sản phẩm chất lượng tốt, giống hình ảnh, mặc đẹp lắm",
+      "HinhAnh": "danhgia/Áo.jpg",
+      "NgayDanhGia": "2026-04-02"
+    }
+  },
+  {
+    "model": "products.danhgia",
+    "pk": "DG00005",
+    "fields": {
+      "MaKH": "KH00003",
+      "MaSP": "SP00001",
+      "SoSao": 5,
+      "NoiDung": "Áo chất vải dày dặn, đứng form mặc đẹp lắm lun",
+      "HinhAnh": "",
+      "NgayDanhGia": "2026-03-02"
+    }
+  },
+  {
+    "model": "products.danhgia",
+    "pk": "DG00006",
+    "fields": {
+      "MaKH": "KH00010",
+      "MaSP": "SP00008",
+      "SoSao": 5,
+      "NoiDung": "Váy lên form đứng người, chất vải dày dặn",
+      "HinhAnh": "",
+      "NgayDanhGia": "2026-04-04"
+    }
+  },
+  {
+    "model": "products.danhgia",
+    "pk": "DG00007",
+    "fields": {
+      "MaKH": "KH00007",
+      "MaSP": "SP00003",
+      "SoSao": 5,
+      "NoiDung": "Áo đẹp",
+      "HinhAnh": "",
+      "NgayDanhGia": "2026-04-01"
+    }
+  },
+  {
+    "model": "products.danhgia",
+    "pk": "DG00008",
+    "fields": {
+      "MaKH": "KH00004",
+      "MaSP": "SP00002",
+      "SoSao": 5,
+      "NoiDung": "Áo mặc đẹp, như hình",
+      "HinhAnh": "danhgia/ÁO_ĐEN.jpg",
+      "NgayDanhGia": "2026-04-04"
+    }
+  },
+  {
+    "model": "products.danhgia",
+    "pk": "DG00009",
+    "fields": {
+      "MaKH": "KH00009",
+      "MaSP": "SP00011",
+      "SoSao": 5,
+      "NoiDung": "Áo chất vải dày dặn, đứng form mặc đẹp lắm lun",
+      "HinhAnh": "danhgia/BLAZER.jpg",
+      "NgayDanhGia": "2026-04-04"
+    }
+  },
+  {
+    "model": "products.danhgia",
+    "pk": "DG00010",
+    "fields": {
+      "MaKH": "KH00014",
+      "MaSP": "SP00007",
+      "SoSao": 5,
+      "NoiDung": "Quần mặc đúng form, chuẩn size",
+      "HinhAnh": "",
+      "NgayDanhGia": "2026-04-01"
+    }
+  },
+  {
+    "model": "orders.donhang",
+    "pk": "DH00001",
+    "fields": {
+      "MaKH": "KH00001",
+      "MaKM": null,
+      "NgayDat": "2026-04-02",
+      "NgayGiao": "2026-04-04",
+      "TongTien": "199000.00",
+      "TrangThaiDonHang": "CHO",
+      "DiaChiGiaoHang": "36 Bạch Đằng"
+    }
+  },
+  {
+    "model": "orders.donhang",
+    "pk": "DH00002",
+    "fields": {
+      "MaKH": "KH00007",
+      "MaKM": null,
+      "NgayDat": "2026-04-01",
+      "NgayGiao": "2026-04-03",
+      "TongTien": "255000.00",
+      "TrangThaiDonHang": "DONE",
+      "DiaChiGiaoHang": "2 Võ Văn Kiệt"
+    }
+  },
+  {
+    "model": "orders.donhang",
+    "pk": "DH00003",
+    "fields": {
+      "MaKH": "KH00011",
+      "MaKM": "KM00006",
+      "NgayDat": "2026-03-06",
+      "NgayGiao": "2026-03-08",
+      "TongTien": "129000.00",
+      "TrangThaiDonHang": "DONE",
+      "DiaChiGiaoHang": "8 Đỗ Bá"
+    }
+  },
+  {
+    "model": "orders.donhang",
+    "pk": "DH00004",
+    "fields": {
+      "MaKH": "KH00014",
+      "MaKM": null,
+      "NgayDat": "2026-03-17",
+      "NgayGiao": "2026-03-19",
+      "TongTien": "199000.00",
+      "TrangThaiDonHang": "DANG",
+      "DiaChiGiaoHang": "45 Hồ Xuân Hương"
+    }
+  },
+  {
+    "model": "orders.donhang",
+    "pk": "DH00005",
+    "fields": {
+      "MaKH": "KH00016",
+      "MaKM": null,
+      "NgayDat": "2026-04-01",
+      "NgayGiao": "2026-04-03",
+      "TongTien": "149000.00",
+      "TrangThaiDonHang": "DONE",
+      "DiaChiGiaoHang": "78 Đỗ Bá"
+    }
+  },
+  {
+    "model": "orders.chitietdonhang",
+    "pk": 1,
+    "fields": {
+      "MaDonHang": "DH00001",
+      "MaBTSP": "CTSP00001",
+      "SoLuong": 1,
+      "DonGia": "199000.00",
+      "ThanhTien": "199000.00"
+    }
+  },
+  {
+    "model": "orders.chitietdonhang",
+    "pk": 2,
+    "fields": {
+      "MaDonHang": "DH00002",
+      "MaBTSP": "CTSP00009",
+      "SoLuong": 1,
+      "DonGia": "255000.00",
+      "ThanhTien": "255000.00"
+    }
+  },
+  {
+    "model": "orders.chitietdonhang",
+    "pk": 3,
+    "fields": {
+      "MaDonHang": "DH00003",
+      "MaBTSP": "CTSP00015",
+      "SoLuong": 1,
+      "DonGia": "129000.00",
+      "ThanhTien": "129000.00"
+    }
+  },
+  {
+    "model": "orders.chitietdonhang",
+    "pk": 4,
+    "fields": {
+      "MaDonHang": "DH00004",
+      "MaBTSP": "CTSP00017",
+      "SoLuong": 1,
+      "DonGia": "149000.00",
+      "ThanhTien": "149000.00"
+    }
+  },
+  {
+    "model": "orders.chitietdonhang",
+    "pk": 5,
+    "fields": {
+      "MaDonHang": "DH00005",
+      "MaBTSP": "CTSP00016",
+      "SoLuong": 1,
+      "DonGia": "249000.00",
+      "ThanhTien": "249000.00"
+    }
+  },
+  {
+    "model": "orders.doitra",
+    "pk": "DT00001",
+    "fields": {
+      "MaCTDH": "1",
+      "MaKH": "KH00001",
+      "MaNV": "NV00006",
+      "LoaiYeuCau": "DOI",
+      "NgayYeuCau": "2026-04-04",
+      "LyDo": "Đổi size",
+      "HinhAnh": "doitra_images/Áo.jpg",
+      "TrangThai": "PENDING",
+      "GhiChuXuLy": "Đang chờ xử lý"
+    }
+  },
+  {
+    "model": "orders.doitra",
+    "pk": "DT00002",
+    "fields": {
+      "MaCTDH": "2",
+      "MaKH": "KH00007",
+      "MaNV": "NV00008",
+      "LoaiYeuCau": "DOI",
+      "NgayYeuCau": "2026-04-01",
+      "LyDo": "Đổi màu",
+      "HinhAnh": "doitra_images/ÁO_ĐEN.jpg",
+      "TrangThai": "PENDING",
+      "GhiChuXuLy": "Đang chờ xử lý"
+    }
+  },
+  {
+    "model": "orders.doitra",
+    "pk": "DT00003",
+    "fields": {
+      "MaCTDH": "3",
+      "MaKH": "KH00012",
+      "MaNV": "NV00006",
+      "LoaiYeuCau": "TRA",
+      "NgayYeuCau": "2026-03-05",
+      "LyDo": "Sai màu",
+      "HinhAnh": "doitra_images/ÁO_KIỂU.jpg",
+      "TrangThai": "DONE",
+      "GhiChuXuLy": "Đã xử lý"
+    }
+  },
+  {
+    "model": "orders.doitra",
+    "pk": "DT00004",
+    "fields": {
+      "MaCTDH": "4",
+      "MaKH": "KH00016",
+      "MaNV": "NV00010",
+      "LoaiYeuCau": "DOI",
+      "NgayYeuCau": "2026-03-04",
+      "LyDo": "Đổi màu",
+      "HinhAnh": "doitra_images/Bánh_mì.jpg",
+      "TrangThai": "REJECT",
+      "GhiChuXuLy": "Đã từ chối vì up minh chứng không rõ"
+    }
+  },
+  {
+    "model": "orders.doitra",
+    "pk": "DT00005",
+    "fields": {
+      "MaCTDH": "5",
+      "MaKH": "KH00014",
+      "MaNV": "NV00005",
+      "LoaiYeuCau": "TRA",
+      "NgayYeuCau": "2026-03-02",
+      "LyDo": "Sai mẫu",
+      "HinhAnh": "doitra_images/BODY_NỮ.jpg",
+      "TrangThai": "PENDING",
+      "GhiChuXuLy": "ok"
+    }
+  },
+  {
+    "model": "cskh.khuyenmai",
+    "pk": "KM00001",
+    "fields": {
+      "TenKhuyenMai": "Sale up 10% mùa hè",
+      "PhanTramGiam": "10.00",
+      "NgayBatDau": "2026-04-01",
+      "NgayKetThuc": "2026-04-30",
+      "MoTa": "Giảm giá toàn bộ sản phẩm mùa hè"
+    }
+  },
+  {
+    "model": "cskh.khuyenmai",
+    "pk": "KM00002",
+    "fields": {
+      "TenKhuyenMai": "Flash Sale cuối tuần",
+      "PhanTramGiam": "15.00",
+      "NgayBatDau": "2026-04-05",
+      "NgayKetThuc": "2026-04-07",
+      "MoTa": "Áp dụng cho đơn hàng từ 500000đ"
+    }
+  },
+  {
+    "model": "cskh.khuyenmai",
+    "pk": "KM00003",
+    "fields": {
+      "TenKhuyenMai": "Khuyễn mãi lễ 30/4",
+      "PhanTramGiam": "18.00",
+      "NgayBatDau": "2026-04-25",
+      "NgayKetThuc": "2026-05-02",
+      "MoTa": "Giảm giá nhân dịp lễ 30/4 - 1/5"
+    }
+  },
+  {
+    "model": "cskh.khuyenmai",
+    "pk": "KM00004",
+    "fields": {
+      "TenKhuyenMai": "Mừng sinh nhật shop",
+      "PhanTramGiam": "25.00",
+      "NgayBatDau": "2026-05-10",
+      "NgayKetThuc": "2026-05-20",
+      "MoTa": "Giảm giá đặc biệt nhân dịp sinh nhật cửa hàng"
+    }
+  },
+  {
+    "model": "cskh.khuyenmai",
+    "pk": "KM00005",
+    "fields": {
+      "TenKhuyenMai": "Sale 11/11",
+      "PhanTramGiam": "11.00",
+      "NgayBatDau": "2026-11-01",
+      "NgayKetThuc": "2026-11-11",
+      "MoTa": "Khuyễn mãi lớn tháng 11"
+    }
+  },
+  {
+    "model": "cskh.khuyenmai",
+    "pk": "KM00006",
+    "fields": {
+      "TenKhuyenMai": "Ưu đãi ngày phụ nữ",
+      "PhanTramGiam": "8.00",
+      "NgayBatDau": "2026-03-05",
+      "NgayKetThuc": "2026-03-08",
+      "MoTa": "Sale đặc biệt nhân ngày 8/3"
+    }
+  },
+  {
+    "model": "cskh.khuyenmai",
+    "pk": "KM00007",
+    "fields": {
+      "TenKhuyenMai": "Ưu đãi ngày phụ nữ",
+      "PhanTramGiam": "10.00",
+      "NgayBatDau": "2025-10-01",
+      "NgayKetThuc": "2025-10-15",
+      "MoTa": "Áp dụng cho áo sơ mi, quần tây, blazer"
+    }
+  },
+  {
+    "model": "cskh.khuyenmai",
+    "pk": "KM00008",
+    "fields": {
+      "TenKhuyenMai": "Sale Black Friday",
+      "PhanTramGiam": "30.00",
+      "NgayBatDau": "2026-04-20",
+      "NgayKetThuc": "2026-04-30",
+      "MoTa": "Áp dụng cho toàn bộ sản phẩm thời trang"
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00001",
+    "fields": {
+      "MaKH": "KH00001",
+      "TongDiem": 3000
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00002",
+    "fields": {
+      "MaKH": "KH00002",
+      "TongDiem": 2000
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00003",
+    "fields": {
+      "MaKH": "KH00003",
+      "TongDiem": 300
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00004",
+    "fields": {
+      "MaKH": "KH00004",
+      "TongDiem": 500
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00005",
+    "fields": {
+      "MaKH": "KH00005",
+      "TongDiem": 320
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00006",
+    "fields": {
+      "MaKH": "KH00006",
+      "TongDiem": 1200
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00007",
+    "fields": {
+      "MaKH": "KH00007",
+      "TongDiem": 360
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00008",
+    "fields": {
+      "MaKH": "KH00008",
+      "TongDiem": 1500
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00009",
+    "fields": {
+      "MaKH": "KH00009",
+      "TongDiem": 320
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00010",
+    "fields": {
+      "MaKH": "KH00010",
+      "TongDiem": 1400
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00011",
+    "fields": {
+      "MaKH": "KH00011",
+      "TongDiem": 1100
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00012",
+    "fields": {
+      "MaKH": "KH00012",
+      "TongDiem": 600
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00013",
+    "fields": {
+      "MaKH": "KH00013",
+      "TongDiem": 1200
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00014",
+    "fields": {
+      "MaKH": "KH00014",
+      "TongDiem": 260
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00015",
+    "fields": {
+      "MaKH": "KH00015",
+      "TongDiem": 1200
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00016",
+    "fields": {
+      "MaKH": "KH00016",
+      "TongDiem": 540
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00017",
+    "fields": {
+      "MaKH": "KH00017",
+      "TongDiem": 400
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00018",
+    "fields": {
+      "MaKH": "KH00018",
+      "TongDiem": 350
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00019",
+    "fields": {
+      "MaKH": "KH00019",
+      "TongDiem": 725
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00020",
+    "fields": {
+      "MaKH": "KH00020",
+      "TongDiem": 430
+    }
+  },
+  {
+    "model": "cskh.tichdiem",
+    "pk": "TD00021",
+    "fields": {
+      "MaKH": "KH00021",
+      "TongDiem": 350
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LS941351",
+    "fields": {
+      "MaKH": "KH00021",
+      "DiemThayDoi": -10,
+      "LyDo": "Trừ điểm (Cập nhật)",
+      "NgayThucHien": "2026-04-08"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00001",
+    "fields": {
+      "MaKH": "KH00001",
+      "DiemThayDoi": 100,
+      "LyDo": "Mua áo",
+      "NgayThucHien": "2026-04-04"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00002",
+    "fields": {
+      "MaKH": "KH00001",
+      "DiemThayDoi": 500,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-04-01"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00003",
+    "fields": {
+      "MaKH": "KH00001",
+      "DiemThayDoi": 2400,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-02-04"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00004",
+    "fields": {
+      "MaKH": "KH00002",
+      "DiemThayDoi": 300,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-04-16"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00005",
+    "fields": {
+      "MaKH": "KH00002",
+      "DiemThayDoi": 600,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-03-03"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00006",
+    "fields": {
+      "MaKH": "KH00002",
+      "DiemThayDoi": 1100,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2025-11-04"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00007",
+    "fields": {
+      "MaKH": "KH00003",
+      "DiemThayDoi": 300,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-01-05"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00008",
+    "fields": {
+      "MaKH": "KH00004",
+      "DiemThayDoi": 500,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-04-04"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00009",
+    "fields": {
+      "MaKH": "KH00005",
+      "DiemThayDoi": 320,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-04-16"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00010",
+    "fields": {
+      "MaKH": "KH00006",
+      "DiemThayDoi": 360,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2025-11-04"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00011",
+    "fields": {
+      "MaKH": "KH00006",
+      "DiemThayDoi": 600,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-02-04"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00012",
+    "fields": {
+      "MaKH": "KH00006",
+      "DiemThayDoi": 240,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-04-23"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00013",
+    "fields": {
+      "MaKH": "KH00007",
+      "DiemThayDoi": 360,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-04-04"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00014",
+    "fields": {
+      "MaKH": "KH00008",
+      "DiemThayDoi": 600,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-04-01"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00015",
+    "fields": {
+      "MaKH": "KH00008",
+      "DiemThayDoi": 900,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-04-04"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00016",
+    "fields": {
+      "MaKH": "KH00009",
+      "DiemThayDoi": 320,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-04-16"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00017",
+    "fields": {
+      "MaKH": "KH00010",
+      "DiemThayDoi": 400,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-04-04"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00018",
+    "fields": {
+      "MaKH": "KH00010",
+      "DiemThayDoi": 1000,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-04-16"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00019",
+    "fields": {
+      "MaKH": "KH00011",
+      "DiemThayDoi": 1100,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-01-08"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00020",
+    "fields": {
+      "MaKH": "KH00012",
+      "DiemThayDoi": 600,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-01-07"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00021",
+    "fields": {
+      "MaKH": "KH00013",
+      "DiemThayDoi": 600,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-01-07"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00022",
+    "fields": {
+      "MaKH": "KH00013",
+      "DiemThayDoi": 320,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-02-02"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00023",
+    "fields": {
+      "MaKH": "KH00013",
+      "DiemThayDoi": 280,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-01-01"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00024",
+    "fields": {
+      "MaKH": "KH00014",
+      "DiemThayDoi": 260,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-01-30"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00025",
+    "fields": {
+      "MaKH": "KH00015",
+      "DiemThayDoi": 500,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2025-11-25"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00026",
+    "fields": {
+      "MaKH": "KH00015",
+      "DiemThayDoi": 700,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-04-04"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00027",
+    "fields": {
+      "MaKH": "KH00016",
+      "DiemThayDoi": 200,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-04-04"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00028",
+    "fields": {
+      "MaKH": "KH00016",
+      "DiemThayDoi": 340,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-01-29"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00029",
+    "fields": {
+      "MaKH": "KH00017",
+      "DiemThayDoi": 400,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-02-04"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00030",
+    "fields": {
+      "MaKH": "KH00018",
+      "DiemThayDoi": 350,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-03-23"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00031",
+    "fields": {
+      "MaKH": "KH00019",
+      "DiemThayDoi": 425,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-04-04"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00032",
+    "fields": {
+      "MaKH": "KH00019",
+      "DiemThayDoi": 300,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-01-23"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00033",
+    "fields": {
+      "MaKH": "KH00020",
+      "DiemThayDoi": 430,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-04-04"
+    }
+  },
+  {
+    "model": "cskh.lichsutichdiem",
+    "pk": "LSTD00034",
+    "fields": {
+      "MaKH": "KH00021",
+      "DiemThayDoi": 360,
+      "LyDo": "Mua hàng",
+      "NgayThucHien": "2026-01-31"
+    }
+  },
+  {
+    "model": "cskh.thongbaokhuyenmai",
+    "pk": "TBKM00001",
+    "fields": {
+      "MaKH": "KH00001",
+      "NoiDung": "Chương trình sale up 10% mùa hè đã bắt đầu, nhanh tay mua sắm ngay hôm nay",
+      "NgayGui": "2026-04-01"
+    }
+  },
+  {
+    "model": "cskh.hoithoaituvan",
+    "pk": "HT000001",
+    "fields": {
+      "MaKH": "KH00008",
+      "TrangThai": "Đang tư vấn"
+    }
+  },
+  {
+    "model": "cskh.hoithoaituvan",
+    "pk": "HT000002",
+    "fields": {
+      "MaKH": "KH00008",
+      "TrangThai": "Đang tư vấn"
+    }
+  },
+  {
+    "model": "cskh.hoithoaituvan",
+    "pk": "HT000003",
+    "fields": {
+      "MaKH": "KH00009",
+      "TrangThai": "Đã tư vấn"
+    }
+  },
+  {
+    "model": "cskh.tinnhantuvan",
+    "pk": "TN00001",
+    "fields": {
+      "MaHoiThoai": "HT000001",
+      "MaNV": null,
+      "NoiDung": "Mình cần shop hỗ trợ gì ạ ?",
+      "ThoiGianGui": "2026-04-04T14:13:01.902Z"
+    }
+  }
+]
