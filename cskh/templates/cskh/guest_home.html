@@ -30,14 +30,15 @@
         .header-top {
             max-width: 1440px;
             margin: 0 auto;
-            padding: 16px 40px;
+            padding: 10px 40px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            position: relative;
         }
-
+        
         .logo {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: 800;
             color: #e58f8b;
             letter-spacing: 1px;
@@ -45,14 +46,16 @@
         }
 
         .search-box {
-            flex: 1;
-            max-width: 500px;
-            margin: 0 40px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 450px;
         }
 
         .search-box input {
             width: 100%;
-            padding: 10px 20px;
+            padding: 8px 16px;
+            font-size: 13px;
             border-radius: 20px;
             border: 1px solid #eaeaea;
             background: #fdfdfd;
@@ -63,7 +66,7 @@
         .header-icons {
             display: flex;
             align-items: center;
-            gap: 24px;
+            gap: 32px;
         }
 
         .user-btn {
@@ -190,17 +193,31 @@
 
     <div class="header-top-container">
         <div class="header-top">
-            <div class="logo">SALAVI</div>
+            <div class="logo"><a href="{% url 'cskh:guest_home' %}" style="text-decoration: none; color: inherit;">SALAVI</a></div>
             <div class="search-box">
-                <input type="text" placeholder="Tìm kiếm sản phẩm...">
+                <form action="{% url 'products:product_list' %}" method="GET" style="display: flex; width: 100%;">
+                    <input type="text" name="q" placeholder="Tìm kiếm sản phẩm..." value="{{ request.GET.q|default:'' }}">
+                </form>
             </div>
             <div class="header-icons">
+                {% if user.is_authenticated %}
+                <div class="user-btn hover:bg-gray-50 transition text-[#333] relative group">
+                    {{ user.khachhang.HoTen|default:user.username }}
+                    <i class="fas fa-user text-lg ml-1 text-[#333]"></i>
+                    
+                    <!-- Dropdown đơn giản cho Guest Home -->
+                    <div class="absolute top-full right-0 mt-2 w-40 bg-white shadow-xl rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 border border-gray-100 py-2">
+                        <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-500">Đăng xuất</a>
+                    </div>
+                </div>
+                {% else %}
                 <a href="{% url 'accounts:login' %}" style="text-decoration:none;">
                     <div class="user-btn hover:bg-gray-50 transition text-[#333]">
                         Tài khoản
                         <i class="fas fa-user text-lg ml-1 text-[#333]"></i>
                     </div>
                 </a>
+                {% endif %}
                 <div class="icon-list text-xl">
                     <div class="relative cursor-pointer hover:text-[#e58f8b] transition text-[#333]">
                         <i class="fas fa-shopping-cart text-[#e58f8b]"></i>
@@ -208,7 +225,6 @@
                     </div>
                     <i class="far fa-heart cursor-pointer hover:text-[#e58f8b] transition text-[#333]"></i>
                     <i class="far fa-user cursor-pointer hover:text-[#e58f8b] transition text-[#333]"></i>
-                    <i class="fas fa-sign-out-alt cursor-pointer hover:text-[#e58f8b] transition text-[#333]"></i>
                 </div>
             </div>
         </div>
@@ -217,9 +233,15 @@
     <header class="header-nav">
         <div class="nav-container">
             <nav class="nav">
-                <a class="active">Trang chủ</a>
-                <a>Sản phẩm</a>
-                <a>Đánh giá</a>
+                <a href="{% url 'cskh:guest_home' %}" class="active">Trang chủ</a>
+                <a href="{% url 'products:product_list' %}">Sản phẩm</a>
+                {% if user.is_authenticated and user.khachhang %}
+                    <a href="{% url 'cskh:diem_tich_luy' %}">Tích điểm</a>
+                    <a href="{% url 'cskh:quan_ly_danh_gia' %}">Đánh giá</a>
+                    <a href="{% url 'orders:doitra_list' %}">Đổi trả</a>
+                {% else %}
+                    <a href="{% url 'cskh:quan_ly_danh_gia' %}">Đánh giá</a>
+                {% endif %}
             </nav>
             <div class="absolute right-10 py-3 cursor-pointer">
                 <i class="far fa-bell text-xl"></i>

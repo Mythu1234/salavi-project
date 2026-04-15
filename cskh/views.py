@@ -18,7 +18,14 @@ from .forms import KhuyenMaiForm
 
 
 def dashboard_view(request):
-    # Lấy thống kê cơ bản
+    if not request.user.is_authenticated:
+        return redirect('cskh:guest_home')
+
+    # Nếu là khách hàng, chuyển hướng sang giao diện mua sắm
+    if hasattr(request.user, 'khachhang'):
+        return redirect('cskh:guest_home')
+
+    # Lấy thống kê cơ bản dành cho Nhân viên/Admin
     chua_phan_hoi = HoiThoaiTuVan.objects.filter(TrangThai='Chưa xử lý').count()
     dang_tu_van = HoiThoaiTuVan.objects.filter(Q(TrangThai='Đang xử lý') | Q(TrangThai='Đã phản hồi')).count()
     don_can_ho_tro = DoiTra.objects.filter(TrangThai='PENDING').count()
