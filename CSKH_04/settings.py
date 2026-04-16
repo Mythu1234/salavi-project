@@ -85,7 +85,6 @@ WSGI_APPLICATION = 'CSKH_04.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }\
-import os
 import dj_database_url
 import dj_database_url
 
@@ -94,7 +93,7 @@ DATABASES = {
         "postgresql://postgres.ctguatuzjdrgaxzvmgsw:SALAVI123_N4@aws-1-ap-south-1.pooler.supabase.com:6543/postgres"
     )
 }
-
+ALLOWED_HOSTS = ['*']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -138,8 +137,8 @@ STATICFILES_DIRS = [
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-
+import os
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
