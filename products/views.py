@@ -240,7 +240,7 @@ def delete_product(request, pk):
         obj = get_object_or_404(SanPham, MaSP=pk)
     if request.method == 'POST':
         obj.delete()
-        return redirect('products:product_list')
+        return render(request, 'products/product_delete_success.html')
     return render(request, 'products/product_delete.html', {'product': obj, 'mode': mode})
 
 def add_success(request): return render(request, 'products/product_add_success.html')
