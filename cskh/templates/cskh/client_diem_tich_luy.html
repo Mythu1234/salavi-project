@@ -1,0 +1,355 @@
+{% extends 'base.html' %}
+
+{% block title %}Điểm tích lũy cá nhân - Salavi{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --primary-pink: #ef8989;
+        --secondary-pink: #e58f8b;
+        --bg-light: #fafafa;
+        --glass-white: rgba(255, 255, 255, 0.8);
+    }
+
+    .loyalty-page {
+        padding: 60px 20px;
+        max-width: 1150px;
+        margin: 0 auto;
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .welcome-header {
+        text-align: left;
+        margin-bottom: 40px;
+    }
+
+    .welcome-header h1 {
+        font-size: 32px;
+        font-weight: 800;
+        color: #2b2b2b;
+        margin-bottom: 8px;
+    }
+
+    /* New Layout: 2 Columns */
+    .loyalty-main-layout {
+        display: flex;
+        gap: 30px;
+        align-items: stretch;
+        /* Đảm bảo 2 cột cao bằng nhau */
+        margin-bottom: 40px;
+    }
+
+    /* Left Column: Points Card */
+    .points-section {
+        flex: 0 0 360px;
+        /* Tăng nhẹ độ rộng của ô điểm */
+        display: flex;
+    }
+
+    .points-card {
+        background: #fff;
+        border-radius: 30px;
+        padding: 40px 20px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        /* Căn giữa nội dung theo chiều dọc */
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #f9ebea;
+        width: 100%;
+        height: 100%;
+        /* Chiều cao tối đa theo cột */
+    }
+
+    .points-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(239, 137, 137, 0.05) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .progress-circle {
+        width: 240px;
+        /* Phóng to vòng tròn */
+        height: 240px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .progress-circle svg {
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+    }
+
+    .progress-circle circle {
+        fill: none;
+        stroke-width: 12;
+        stroke-linecap: round;
+    }
+
+    .circle-bg {
+        stroke: #f8f8f8;
+    }
+
+    .circle-progress {
+        stroke: var(--primary-pink);
+        stroke-dasharray: 660;
+        /* Cập nhật theo kích thước mới */
+        stroke-dashoffset: 0;
+        filter: drop-shadow(0 0 8px rgba(239, 137, 137, 0.3));
+    }
+
+    .points-text {
+        position: absolute;
+        text-align: center;
+    }
+
+    .points-value {
+        font-size: 56px;
+        /* Chữ to hơn */
+        font-weight: 800;
+        color: #2b2b2b;
+        line-height: 1;
+    }
+
+    .points-label {
+        font-size: 14px;
+        color: #999;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 5px;
+    }
+
+    .status-badge {
+        background: #fdf5f4;
+        color: var(--primary-pink);
+        padding: 8px 20px;
+        border-radius: 100px;
+        font-weight: 700;
+        font-size: 13px;
+        border: 1px solid #f9ebea;
+    }
+
+    /* Right Column: History Table */
+    .history-section {
+        flex: 1;
+        /* Chiếm toàn bộ không gian còn lại (kéo dài ra) */
+        display: flex;
+    }
+
+    .history-card {
+        background: #fff;
+        border-radius: 25px;
+        padding: 35px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.02);
+        border: 1px solid #f0f0f0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .history-card h3 {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 25px;
+        color: #2b2b2b;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .history-card h3 svg {
+        color: var(--primary-pink);
+    }
+
+    .table-container {
+        overflow-y: auto;
+        max-height: 400px; /* Cân bằng với chiều cao của ô Tổng điểm */
+        padding-right: 5px;
+    }
+
+    /* Tùy chỉnh thanh cuộn cho mượt mà */
+    .table-container::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .table-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .table-container::-webkit-scrollbar-thumb {
+        background: #ef8989;
+        border-radius: 10px;
+    }
+
+    .loyalty-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .loyalty-table th {
+        background: #fdf5f4;
+        text-align: left;
+        padding: 15px 20px;
+        font-size: 12px;
+        font-weight: 800;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: sticky;
+        /* Cố định tiêu đề khi cuộn */
+        top: 0;
+        z-index: 10;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+    }
+
+    .loyalty-table td {
+        padding: 18px 20px;
+        border-bottom: 1px solid #f7f7f7;
+        font-size: 15px;
+        color: #444;
+    }
+
+    .loyalty-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .point-change {
+        font-weight: 800;
+        font-size: 16px;
+    }
+
+    .point-plus {
+        color: #2ecc71;
+    }
+
+    .point-minus {
+        color: #e74c3c;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #ccc;
+    }
+
+    .empty-state svg {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 15px;
+        opacity: 0.2;
+    }
+
+    @media (max-width: 900px) {
+        .loyalty-main-layout {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .points-section {
+            flex: none;
+        }
+    }
+</style>
+
+<div class="loyalty-page">
+    <div class="welcome-header">
+        <h1>Chào mừng, {{ khach_hang.HoTen }}!</h1>
+        <p>Cảm ơn bạn đã luôn đồng hành cùng Salavi</p>
+    </div>
+
+    <div class="loyalty-main-layout">
+        <!-- Left: Points Status -->
+        <div class="points-section">
+            <div class="points-card">
+                <div class="progress-circle">
+                    <svg viewBox="0 0 200 200">
+                        <circle class="circle-bg" cx="100" cy="100" r="90"></circle>
+                        <circle class="circle-progress" cx="100" cy="100" r="90"></circle>
+                    </svg>
+                    <div class="points-text">
+                        <div class="points-value">{{ tong_diem|stringformat:"d" }}</div>
+                        <div class="points-label">Điểm tích lũy</div>
+                    </div>
+                </div>
+                <div class="status-badge">
+                    Tài khoản chính thức
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: History -->
+        <div class="history-section">
+            <div class="history-card">
+                <h3>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Lịch sử giao dịch điểm
+                </h3>
+                <div class="table-container">
+                    <table class="loyalty-table">
+                        <thead>
+                            <tr>
+                                <th>Ngày giao dịch</th>
+                                <th>Nội dung</th>
+                                <th>Biến động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in history_list %}
+                            <tr>
+                                <td style="color: #888;">{{ item.NgayThucHien|date:"d/m/Y" }}</td>
+                                <td style="font-weight: 600;">{{ item.LyDo }}</td>
+                                <td
+                                    class="point-change {% if item.DiemThayDoi > 0 %}point-plus{% else %}point-minus{% endif %}">
+                                    {% if item.DiemThayDoi > 0 %}+{% endif %}{{ item.DiemThayDoi }}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3">
+                                    <div class="empty-state">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path
+                                                d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2v11z">
+                                            </path>
+                                        </svg>
+                                        <p>Chưa có lịch sử.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

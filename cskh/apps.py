@@ -4,3 +4,6 @@ from django.apps import AppConfig
 class CskhConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'cskh'
+
+    def ready(self):
+        import cskh.signals
