@@ -51,13 +51,13 @@ class DoiTra(models.Model):
     MaDoiTra = models.CharField(max_length=10, primary_key=True)
     MaCTDH = models.ForeignKey(ChiTietDonHang, on_delete=models.CASCADE)
     MaKH = models.ForeignKey(KhachHang, on_delete=models.CASCADE)
-    MaNV = models.ForeignKey(NhanVien, on_delete=models.CASCADE)
+    MaNV = models.ForeignKey(NhanVien, on_delete=models.CASCADE, null=True, blank=True)
     LoaiYeuCau = models.CharField(max_length=50, choices=LOAI_CHOICES)
     NgayYeuCau = models.DateField()
     LyDo = models.CharField(max_length=200)
     HinhAnh = models.ImageField(upload_to='doitra_images/')
-    TrangThai = models.CharField(max_length=50, choices=TRANGTHAI_CHOICES)
-    GhiChuXuLy = models.CharField(max_length=100)
+    TrangThai = models.CharField(max_length=50, choices=TRANGTHAI_CHOICES, default='PENDING')
+    GhiChuXuLy = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.MaDoiTra

@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block block_title %}Salavi - Chi tiết đổi trả{% endblock %}
+
+{% block content %}
+<style>
+    .doitra-page {
+        position: relative;
+        min-height: 100vh;
+        background: #f8f9fa;
+    }
+
+    .doitra-page.is-muted {
+        filter: blur(1px);
+    }
+
+    .doitra-page.is-muted::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.25);
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px 16px;
+        z-index: 50;
+    }
+
+    .modal-content {
+        width: 100%;
+        max-width: 580px;
+        border-radius: 32px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22);
+        border: none;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+</style>
+
+<div class="doitra-page is-muted">
+    <div class="p-6">
+        <!-- Header Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-home text-red-400 text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-[22px] font-bold text-gray-800">Quản lý đổi - trả</h1>
+                    <p class="text-gray-500 text-sm">Quản lý và chăm sóc khách hàng</p>
+                </div>
+            </div>
+            <div class="bg-[#ef8989] text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2">
+                <i class="fas fa-plus-circle text-lg"></i>
+                Gửi yêu cầu
+            </div>
+        </div>
+
+        <!-- Requests Grid (Background) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for item in doitra_list %}
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+                <div class="h-1.5 bg-red-500 w-full"></div>
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef8989" stroke-width="2">
+                                <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H20.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"></path>
+                                <path d="M4 11v8a2 2 0 002 2h12a2 2 0 002-2v-8"></path>
+                                <path d="M9 11v4l3-2 3 2v-4"></path>
+                            </svg>
+                        </div>
+                        {% if item.TrangThai == 'DONE' %}
+                        <span class="bg-[#8ef0ba] text-[#111] px-4 py-1.5 rounded-full text-[13px] font-bold">Đã xử lý</span>
+                        {% elif item.TrangThai == 'PENDING' %}
+                        <span class="bg-[#fff9c4] text-[#856404] px-4 py-1.5 rounded-full text-[13px] font-bold">Chờ xử lý</span>
+                        {% else %}
+                        <span class="bg-[#fae1e1] text-[#721c24] px-4 py-1.5 rounded-full text-[13px] font-bold">Từ chối</span>
+                        {% endif %}
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 text-gray-700">
+                            <i class="far fa-calendar-alt w-5 text-gray-400"></i>
+                            <span class="text-[14px] font-medium">Mã đơn: <span class="font-bold text-gray-900">{{ item.MaCTDH.MaDonHang.MaDonHang }}</span></span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-700">
+                            <i class="fas fa-user-friends w-5 text-gray-400"></i>
+                            <span class="text-[14px] font-medium">Loại: <span class="text-gray-900">{{ item.get_LoaiYeuCau_display }}</span></span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-700">
+                            <i class="far fa-calendar-check w-5 text-gray-400"></i>
+                            <span class="text-[14px] font-medium">Ngày gửi: <span class="text-gray-900">{{ item.NgayYeuCau|date:"d/m/Y" }}</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay">
+    <div class="modal-content">
+        <!-- Main Card in Modal -->
+        <div class="bg-white overflow-hidden">
+            <!-- Header -->
+            <div class="bg-[#F39A97] py-6 px-8">
+                <h1 class="text-3xl font-extrabold text-white text-center tracking-tight">
+                    Chi tiết yêu cầu đổi trả
+                </h1>
+            </div>
+
+            <div class="p-8">
+                <!-- Status Banner -->
+                {% if doitra.TrangThai == 'DONE' %}
+                <div class="bg-green-50 rounded-xl py-4 px-6 mb-8 text-center border border-green-200">
+                    <p class="text-green-600 text-sm uppercase font-bold tracking-widest mb-1">Trạng thái yêu cầu</p>
+                    <p class="text-green-800 font-bold text-lg">Đã xử lý</p>
+                </div>
+                {% elif doitra.TrangThai == 'REJECT' %}
+                <div class="bg-red-50 rounded-xl py-4 px-6 mb-8 text-center border border-red-200">
+                    <p class="text-red-500 text-sm uppercase font-bold tracking-widest mb-1">Trạng thái yêu cầu</p>
+                    <p class="text-red-700 font-bold text-lg">Từ chối</p>
+                </div>
+                {% else %}
+                <div class="bg-[#FFF9C4] rounded-xl py-4 px-6 mb-8 text-center border border-[#FFF176]">
+                    <p class="text-[#FBC02D] text-sm uppercase font-bold tracking-widest mb-1">Trạng thái yêu cầu</p>
+                    <p class="text-[#AFB42B] font-bold text-lg">Chờ xử lý</p>
+                </div>
+                {% endif %}
+
+                <!-- Info Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    <!-- Customer Information -->
+                    <div class="border border-gray-200 rounded-2xl p-5 bg-white">
+                        <h3 class="text-gray-900 font-bold mb-4 flex items-center gap-2">
+                            Thông tin khách hàng:
+                        </h3>
+                        <div class="space-y-3">
+                            <p class="text-gray-700 font-medium">Khách hàng: <span class="text-gray-900">{{ doitra.MaKH.HoTen }}</span></p>
+                            <p class="text-gray-700 font-medium">SĐT: <span class="text-gray-900">{{ user.username }}</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Product Information -->
+                    <div class="border border-gray-200 rounded-2xl p-5 bg-white">
+                        <h3 class="text-gray-900 font-bold mb-4 flex items-center gap-2">
+                            Thông tin sản phẩm:
+                        </h3>
+                        <div class="space-y-3">
+                            <p class="text-gray-700 font-medium">Mã đơn: <span class="text-gray-900">{{ doitra.MaCTDH.MaDonHang.MaDonHang }}</span></p>
+                            <p class="text-gray-700 font-medium">Ngày mua: <span class="text-gray-900">{{ doitra.MaCTDH.MaDonHang.NgayDat|date:"d/m/Y" }}</span></p>
+                            <p class="text-gray-700 font-medium">Ngày giao: <span class="text-gray-900">{{ doitra.MaCTDH.MaDonHang.NgayGiao|date:"d/m/Y" }}</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Request Details / Image -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                    <!-- Proof Image -->
+                    <div>
+                        <h3 class="text-gray-900 font-bold mb-4">Hình ảnh minh chứng</h3>
+                        <div class="rounded-2xl overflow-hidden border border-gray-100 shadow-sm aspect-square bg-gray-50 flex items-center justify-center">
+                            {% if doitra.HinhAnh %}
+                                <img src="{{ doitra.HinhAnh.url }}" alt="Minh chứng" class="w-full h-full object-cover">
+                            {% else %}
+                                <div class="text-gray-400 flex flex-col items-center">
+                                    <i class="far fa-image text-4xl mb-2"></i>
+                                    <span class="text-sm">Không có hình ảnh</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Detail Box -->
+                    <div class="flex flex-col">
+                        <h3 class="text-gray-900 font-bold mb-4">Chi tiết yêu cầu</h3>
+                        <div class="flex-1 border border-gray-200 rounded-2xl p-5 bg-white flex flex-col justify-center space-y-4">
+                            <p class="text-gray-700 font-medium">
+                                Loại yêu cầu: <span class="text-gray-900">
+                                    {% if doitra.LoaiYeuCau == 'DOI' %}Đổi hàng
+                                    {% else %}Trả hàng - Hoàn tiền
+                                    {% endif %}
+                                </span>
+                            </p>
+                            <p class="text-gray-700 font-medium">
+                                Lý do: <span class="text-gray-900">{{ doitra.LyDo }}</span>
+                            </p>
+                            <p class="text-gray-700 font-medium">
+                                Ngày gửi: <span class="text-gray-900">{{ doitra.NgayYeuCau|date:"d/m/Y" }}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {% if doitra.GhiChuXuLy %}
+                <div class="mb-10 bg-blue-50 border border-blue-100 rounded-2xl p-5">
+                    <h3 class="text-blue-900 font-bold mb-2">Ghi chú từ cửa hàng:</h3>
+                    <p class="text-blue-800">{{ doitra.GhiChuXuLy }}</p>
+                </div>
+                {% endif %}
+
+                <!-- Footer / Close Button -->
+                <div class="flex justify-end">
+                    <a href="{% url 'orders:customer_doitra_list' %}" 
+                       class="px-12 py-3 border-2 border-gray-800 text-gray-800 font-bold text-xl rounded-2xl hover:bg-gray-800 hover:text-white transition-all duration-300 transform active:scale-95 shadow-sm">
+                        Đóng
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
