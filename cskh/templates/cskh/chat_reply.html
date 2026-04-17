@@ -8,13 +8,15 @@
     .cskh-chat-container {
         display: flex;
         width: 100%;
-        max-width: 850px; /* Thu nhỏ thêm chút */
-        height: 480px;    /* Thu nhỏ thêm chút */
+        max-width: 850px;
+        /* Thu nhỏ thêm chút */
+        height: 480px;
+        /* Thu nhỏ thêm chút */
         margin: 20px auto;
         background-color: #fff;
         border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         border: 1px solid #eaeaea;
         font-family: Arial, sans-serif;
     }
@@ -22,7 +24,8 @@
 
     /* BÊN TRÁI: DANH SÁCH KHÁCH HÀNG */
     .chat-sidebar {
-        width: 280px; /* Thu nhỏ từ 300px */
+        width: 280px;
+        /* Thu nhỏ từ 300px */
         background-color: #e8e8e8;
         display: flex;
         flex-direction: column;
@@ -40,10 +43,29 @@
         font-weight: 800;
         color: #111;
         margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .back-btn {
+        color: #f18686;
+        cursor: pointer;
+        font-size: 16px;
+        transition: transform 0.2s;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .back-btn:hover {
+        transform: translateX(-3px);
     }
 
 
-    .sidebar-filter, .sidebar-search {
+    .sidebar-filter,
+    .sidebar-search {
         width: 100%;
         padding: 8px 12px;
         margin-bottom: 8px;
@@ -67,7 +89,7 @@
         overflow-y: auto;
         scrollbar-width: none;
     }
-   
+
     .thread-list::-webkit-scrollbar {
         display: none;
     }
@@ -216,7 +238,7 @@
         background-color: #fff;
         padding: 10px 15px;
         border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
         border: 1px solid #f0f0f0;
         color: #111;
     }
@@ -250,8 +272,15 @@
     }
 
 
-    .message-wrapper-customer .message-time { color: #999; text-align: left; }
-    .message-wrapper-shop .message-time { color: rgba(255, 255, 255, 0.8); text-align: right; }
+    .message-wrapper-customer .message-time {
+        color: #999;
+        text-align: left;
+    }
+
+    .message-wrapper-shop .message-time {
+        color: rgba(255, 255, 255, 0.8);
+        text-align: right;
+    }
 
 
     .send-status-right {
@@ -308,50 +337,167 @@
     .chat-send-btn:hover {
         background-color: #e57373;
     }
-.btn-action {
-    padding: 6px 14px;
-    border-radius: 20px;
-    border: none;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-}
 
-.btn-receive {
-    background-color: #3498db;
-    color: #fff;
-}
+    .btn-action {
+        padding: 6px 14px;
+        border-radius: 20px;
+        border: none;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+    }
 
-.btn-receive:hover {
-    background-color: #2980b9;
-}
+    .btn-receive {
+        background-color: #3498db;
+        color: #fff;
+    }
 
-.btn-end {
-    background-color: #e74c3c;
-    color: #fff;
-}
+    .btn-receive:hover {
+        background-color: #2980b9;
+    }
 
-.btn-end:hover {
-    background-color: #c0392b;
-}
+    .btn-end {
+        background-color: #e74c3c;
+        color: #fff;
+    }
 
+    .btn-end:hover {
+        background-color: #c0392b;
+    }
 
+    /* Custom Quick Reply Dropdown */
+    .quick-reply-wrapper {
+        position: relative;
+    }
+
+    .quick-reply-btn {
+        background: #f8f8f8;
+        border: 1px solid #ddd;
+        color: #777;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .quick-reply-btn:hover {
+        background: #f18686;
+        color: #fff;
+        border-color: #f18686;
+    }
+
+    .quick-reply-menu {
+        display: none;
+        position: absolute;
+        bottom: 45px;
+        left: 0;
+        background: white;
+        min-width: 320px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        z-index: 1000;
+        border: 1px solid #eee;
+        padding: 8px 0;
+    }
+
+    .quick-reply-item {
+        padding: 10px 16px;
+        font-size: 13px;
+        color: #444;
+        cursor: pointer;
+        line-height: 1.5;
+        transition: background 0.2s;
+    }
+
+    .quick-reply-item:hover {
+        background-color: #fff5f5;
+        color: #f18686;
+    }
+
+    .quick-reply-menu.show {
+        display: block;
+    }
+
+    /* Image Attachment Styling */
+    .message-image {
+        max-width: 250px;
+        border-radius: 12px;
+        margin-top: 5px;
+        border: 1px solid rgba(0,0,0,0.05);
+        display: block;
+    }
+
+    .image-upload-btn {
+        background: #f8f8f8;
+        border: 1px solid #ddd;
+        color: #777;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .image-upload-btn:hover {
+        background: #f18686;
+        color: #fff;
+        border-color: #f18686;
+    }
+
+    #image-preview-container {
+        display: none;
+        padding: 8px 15px;
+        background: #fcfcfc;
+        border-top: 1px solid #eee;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .preview-thumbnail {
+        width: 45px;
+        height: 45px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+    }
+
+    .remove-preview {
+        color: #e74c3c;
+        cursor: pointer;
+        font-size: 14px;
+    }
 </style>
 
 
 <div class="cskh-chat-container">
     <div class="chat-sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-title">Yêu cầu tư vấn</div>
+            <div class="sidebar-title">
+                {% if search_query %}
+                <a href="?" class="back-btn" title="Quay lại">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                {% endif %}
+                Yêu cầu tư vấn
+            </div>
             <!-- Ô TÌM KIẾM KHÁCH HÀNG -->
             <form method="GET">
-                <input type="text" name="search" class="sidebar-search" placeholder="Tìm khách hàng..." value="{{ search_query }}">
+                <input type="text" name="search" class="sidebar-search" placeholder="Tìm khách hàng..."
+                    value="{{ search_query }}">
             </form>
         </div>
-       
+
         <div class="thread-list">
             {% for kh in khach_hang_list %}
-            <a href="?ma_kh={{ kh.MaKH.MaKH }}" class="thread-item {% if kh.MaKH.MaKH == current_customer.MaKH %}active{% endif %}">
+            <a href="?ma_kh={{ kh.MaKH.MaKH }}"
+                class="thread-item {% if kh.MaKH.MaKH == current_customer.MaKH %}active{% endif %}">
                 <div class="thread-top">
                     <span class="thread-name">{{ kh.MaKH.HoTen }}</span>
                     <span class="thread-time">{{ kh.last_time|date:"H:i" }}</span>
@@ -361,13 +507,13 @@
                 </div>
                 <div class="thread-status">
                     {% if kh.TrangThai == 'Đã đóng' %}
-                        <span class="status-dot" style="background-color: #2ecc71;"></span> Đã đóng
+                    <span class="status-dot" style="background-color: #2ecc71;"></span> Đã đóng
                     {% elif kh.TrangThai == 'Đã phản hồi' %}
-                        <span class="status-dot" style="background-color: #3498db;"></span> Đã phản hồi
+                    <span class="status-dot" style="background-color: #3498db;"></span> Đã phản hồi
                     {% elif kh.TrangThai == 'Đang xử lý' %}
-                        <span class="status-dot" style="background-color: #fbc02d;"></span> Đang xử lý
+                    <span class="status-dot" style="background-color: #fbc02d;"></span> Đang xử lý
                     {% else %}
-                        <span class="status-dot" style="background-color: #ff4d4d;"></span> Chưa xử lý
+                    <span class="status-dot" style="background-color: #ff4d4d;"></span> Chưa xử lý
                     {% endif %}
                 </div>
             </a>
@@ -377,73 +523,160 @@
 
 
     <div class="chat-main">
-<div class="chat-header">
-    <div class="chat-header-info">
-        <div class="chat-header-name">{{ current_customer.HoTen }}</div>
-        <div class="chat-header-status">Trạng thái: {{ header_status }}</div>
-    </div>
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <div class="chat-header-name">{{ current_customer.HoTen }}</div>
+                <div class="chat-header-status">Trạng thái: {{ header_status }}</div>
+            </div>
 
-    <div style="display: flex; gap: 10px; align-items: center;">
-        
-        <!-- Nút nhận xử lý -->
-        {% if header_status == "Chưa xử lý" %}
-        <form method="POST" action="{% url 'cskh:nhan_xu_ly' current_customer.MaKH %}">
-            {% csrf_token %}
-            <button class="btn-action btn-receive">Nhận xử lý</button>
-        </form>
-        {% endif %}
+            <div style="display: flex; gap: 10px; align-items: center;">
 
-        <!-- Nút kết thúc -->
-        {% if header_status == "Đang xử lý" or header_status == "Đã phản hồi" %}
-        <form method="POST" action="{% url 'cskh:ket_thuc_tu_van' current_customer.MaKH %}">
-            {% csrf_token %}
-            <button class="btn-action btn-end">Kết thúc</button>
-        </form>
-        {% endif %}
+                <!-- Nút nhận xử lý -->
+                {% if header_status == "Chưa xử lý" %}
+                <form method="POST" action="{% url 'cskh:nhan_xu_ly' current_customer.MaKH %}">
+                    {% csrf_token %}
+                    <button class="btn-action btn-receive">Nhận xử lý</button>
+                </form>
+                {% endif %}
 
-        <div style="font-weight: bold; color: #f18686;">Salavi</div>
-    </div>
-</div>
+                <!-- Nút kết thúc -->
+                {% if header_status == "Đang xử lý" or header_status == "Đã phản hồi" %}
+                <form method="POST" action="{% url 'cskh:ket_thuc_tu_van' current_customer.MaKH %}">
+                    {% csrf_token %}
+                    <button class="btn-action btn-end">Kết thúc</button>
+                </form>
+                {% endif %}
+
+                <div style="font-weight: bold; color: #f18686;">Salavi</div>
+            </div>
+        </div>
 
 
         <div class="chat-messages" id="chatMessages">
             {% for msg in tin_nhan_list %}
-                {% if msg.MaNV.MaNV != 'NV_KH' %}
-                <div class="message-bubble-wrapper message-wrapper-shop">
-                    <div class="message-bubble shop">
-                        <div class="message-text">{{ msg.NoiDung }}</div>
-                        <div class="message-time">{{ msg.ThoiGianGui|date:"H:i" }}</div>
-                    </div>
-                    <div class="send-status-right">Đã gửi</div>
+            {% if msg.MaNV.MaNV != 'NV_KH' %}
+            <div class="message-bubble-wrapper message-wrapper-shop">
+                <div class="message-bubble shop">
+                    {% if msg.HinhAnh %}
+                    <a href="{{ msg.HinhAnh.url }}" target="_blank">
+                        <img src="{{ msg.HinhAnh.url }}" class="message-image" alt="Image">
+                    </a>
+                    {% endif %}
+                    {% if msg.NoiDung %}
+                    <div class="message-text">{{ msg.NoiDung }}</div>
+                    {% endif %}
+                    <div class="message-time">{{ msg.ThoiGianGui|date:"H:i" }}</div>
                 </div>
-                {% else %}
-                <div class="message-bubble-wrapper message-wrapper-customer">
-                    <div class="message-bubble customer">
-                        <div class="message-text">{{ msg.NoiDung }}</div>
-                        <div class="message-time">{{ msg.ThoiGianGui|date:"H:i" }}</div>
-                    </div>
+                <div class="send-status-right">Đã gửi</div>
+            </div>
+            {% else %}
+            <div class="message-bubble-wrapper message-wrapper-customer">
+                <div class="message-bubble customer">
+                    {% if msg.HinhAnh %}
+                    <a href="{{ msg.HinhAnh.url }}" target="_blank">
+                        <img src="{{ msg.HinhAnh.url }}" class="message-image" alt="Image">
+                    </a>
+                    {% endif %}
+                    {% if msg.NoiDung %}
+                    <div class="message-text">{{ msg.NoiDung }}</div>
+                    {% endif %}
+                    <div class="message-time">{{ msg.ThoiGianGui|date:"H:i" }}</div>
                 </div>
-                {% endif %}
+            </div>
+            {% endif %}
             {% endfor %}
         </div>
 
 
-        <form class="chat-input-area" method="POST">
+        <form class="chat-input-area" method="POST" id="chatForm" enctype="multipart/form-data">
             {% csrf_token %}
+            
+            <!-- Image Preview -->
+            <div id="image-preview-container" style="display: none; padding: 8px 15px; background: #fcfcfc; border-top: 1px solid #eee; align-items: center; gap: 10px;">
+                <img id="preview-img" class="preview-thumbnail" style="width: 45px; height: 45px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd;">
+                <span class="text-xs text-gray-500 flex-grow" id="preview-filename" style="font-size: 11px; color: #888;"></span>
+                <i class="fas fa-times-circle remove-preview" onclick="clearImagePreview()" style="color: #e74c3c; cursor: pointer;"></i>
+            </div>
+
             <div class="chat-input-row">
-                <input type="text" name="NoiDung" class="chat-input" placeholder="Nhập nội dung phản hồi..." required autocomplete="off">
+                <!-- Dropdown Button -->
+                <div class="quick-reply-wrapper">
+                    <div class="quick-reply-btn" onclick="toggleQuickReplyMenu()" title="Câu trả lời mẫu">
+                        <i class="fas fa-list-ul"></i>
+                    </div>
+                    <div class="quick-reply-menu" id="quickReplyMenu">
+                        <div class="quick-reply-item" onclick="applyQuickReply('Chào bạn, Salavi có thể giúp gì cho bạn?')">Chào bạn, Salavi có thể giúp gì cho bạn?</div>
+                        <div class="quick-reply-item" onclick="applyQuickReply('Sản phẩm này bên mình có đủ size từ S đến XL. Bạn cho mình xin chiều cao, cân nặng để mình tư vấn kỹ hơn nhé.')">Tư vấn size (S-XL)</div>
+                        <div class="quick-reply-item" onclick="applyQuickReply('Mẫu này form hơi rộng, bạn nên lùi 1 size so với bình thường ạ.')">Tư vấn lùi size</div>
+                        <div class="quick-reply-item" onclick="applyQuickReply('Đơn hàng của bạn đã được xác nhận. Chúc bạn một ngày tốt lành!')">Xác nhận đơn hàng</div>
+                    </div>
+                </div>
+
+                <!-- Image Upload Icon Button -->
+                <label for="image-upload-input" class="image-upload-btn" title="Đính kèm hình ảnh">
+                    <i class="far fa-image"></i>
+                </label>
+                <input type="file" name="HinhAnh" id="image-upload-input" class="hidden" accept="image/*" style="display:none;" onchange="handleImageSelect(this)">
+
+                <input type="text" name="NoiDung" id="chatInputField" class="chat-input"
+                    placeholder="Nhập nội dung phản hồi..." required autocomplete="off">
                 <button type="submit" class="chat-send-btn">Gửi</button>
             </div>
-            <div style="font-size: 12px; color: #999; padding-left: 10px; margin-top: 5px;">* Nội dung phản hồi sẽ được lưu vào lịch sử tư vấn</div>
+            <div style="font-size: 12px; color: #999; padding-left: 10px; margin-top: 5px;">* Nội dung phản hồi sẽ được
+                lưu vào lịch sử tư vấn</div>
         </form>
     </div>
 </div>
 
-
 <script>
     var chatMessages = document.getElementById('chatMessages');
     chatMessages.scrollTop = chatMessages.scrollHeight;
-</script>
 
+    function applyQuickReply(text) {
+        const input = document.getElementById('chatInputField');
+        input.value = text;
+        document.getElementById('quickReplyMenu').classList.remove('show');
+        input.focus();
+    }
+
+    function toggleQuickReplyMenu() {
+        document.getElementById('quickReplyMenu').classList.toggle('show');
+    }
+
+    // Close menu when clicking outside
+    window.onclick = function (event) {
+        if (!event.target.matches('.quick-reply-btn') && !event.target.matches('.fa-list-ul')) {
+            var dropdowns = document.getElementsByClassName("quick-reply-menu");
+            for (var i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+
+    function handleImageSelect(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('preview-img').src = e.target.result;
+                document.getElementById('preview-filename').textContent = input.files[0].name;
+                document.getElementById('image-preview-container').style.display = 'flex';
+                document.getElementById('chatInputField').removeAttribute('required');
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function clearImagePreview() {
+        document.getElementById('image-upload-input').value = "";
+        document.getElementById('image-preview-container').style.display = 'none';
+        document.getElementById('chatInputField').setAttribute('required', '');
+    }
+
+    // Always scroll to bottom on load
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+</script>
 
 {% endblock %}
