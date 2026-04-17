@@ -630,3 +630,76 @@ def gui_danh_gia_view(request, ma_sp):
         return redirect(reverse('cskh:danh_gia_san_pham') + "?filter=todo")
 
     return redirect('cskh:danh_gia_san_pham')
+
+@csrf_exempt
+def api_customer_send_message(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Yêu cầu đăng nhập'}, status=403)
+    
+    khach_hang = getattr(request.user, 'khachhang', None)
+    if not khach_hang:
+        return JsonResponse({'status': 'error', 'message': 'Chỉ dành cho khách hàng'}, status=403)
+
+    if request.method == 'POST':
+        noi_dung = request.POST.get('NoiDung', '').strip()
+        hinh_anh = request.FILES.get('HinhAnh')
+
+        if not noi_dung and not hinh_anh:
+            return JsonResponse({'status': 'error', 'message': 'Nội dung trống'}, status=400)
+
+        # 1. Tìm hoặc tạo hội thoại cho khách này
+        chat, created = HoiThoaiTuVan.objects.get_or_create(
+            MaKH=khach_hang,
+            defaults={
+                'MaHoiThoai': "HT" + ''.join(random.choices(string.digits, k=6)),
+                'TrangThai': 'Chưa xử lý'
+            }
+        )
+        
+        # Nếu hội thoại đã kết thúc, mở lại nó
+        if chat.TrangThai == 'Đã đóng':
+            chat.TrangThai = 'Chưa xử lý'
+            chat.save()
+
+        # 2. Tạo mã tin nhắn duy nhất
+        ma_tn = "TN" + ''.join(random.choices(string.digits, k=6))
+        
+        # 3. Lưu tin nhắn (MaNV = None vì là khách gửi)
+        TinNhanTuVan.objects.create(
+            MaTinNhan=ma_tn,
+            MaHoiThoai=chat,
+            NoiDung=noi_dung,
+            HinhAnh=hinh_anh
+        )
+
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Đã gửi tin nhắn',
+            'time': datetime.now().strftime('%H:%M')
+        })
+
+    return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
+
+def api_get_chat_history(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Yêu cầu đăng nhập'}, status=403)
+    
+    khach_hang = getattr(request.user, 'khachhang', None)
+    if not khach_hang:
+        return JsonResponse({'status': 'error', 'message': 'Chỉ dành cho khách hàng'}, status=403)
+
+    chat = HoiThoaiTuVan.objects.filter(MaKH=khach_hang).first()
+    if not chat:
+        return JsonResponse({'status': 'success', 'messages': []})
+
+    messages_qs = TinNhanTuVan.objects.filter(MaHoiThoai=chat).order_by('ThoiGianGui')
+    history = []
+    for msg in messages_qs:
+        history.append({
+            'content': msg.NoiDung,
+            'image_url': msg.HinhAnh.url if msg.HinhAnh else None,
+            'time': msg.ThoiGianGui.strftime('%H:%M'),
+            'is_mine': msg.MaNV is None # Nếu MaNV là None thì là khách gửi (bên phải)
+        })
+
+    return JsonResponse({'status': 'success', 'messages': history})

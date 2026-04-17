@@ -408,18 +408,30 @@
 
         <div class="chat-messages" id="chatMessages">
             {% for msg in tin_nhan_list %}
-                {% if msg.MaNV.MaNV != 'NV_KH' %}
+                {% if msg.MaNV %}
+                <!-- TIN NHẮN CỦA SHOP (CÓ NHÂN VIÊN) -->
                 <div class="message-bubble-wrapper message-wrapper-shop">
                     <div class="message-bubble shop">
-                        <div class="message-text">{{ msg.NoiDung }}</div>
+                        <div class="message-text">
+                            {{ msg.NoiDung }}
+                            {% if msg.HinhAnh %}
+                                <img src="{{ msg.HinhAnh.url }}" style="max-width: 100%; border-radius: 8px; margin-top: 8px; display: block;">
+                            {% endif %}
+                        </div>
                         <div class="message-time">{{ msg.ThoiGianGui|date:"H:i" }}</div>
                     </div>
                     <div class="send-status-right">Đã gửi</div>
                 </div>
                 {% else %}
+                <!-- TIN NHẮN CỦA KHÁCH HÀNG (KHÔNG CÓ NHÂN VIÊN) -->
                 <div class="message-bubble-wrapper message-wrapper-customer">
                     <div class="message-bubble customer">
-                        <div class="message-text">{{ msg.NoiDung }}</div>
+                        <div class="message-text">
+                            {{ msg.NoiDung }}
+                            {% if msg.HinhAnh %}
+                                <img src="{{ msg.HinhAnh.url }}" style="max-width: 100%; border-radius: 8px; margin-top: 8px; display: block;">
+                            {% endif %}
+                        </div>
                         <div class="message-time">{{ msg.ThoiGianGui|date:"H:i" }}</div>
                     </div>
                 </div>

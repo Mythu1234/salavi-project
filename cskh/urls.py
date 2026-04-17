@@ -24,6 +24,8 @@ urlpatterns = [
     path('chat/reply/', views.chat_reply_view, name='chat_reply'),
     path('chat/nhan/<str:ma_kh>/', views.nhan_xu_ly_view, name='nhan_xu_ly'),
     path('chat/ket-thuc/<str:ma_kh>/', views.ket_thuc_tu_van_view, name='ket_thuc_tu_van'),
+    path('api/chat/send/', views.api_customer_send_message, name='api_customer_send_message'),
+    path('api/chat/history/', views.api_get_chat_history, name='api_get_chat_history'),
     path('store/', views.guest_home_view, name='guest_home'),
 ]
 

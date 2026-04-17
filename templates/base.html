@@ -370,20 +370,109 @@
             transition: transform 0.2s;
         }
         .phone-btn:hover, .chat-btn:hover { transform: scale(1.1); }
+
+        /* CHAT POPUP STYLES */
+        .chat-popup {
+            position: fixed; right: 20px; bottom: 0; width: 380px; height: 500px;
+            background: #fff; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: none; flex-direction: column; z-index: 1000; overflow: hidden;
+            border: 1px solid #eee; transition: all 0.3s ease;
+        }
+        .chat-popup.show { display: flex; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .chat-header {
+            background: #fff; padding: 15px 20px; border-bottom: 1px solid #f0f0f0;
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .chat-header h3 { margin: 0; font-size: 16px; font-weight: 700; color: #111; }
+        .chat-header .status { font-size: 12px; color: #888; display: flex; justify-content: space-between; }
+
+        .chat-messages {
+            flex: 1; padding: 20px; overflow-y: auto; background: #f9f9f9;
+            display: flex; flex-direction: column; gap: 15px;
+        }
+        .msg { max-width: 80%; padding: 10px 15px; border-radius: 12px; font-size: 14px; line-height: 1.5; position: relative; }
+        .msg-left { align-self: flex-start; background: #fff; color: #333; border: 1px solid #eee; }
+        .msg-right { align-self: flex-end; background: #e58f8b; color: #fff; }
+        .msg-time { font-size: 10px; margin-top: 4px; opacity: 0.7; }
+        .msg-right .msg-time { text-align: right; }
+
+        .chat-footer {
+            padding: 15px 20px; background: #fff; border-top: 1px solid #f0f0f0;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .chat-input-wrapper { display: flex; align-items: center; background: #f3f4f6; border-radius: 20px; padding: 5px 15px; gap: 10px; }
+        .chat-input-wrapper input { 
+            flex: 1; border: none; background: transparent; padding: 8px 0; 
+            font-size: 14px; outline: none; color: #333;
+        }
+        .chat-img-btn { 
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; color: #888; transition: color 0.2s;
+        }
+        .chat-img-btn:hover { color: #e58f8b; }
+        .chat-actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+        /* IMAGE PREVIEW STYLES */
+        .chat-image-preview {
+            display: none; align-items: center; gap: 10px; background: #fff5f5;
+            padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #ffe3e3;
+        }
+        .preview-thumb { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; }
+        .preview-info { flex: 1; font-size: 12px; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .preview-remove { cursor: pointer; color: #ff6b6b; font-size: 16px; font-weight: bold; }
+
+        .btn-chat-huy { background: #4ade80; color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; border: none; cursor: pointer; }
+        .btn-chat-gui { background: #e58f8b; color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; border: none; cursor: pointer; }
     </style>
     <a href="tel:19001234" class="phone-btn">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
         </svg>
     </a>
-    <a href="{% url 'cskh:chat_reply' %}" class="chat-btn">
+    <div id="chatBtn" class="chat-btn">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="1.5">
             <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
             <circle cx="8" cy="12" r="1.5" fill="#222" stroke="none"/>
             <circle cx="12" cy="12" r="1.5" fill="#222" stroke="none"/>
             <circle cx="16" cy="12" r="1.5" fill="#222" stroke="none"/>
         </svg>
-    </a>
+    </div>
+
+    <!-- CHAK POPUP HTML -->
+    <div id="chatPopup" class="chat-popup">
+        <div class="chat-header">
+            <h3>Shop SALAVI</h3>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be loaded dynamically via AJAX -->
+        </div>
+        <div class="chat-footer">
+            <!-- Image Preview Area -->
+            <div id="imagePreviewArea" class="chat-image-preview">
+                <img src="" id="previewImg" class="preview-thumb">
+                <span id="previewName" class="preview-info"></span>
+                <span id="removeImage" class="preview-remove" title="Bỏ chọn ảnh">&times;</span>
+            </div>
+
+            <div class="chat-input-wrapper">
+                <input type="text" placeholder="Nhập nội dung gửi ...">
+                <label for="chatImageInput" class="chat-img-btn" title="Gửi ảnh">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                </label>
+                <input type="file" id="chatImageInput" hidden accept="image/*">
+            </div>
+            <div class="chat-actions">
+                <button class="btn-chat-huy" id="closeChat">Huỷ</button>
+                <button class="btn-chat-gui">Gửi</button>
+            </div>
+        </div>
+    </div>
 
     {% if messages %}
     <div class="fixed bottom-5 right-5 z-50 flex flex-col gap-2">
@@ -472,6 +561,169 @@
 
                 notifDropdown.addEventListener('click', function(e) {
                     e.stopPropagation();
+                });
+            }
+
+            // Chat Popup toggle logic
+            const chatBtn = document.getElementById('chatBtn');
+            const chatPopup = document.getElementById('chatPopup');
+            const closeChat = document.getElementById('closeChat');
+
+            if (chatBtn && chatPopup) {
+                chatBtn.addEventListener('click', function() {
+                    {% if user.nhanvien or user.is_superuser %}
+                        // Admin/Staff vẫn đi đến trang quản lý chat
+                        window.location.href = "{% url 'cskh:chat_reply' %}";
+                    {% else %}
+                        // Khách hàng: Nếu chưa mở thì nội dung chưa có gì -> Đi lấy lịch sử
+                        if (!chatPopup.classList.contains('show')) {
+                            loadChatHistory();
+                        }
+                        chatPopup.classList.toggle('show');
+                    {% endif %}
+                });
+            }
+
+            function loadChatHistory() {
+                const chatMessages = document.getElementById('chatMessages');
+                if (!chatMessages) return;
+
+                chatMessages.innerHTML = '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">Đang tải lịch sử...</div>';
+
+                fetch("{% url 'cskh:api_get_chat_history' %}")
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            chatMessages.innerHTML = '';
+                            if (data.messages.length === 0) {
+                                chatMessages.innerHTML = '<div class="msg msg-left">Xin chào! Shop SALAVI có thể giúp gì cho bạn không ạ?<div class="msg-time">Vừa xong</div></div>';
+                            } else {
+                                data.messages.forEach(m => {
+                                    const div = document.createElement('div');
+                                    div.className = m.is_mine ? 'msg msg-right' : 'msg msg-left';
+                                    let htmlContent = m.content.replace(/\n/g, '<br>');
+                                    if (m.image_url) {
+                                        htmlContent += `<br><img src="${m.image_url}" style="max-width:100%; border-radius:8px; margin-top:8px; display:block;">`;
+                                    }
+                                    div.innerHTML = `${htmlContent}<div class="msg-time">${m.time}</div>`;
+                                    chatMessages.appendChild(div);
+                                });
+                            }
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Lỗi tải lịch sử:', err);
+                        chatMessages.innerHTML = '<div style="text-align:center; padding:20px; color:red; font-size:12px;">Không thể tải tin nhắn.</div>';
+                    });
+            }
+
+            if (closeChat && chatPopup) {
+                closeChat.addEventListener('click', function() {
+                    chatPopup.classList.remove('show');
+                });
+            }
+
+            // Chat Image selection logic
+            const chatImageInput = document.getElementById('chatImageInput');
+            const imagePreviewArea = document.getElementById('imagePreviewArea');
+            const previewImg = document.getElementById('previewImg');
+            const previewName = document.getElementById('previewName');
+            const removeImageBtn = document.getElementById('removeImage');
+
+            if (chatImageInput && imagePreviewArea) {
+                chatImageInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        const file = this.files[0];
+                        previewName.innerText = file.name;
+                        
+                        // Hiển thị ảnh thu nhỏ
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            previewImg.src = e.target.result;
+                            imagePreviewArea.style.display = 'flex';
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+
+                removeImageBtn.addEventListener('click', function() {
+                    chatImageInput.value = '';
+                    imagePreviewArea.style.display = 'none';
+                    previewImg.src = '';
+                });
+            }
+
+            // Real Message Sending Logic
+            const btnChatGui = document.querySelector('.btn-chat-gui');
+            const chatInput = document.querySelector('.chat-input-wrapper input');
+            const chatMessages = document.querySelector('.chat-messages');
+
+            if (btnChatGui && chatInput && chatMessages) {
+                btnChatGui.addEventListener('click', function() {
+                    const text = chatInput.value.trim();
+                    const imageFile = chatImageInput ? chatImageInput.files[0] : null;
+
+                    if (!text && !imageFile) return;
+
+                    const formData = new FormData();
+                    formData.append('NoiDung', text);
+                    if (imageFile) formData.append('HinhAnh', imageFile);
+
+                    // Hiển thị trạng thái đang gửi (tùy chọn)
+                    btnChatGui.disabled = true;
+                    btnChatGui.innerText = "...";
+
+                    fetch("{% url 'cskh:api_customer_send_message' %}", {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        btnChatGui.disabled = false;
+                        btnChatGui.innerText = "Gửi";
+
+                        if (data.status === 'success') {
+                            // Tạo bong bóng chat mới
+                            const msgDiv = document.createElement('div');
+                            msgDiv.className = 'msg msg-right';
+                            
+                            let htmlContent = text.replace(/\n/g, '<br>');
+                            if (imageFile) {
+                                const imgUrl = URL.createObjectURL(imageFile);
+                                htmlContent += `<br><img src="${imgUrl}" style="max-width:100%; border-radius:8px; margin-top:8px; display:block;">`;
+                            }
+                            
+                            msgDiv.innerHTML = `${htmlContent}<div class="msg-time">${data.time}</div>`;
+                            chatMessages.appendChild(msgDiv);
+                            
+                            // Cuộn xuống cuối
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                            
+                            // Xóa trắng input và preview
+                            chatInput.value = '';
+                            if (chatImageInput) {
+                                chatImageInput.value = '';
+                                imagePreviewArea.style.display = 'none';
+                                previewImg.src = '';
+                            }
+                        } else {
+                            alert("Lỗi: " + data.message);
+                        }
+                    })
+                    .catch(err => {
+                        btnChatGui.disabled = false;
+                        btnChatGui.innerText = "Gửi";
+                        console.error(err);
+                    });
+                });
+
+                // Gửi bằng phím Enter
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') btnChatGui.click();
                 });
             }
 
