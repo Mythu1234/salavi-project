@@ -12,7 +12,7 @@ from datetime import date, datetime
 
 from .models import HoiThoaiTuVan, TinNhanTuVan, KhuyenMai, TichDiem, LichSuTichDiem
 from orders.models import DoiTra, DonHang
-from products.models import DanhGia, SanPham
+from products.models import DanhGia, SanPham, BienTheSanPham
 from accounts.models import KhachHang, NhanVien
 from .forms import KhuyenMaiForm
 
@@ -357,7 +357,52 @@ def mot_danh_gia_view(request, ma_dg):
 
 
 def guest_home_view(request):
-    return render(request, 'cskh/guest_home.html')
+    danh_sach_sp = SanPham.objects.all()
+    return render(request, 'cskh/guest_home.html', {'san_pham_list': danh_sach_sp})
+
+
+def store_product_list_view(request):
+    loai = request.GET.get('loai', 'Tất cả')
+    q = request.GET.get('q', '')
+    san_pham_qs = SanPham.objects.all()
+
+    if q:
+        from django.db.models import Q
+        san_pham_qs = san_pham_qs.filter(
+            Q(MaSP__icontains=q) |
+            Q(TenSP__icontains=q)
+        ).distinct()
+
+    if loai and loai != 'Tất cả':
+        san_pham_qs = san_pham_qs.filter(TenSP__icontains=loai)
+
+    return render(request, 'cskh/store_product_list.html', {
+        'san_pham_list': san_pham_qs,
+        'current_loai': loai,
+        'search_query': q
+    })
+
+
+def store_product_detail_view(request, ma_sp):
+    san_pham = get_object_or_404(SanPham, MaSP=ma_sp)
+    variants = BienTheSanPham.objects.filter(MaSP=ma_sp)
+    colors = variants.values_list('MauSac', flat=True).distinct()
+    sizes = variants.values_list('Size', flat=True).distinct()
+    
+    rating_data = san_pham.danhgia_set.aggregate(avg=Avg('SoSao'), count=Count('MaDanhGia'))
+    avg_rating = float(rating_data['avg'] or 0.0)
+    san_pham.star_percent = avg_rating * 20
+    
+    return render(request, 'cskh/store_product_detail.html', {
+        'product': san_pham,
+        'variants': variants,
+        'colors': colors,
+        'sizes': sizes,
+        'avg_rating': round(avg_rating, 1),
+        'review_count': rating_data['count'],
+        'color_list': list(colors),
+        'size_list': list(sizes),
+    })
 
 
 def global_notifications(request):

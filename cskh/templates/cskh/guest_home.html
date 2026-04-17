@@ -234,7 +234,7 @@
         <div class="nav-container">
             <nav class="nav">
                 <a href="{% url 'cskh:guest_home' %}" class="active">Trang chủ</a>
-                <a href="{% url 'products:product_list' %}">Sản phẩm</a>
+                <a href="{% url 'cskh:store_product_list' %}">Sản phẩm</a>
                 {% if user.is_authenticated and user.khachhang %}
                     <a href="{% url 'cskh:diem_tich_luy' %}">Tích điểm</a>
                     <a href="{% url 'cskh:quan_ly_danh_gia' %}">Đánh giá</a>
@@ -250,13 +250,7 @@
         </div>
     </header>
 
-    <div class="sub-nav">
-        <a class="active">Tất cả</a>
-        <a>Áo</a>
-        <a>Quần</a>
-        <a>Váy</a>
-        <a>Phụ kiện</a>
-    </div>
+
 
     <section class="bg-[#fcf2f2] w-full">
         <div class="max-w-[1000px] mx-auto py-16 px-8 flex flex-col md:flex-row items-center justify-between gap-10">
@@ -278,52 +272,26 @@
         <h2 class="text-2xl font-bold mb-8 text-[#111]">Sản phẩm</h2>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            <div class="flex flex-col group cursor-pointer relative top-0 hover:-top-1 transition-all">
+            {% for product in san_pham_list %}
+            <div class="flex flex-col group cursor-pointer relative top-0 hover:-top-1 transition-all" onclick="window.location.href='{% url 'cskh:store_product_detail' product.MaSP %}'">
                 <div class="w-full h-[350px] rounded-xl overflow-hidden relative bg-gray-100 mb-4 shadow-sm">
+                    {% if forloop.first %}
                     <span class="absolute top-3 left-3 bg-[#e58f8b] text-white text-[11px] font-medium px-2.5 py-1 rounded z-10 shadow-sm">Sale</span>
-                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Áo thun" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    {% endif %}
+                    {% if product.HinhAnh %}
+                    <img src="{{ product.HinhAnh.url }}" alt="{{ product.TenSP }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    {% else %}
+                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="{{ product.TenSP }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    {% endif %}
                 </div>
                 <div class="px-1">
-                    <p class="text-xs text-gray-500 font-medium uppercase mb-1">Áo</p>
-                    <h3 class="text-[15px] text-gray-800 font-medium mb-1">Áo Thun Cổ Tròn Basic</h3>
-                    <p class="text-base text-black font-bold">299.000đ</p>
+                    <h3 class="text-[15px] text-gray-800 font-medium mb-1">{{ product.TenSP }}</h3>
+                    <p class="text-base text-black font-bold">{{ product.Gia|floatformat:0 }}đ</p>
                 </div>
             </div>
-
-            <div class="flex flex-col group cursor-pointer relative top-0 hover:-top-1 transition-all">
-                <div class="w-full h-[350px] rounded-xl overflow-hidden relative bg-gray-100 mb-4 shadow-sm">
-                    <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Quần Jean" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                </div>
-                <div class="px-1">
-                    <p class="text-xs text-gray-500 font-medium uppercase mb-1">Quần</p>
-                    <h3 class="text-[15px] text-gray-800 font-medium mb-1">Quần Jean Ống Rộng</h3>
-                    <p class="text-base text-black font-bold">599.000đ</p>
-                </div>
-            </div>
-
-            <div class="flex flex-col group cursor-pointer relative top-0 hover:-top-1 transition-all">
-                <div class="w-full h-[350px] rounded-xl overflow-hidden relative bg-gray-100 mb-4 shadow-sm">
-                    <img src="https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Váy hoa" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                </div>
-                <div class="px-1">
-                    <p class="text-xs text-gray-500 font-medium uppercase mb-1">Váy</p>
-                    <h3 class="text-[15px] text-gray-800 font-medium mb-1">Váy Midi Hoa Nhí</h3>
-                    <p class="text-base text-black font-bold">459.000đ</p>
-                </div>
-            </div>
-
-            <div class="flex flex-col group cursor-pointer relative top-0 hover:-top-1 transition-all">
-                <div class="w-full h-[350px] rounded-xl overflow-hidden relative bg-gray-100 mb-4 shadow-sm">
-                    <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Áo đỏ" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                </div>
-                <div class="px-1">
-                    <p class="text-xs text-gray-500 font-medium uppercase mb-1">Áo</p>
-                    <h3 class="text-[15px] text-gray-800 font-medium mb-1">Áo Sơ Mi Lụa</h3>
-                    <p class="text-base text-black font-bold">549.000đ</p>
-                </div>
-            </div>
-
+            {% empty %}
+            <div class="col-span-full text-center py-10 text-gray-500">Đang cập nhật sản phẩm...</div>
+            {% endfor %}
         </div>
     </main>
 
