@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Salavi - Quản lý đổi trả{% endblock %}
+
+{% block content %}
+<div class="p-6 bg-[#f8f9fa] min-h-screen">
+    <!-- Header Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8 flex justify-between items-center">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center">
+                <i class="fas fa-home text-red-400 text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-[22px] font-bold text-gray-800">Quản lý đổi - trả</h1>
+                <p class="text-gray-500 text-sm">Quản lý và chăm sóc khách hàng</p>
+            </div>
+        </div>
+        <a href="{% url 'orders:customer_doitra_product_select' %}" class="bg-[#ef8989] text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-[#e57d7d] transition-colors">
+            <i class="fas fa-plus-circle text-lg"></i>
+            Gửi yêu cầu
+        </a>
+    </div>
+
+    <!-- Requests Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for item in doitra_list %}
+        <a href="{% url 'orders:customer_doitra_detail' item.MaDoiTra %}" class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-all hover:scale-[1.01] cursor-pointer block">
+            <div class="h-1.5 bg-red-500 w-full"></div>
+            <div class="p-5">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef8989" stroke-width="2">
+                            <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H20.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"></path>
+                            <path d="M4 11v8a2 2 0 002 2h12a2 2 0 002-2v-8"></path>
+                            <path d="M9 11v4l3-2 3 2v-4"></path>
+                        </svg>
+                    </div>
+                    {% if item.TrangThai == 'DONE' %}
+                    <span class="bg-[#8ef0ba] text-[#111] px-4 py-1.5 rounded-full text-[13px] font-bold">Đã xử lý</span>
+                    {% elif item.TrangThai == 'PENDING' %}
+                    <span class="bg-[#fff9c4] text-[#856404] px-4 py-1.5 rounded-full text-[13px] font-bold">Chờ xử lý</span>
+                    {% else %}
+                    <span class="bg-[#fae1e1] text-[#721c24] px-4 py-1.5 rounded-full text-[13px] font-bold">Từ chối</span>
+                    {% endif %}
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 text-gray-700">
+                        <i class="far fa-calendar-alt w-5 text-gray-400"></i>
+                        <span class="text-[14px] font-medium">Mã đơn: <span class="font-bold text-gray-900">{{ item.MaCTDH.MaDonHang.MaDonHang }}</span></span>
+                    </div>
+                    <div class="flex items-center gap-3 text-gray-700">
+                        <i class="fas fa-user-friends w-5 text-gray-400"></i>
+                        <span class="text-[14px] font-medium">Loại: <span class="text-gray-900">{{ item.get_LoaiYeuCau_display }}</span></span>
+                    </div>
+                    <div class="flex items-center gap-3 text-gray-700">
+                        <i class="far fa-calendar-check w-5 text-gray-400"></i>
+                        <span class="text-[14px] font-medium">Ngày gửi: <span class="text-gray-900">{{ item.NgayYeuCau|date:"d/m/Y" }}</span></span>
+                    </div>
+                </div>
+
+                <!-- Empty space for card consistency as seen in mockup -->
+                <div class="h-4 mt-4 border-t border-gray-50"></div>
+            </div>
+        </a>
+        {% empty %}
+        <div class="col-span-full py-20 text-center">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-50 rounded-full mb-4">
+                <i class="fas fa-box-open text-3xl text-gray-300"></i>
+            </div>
+            <p class="text-gray-500 font-medium">Bạn chưa có yêu cầu đổi trả nào.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

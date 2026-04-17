@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Salavi - Gửi yêu cầu đổi trả{% endblock %}
+
+{% block content %}
+<style>
+    .doitra-page {
+        position: relative;
+        min-height: 100vh;
+        background: #f8f9fa;
+    }
+
+    .doitra-page.is-muted {
+        filter: blur(1px);
+    }
+
+    .doitra-page.is-muted::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.25);
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px 16px;
+        z-index: 50;
+    }
+
+    .modal-content {
+        width: 100%;
+        max-width: 580px;
+        border-radius: 24px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22);
+        border: none;
+    }
+
+    .modal-header {
+        padding: 24px;
+        background: #ef8989;
+        color: #fff;
+        text-align: center;
+    }
+
+    .modal-header h1 {
+        font-size: 24px;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .modal-body {
+        padding: 32px;
+    }
+</style>
+
+<div class="doitra-page is-muted">
+    <div class="p-6">
+        <!-- Header Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-home text-red-400 text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-[22px] font-bold text-gray-800">Quản lý đổi - trả</h1>
+                    <p class="text-gray-500 text-sm">Quản lý và chăm sóc khách hàng</p>
+                </div>
+            </div>
+            <div class="bg-[#ef8989] text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2">
+                <i class="fas fa-plus-circle text-lg"></i>
+                Gửi yêu cầu
+            </div>
+        </div>
+
+        <!-- Requests Grid (Background) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for item in doitra_list %}
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+                <div class="h-1.5 bg-red-500 w-full"></div>
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef8989" stroke-width="2">
+                                <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H20.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"></path>
+                                <path d="M4 11v8a2 2 0 002 2h12a2 2 0 002-2v-8"></path>
+                                <path d="M9 11v4l3-2 3 2v-4"></path>
+                            </svg>
+                        </div>
+                        {% if item.TrangThai == 'DONE' %}
+                        <span class="bg-[#8ef0ba] text-[#111] px-4 py-1.5 rounded-full text-[13px] font-bold">Đã xử lý</span>
+                        {% elif item.TrangThai == 'PENDING' %}
+                        <span class="bg-[#fff9c4] text-[#856404] px-4 py-1.5 rounded-full text-[13px] font-bold">Chờ xử lý</span>
+                        {% else %}
+                        <span class="bg-[#fae1e1] text-[#721c24] px-4 py-1.5 rounded-full text-[13px] font-bold">Từ chối</span>
+                        {% endif %}
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 text-gray-700">
+                            <i class="far fa-calendar-alt w-5 text-gray-400"></i>
+                            <span class="text-[14px] font-medium">Mã đơn: <span class="font-bold text-gray-900">{{ item.MaCTDH.MaDonHang.MaDonHang }}</span></span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-700">
+                            <i class="fas fa-user-friends w-5 text-gray-400"></i>
+                            <span class="text-[14px] font-medium">Loại: <span class="text-gray-900">{{ item.get_LoaiYeuCau_display }}</span></span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-700">
+                            <i class="far fa-calendar-check w-5 text-gray-400"></i>
+                            <span class="text-[14px] font-medium">Ngày gửi: <span class="text-gray-900">{{ item.NgayYeuCau|date:"d/m/Y" }}</span></span>
+                        </div>
+                    </div>
+                    <div class="h-4 mt-4 border-t border-gray-50"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay">
+    <div class="modal-content">
+        <!-- Form Header -->
+        <div class="modal-header">
+            <h1>Yêu cầu đổi trả - {{ ctdh.MaDonHang.MaDonHang }}</h1>
+        </div>
+
+        <div class="modal-body">
+            <form method="POST" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+                
+                <!-- System error -->
+                {% if form_errors.system %}
+                    <div style="margin-bottom: 20px; padding: 12px 16px; background: #fff1f1; color: #d32f2f; font-size: 14px; font-weight: 600; border-radius: 8px; border: 1px solid #f9dcdc; display: flex; align-items: center; gap: 10px;">
+                        <svg style="width: 18px; height: 18px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        <span>{{ form_errors.system }}</span>
+                    </div>
+                {% endif %}
+
+                <!-- Request Type -->
+                <div class="space-y-4">
+                    <label class="block text-gray-800 font-bold text-[16px]">Loại yêu cầu</label>
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-4 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
+                            <input type="radio" name="LoaiYeuCau" value="DOI" checked class="w-5 h-5 accent-red-400">
+                            <span class="text-gray-700 font-medium">Đổi hàng</span>
+                        </label>
+                        <label class="flex items-center gap-4 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
+                            <input type="radio" name="LoaiYeuCau" value="TRA" class="w-5 h-5 accent-red-400">
+                            <span class="text-gray-700 font-medium">Trả hàng - hoàn tiền</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Proof Image -->
+                <div class="space-y-2">
+                    <label class="block text-gray-800 font-bold text-[16px]">Hình ảnh chứng minh <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <input type="file" name="HinhAnh" id="file-upload" class="hidden" accept="image/*">
+                        <label for="file-upload" class="flex items-center justify-between w-full p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 bg-white">
+                            <span id="file-name" class="text-gray-400 text-sm">Choose Files</span>
+                            <i class="fas fa-file-upload text-gray-400 text-lg"></i>
+                        </label>
+                    </div>
+                    {% if form_errors.HinhAnh %}
+                        <p style="margin: 8px 0 0 5px; color: #d32f2f; font-size: 13px; font-weight: 500;">{{ form_errors.HinhAnh }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Reason -->
+                <div class="space-y-2">
+                    <label class="block text-gray-800 font-bold text-[16px]">Lý do đổi / trả <span class="text-red-500">*</span></label>
+                    <textarea name="LyDo" rows="4" placeholder="Nhập lý do đổi / trả" 
+                        class="w-full p-4 border border-gray-200 rounded-2xl resize-none focus:outline-none focus:border-red-300 bg-[#fdfdfd] text-gray-700"></textarea>
+                    {% if form_errors.LyDo %}
+                        <p style="margin: 8px 0 0 5px; color: #d32f2f; font-size: 13px; font-weight: 500;">{{ form_errors.LyDo }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex gap-4 pt-4">
+                    <button type="submit" class="flex-1 bg-[#ef8989] text-white py-3.5 rounded-2xl font-bold text-lg hover:bg-[#e57d7d] transition-colors shadow-md">
+                        Gửi
+                    </button>
+                    <a href="{% url 'orders:customer_doitra_list' %}" class="flex-1 bg-white text-gray-800 py-3.5 rounded-2xl font-bold text-lg text-center border-2 border-gray-100 hover:bg-gray-50 transition-colors">
+                        Hủy
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('file-upload').addEventListener('change', function(e) {
+        var fileName = e.target.files[0] ? e.target.files[0].name : "Choose Files";
+        document.getElementById('file-name').textContent = fileName;
+        document.getElementById('file-name').classList.remove('text-gray-400');
+        document.getElementById('file-name').classList.add('text-gray-800');
+    });
+</script>
+{% endblock %}

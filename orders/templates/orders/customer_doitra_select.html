@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Salavi - Chọn sản phẩm đổi trả{% endblock %}
+
+{% block content %}
+<div class="p-6 bg-[#f8f9fa] min-h-screen">
+    <!-- Header Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8 flex justify-between items-center">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center">
+                <i class="fas fa-home text-red-400 text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-[22px] font-bold text-gray-800">Quản lý đổi - trả</h1>
+                <p class="text-gray-500 text-sm">Quản lý và chăm sóc khách hàng</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-6">
+        <h2 class="text-xl font-bold text-gray-700">Chọn sản phẩm muốn đổi / trả</h2>
+        <p class="text-gray-500 text-sm">Nhấn vào sản phẩm để gửi yêu cầu</p>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for item in eligible_items %}
+        <a href="{% url 'orders:customer_doitra_create' item.MaCTDH %}" class="block group">
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden group-hover:shadow-lg transition-shadow group-hover:border-red-200">
+                <div class="h-1.5 bg-red-500 w-full transition-all group-hover:h-2"></div>
+                <div class="p-5">
+                    <div class="flex gap-4">
+                        <div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 border border-gray-100">
+                            {% if item.MaBTSP.MaSP.HinhAnh %}
+                                <img src="{{ item.MaBTSP.MaSP.HinhAnh.url }}" alt="{{ item.MaBTSP.MaSP.TenSP }}" class="w-full h-full object-cover">
+                            {% else %}
+                                <div class="w-full h-full bg-gray-50 flex items-center justify-center text-gray-300">
+                                    <i class="fas fa-image text-2xl"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="font-bold text-gray-900 text-[16px] mb-1">{{ item.MaBTSP.MaSP.TenSP }}</h3>
+                            <div class="text-[13px] text-gray-600 space-y-0.5">
+                                <p>Size: <span class="text-gray-900">{{ item.MaBTSP.Size }}</span></p>
+                                <p>Màu: <span class="text-gray-900">{{ item.MaBTSP.MauSac }}</span></p>
+                                <p>Mã ĐH: <span class="font-medium text-gray-900">{{ item.MaDonHang.MaDonHang }}</span></p>
+                                <p class="text-red-500 font-bold text-[15px] mt-2">{{ item.DonGia|floatformat:"0" }} đ</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Empty space for card consistency -->
+                    <div class="h-10 mt-4 border-t border-gray-50"></div>
+                </div>
+            </div>
+        </a>
+        {% empty %}
+        <div class="col-span-full py-20 text-center">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-50 rounded-full mb-4">
+                <i class="fas fa-search text-3xl text-gray-300"></i>
+            </div>
+            <p class="text-gray-500 font-medium">Không tìm thấy sản phẩm nào đủ điều kiện đổi trả.</p>
+            <p class="text-gray-400 text-sm mt-2">(Chỉ những đơn hàng đã giao thành công mới có thể gửi yêu cầu)</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
