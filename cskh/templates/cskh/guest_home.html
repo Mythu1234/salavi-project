@@ -187,6 +187,72 @@
             cursor: pointer;
             z-index: 50;
         }
+
+        /* Notification Dropdown Styles (from base.html) */
+        .notification-bell { position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .notif-dropdown {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: -5px;
+            width: 320px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: none;
+            z-index: 1000;
+            border: 1px solid #eaeaea;
+            flex-direction: column;
+            cursor: default;
+        }
+        .notif-dropdown.show { display: flex; }
+        .notif-dropdown::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 14px;
+            width: 12px;
+            height: 12px;
+            background: #fdfaf9;
+            transform: rotate(45deg);
+            border-left: 1px solid #eaeaea;
+            border-top: 1px solid #eaeaea;
+        }
+        .notif-header {
+            padding: 12px 16px;
+            background: #fdfaf9;
+            border-bottom: 1px solid #eaeaea;
+            font-size: 16px;
+            font-weight: 700;
+            color: #d98a87;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            position: relative;
+        }
+        .notif-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .notif-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f2f2f2;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .notif-item:hover { background: #fdfdfd; }
+        .notif-item:last-child { border-bottom: none; }
+        .notif-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #555;
+            background: #fae8e8;
+        }
+        .notif-author { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 4px; }
+        .notif-preview { font-size: 14px; color: #666; margin-bottom: 6px; line-height: 1.4; }
+        .notif-time { font-size: 12px; color: #a0a0a0; }
     </style>
 </head>
 <body>
@@ -243,9 +309,33 @@
                     <a href="{% url 'cskh:quan_ly_danh_gia' %}">Đánh giá</a>
                 {% endif %}
             </nav>
-            <div class="absolute right-10 py-3 cursor-pointer">
+            <div class="absolute right-10 py-3 cursor-pointer notification-bell" id="bellIconBtn">
                 <i class="far fa-bell text-xl"></i>
-                <span class="absolute top-2 -right-1 bg-red-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">1</span>
+                {% if nav_notifications_count > 0 %}
+                <span class="absolute top-2 -right-1 bg-red-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">{{ nav_notifications_count }}</span>
+                {% endif %}
+
+                <!-- DROPDOWN THÔNG BÁO -->
+                <div class="notif-dropdown" id="notifDropdown">
+                    <div class="notif-header">
+                        🔔 Thông báo
+                    </div>
+                    <div class="notif-list">
+                        {% for notif in nav_notifications %}
+                        <a href="{{ notif.link }}" class="notif-item block" style="text-decoration:none; display:block; text-align: left;">
+                            <div class="notif-tag">{{ notif.tag }}</div>
+                            <div class="notif-author">{{ notif.author }}</div>
+                            <div class="notif-preview">{{ notif.preview }}</div>
+                            <div class="notif-time">{{ notif.time }}</div>
+                        </a>
+                        {% empty %}
+                        <div style="padding: 24px; text-align: center; color: #999; font-size: 15px;">
+                            <i class="fas fa-bell-slash" style="font-size: 24px; margin-bottom: 8px; color: #ccc;"></i><br>
+                            Không có thông báo mới
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -377,5 +467,28 @@
         </svg>
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Notification Dropdown logic
+            const bellIconBtn = document.getElementById('bellIconBtn');
+            const notifDropdown = document.getElementById('notifDropdown');
+
+            if (bellIconBtn && notifDropdown) {
+                bellIconBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    console.log('Bell clicked'); // Debug
+                    notifDropdown.classList.toggle('show');
+                });
+
+                document.addEventListener('click', function() {
+                    notifDropdown.classList.remove('show');
+                });
+
+                notifDropdown.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+        });
+    </script>
 </body>
 </html>

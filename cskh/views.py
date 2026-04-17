@@ -365,47 +365,100 @@ def guest_home_view(request):
 
 def global_notifications(request):
     notifications = []
+    
+    if not request.user.is_authenticated:
+        return {
+            'nav_notifications': [],
+            'nav_notifications_count': 0
+        }
 
     try:
-        # 1. Tin nhắn mới nhất (từ cuộc hội thoại Chưa xử lý)
-        hoi_thoai_chua_tl = HoiThoaiTuVan.objects.filter(TrangThai='Chưa xử lý').first()
-        if hoi_thoai_chua_tl:
-            msg = TinNhanTuVan.objects.filter(MaHoiThoai=hoi_thoai_chua_tl).order_by('-ThoiGianGui').first()
-            if msg:
+        if hasattr(request.user, 'khachhang'):
+            kh = request.user.khachhang
+            
+            # 1. Tin nhắn mới nhất từ shop phản hồi cho khách hàng này
+            latest_msg = TinNhanTuVan.objects.filter(
+                MaHoiThoai__MaKH=kh,
+                MaNV__isnull=False
+            ).order_by('-ThoiGianGui').first()
+            if latest_msg:
                 notifications.append({
                     'type': 'msg',
-                    'tag': 'Tin nhắn mới',
-                    'author': msg.MaHoiThoai.MaKH.HoTen if msg.MaHoiThoai.MaKH else 'Khách hàng',
-                    'preview': (msg.NoiDung[:45] + '...') if len(msg.NoiDung) > 45 else msg.NoiDung,
-                    'time': msg.ThoiGianGui.strftime('%H:%M - %d/%m/%Y'),
-                    'link': f'/chat/reply/?ma_kh={msg.MaHoiThoai.MaKH.MaKH}' if msg.MaHoiThoai.MaKH else '/chat/reply/'
+                    'tag': 'Tin nhắn từ shop',
+                    'author': latest_msg.MaNV.HoTen if latest_msg.MaNV else 'Shop Salavi',
+                    'preview': (latest_msg.NoiDung[:45] + '...') if len(latest_msg.NoiDung) > 45 else latest_msg.NoiDung,
+                    'time': latest_msg.ThoiGianGui.strftime('%H:%M - %d/%m/%Y'),
+                    'link': reverse('cskh:chat_reply')
                 })
 
-        # 2. Đổi trả mới nhất (Chờ xử lý)
-        dt = DoiTra.objects.filter(TrangThai='PENDING').order_by('-NgayYeuCau').first()
-        if dt:
-            notifications.append({
-                'type': 'return',
-                'tag': 'Yêu cầu đổi trả mới',
-                'author': dt.MaKH.HoTen if dt.MaKH else 'Khách hàng',
-                'preview': (dt.LyDo[:45] + '...') if len(dt.LyDo) > 45 else dt.LyDo,
-                'time': dt.NgayYeuCau.strftime('00:00 - %d/%m/%Y'),
-                'link': '/orders/doitra/'
-            })
+            # 2. Cập nhật trạng thái đổi trả (DONE/REJECT) của khách hàng này
+            latest_dt = DoiTra.objects.filter(
+                MaKH=kh,
+                TrangThai__in=['DONE', 'REJECT']
+            ).order_by('-NgayYeuCau').first()
+            if latest_dt:
+                status_text = "được duyệt" if latest_dt.TrangThai == 'DONE' else "từ chối"
+                notifications.append({
+                    'type': 'return',
+                    'tag': 'Cập nhật đổi trả',
+                    'author': 'Hệ thống',
+                    'preview': f"Yêu cầu {latest_dt.MaDoiTra} đã {status_text}",
+                    'time': latest_dt.NgayYeuCau.strftime('00:00 - %d/%m/%Y'),
+                    'link': reverse('orders:customer_doitra_list')
+                })
 
-        # 3. Đánh giá mới nhất
-        dg = DanhGia.objects.order_by('-NgayDanhGia').first()
-        if dg:
-            notifications.append({
-                'type': 'review',
-                'tag': 'Đánh giá mới',
-                'author': dg.MaKH.HoTen if dg.MaKH else 'Khách hàng',
-                'preview': (dg.NoiDung[:45] + '...') if dg.NoiDung and len(dg.NoiDung) > 45 else (dg.NoiDung or "Không có nội dung"),
-                'time': dg.NgayDanhGia.strftime('00:00 - %d/%m/%Y'),
-                'link': '/danh-gia/'
-            })
+            # 3. Ưu đãi mới (ThongBaoKhuyenMai)
+            latest_km = ThongBaoKhuyenMai.objects.filter(MaKH=kh).order_by('-NgayGui').first()
+            if latest_km:
+                notifications.append({
+                    'type': 'promo',
+                    'tag': 'Ưu đãi mới',
+                    'author': 'Shop Salavi',
+                    'preview': (latest_km.NoiDung[:45] + '...') if len(latest_km.NoiDung) > 45 else latest_km.NoiDung,
+                    'time': latest_km.NgayGui.strftime('00:00 - %d/%m/%Y'),
+                    'link': reverse('cskh:uudai_list')
+                })
+        else:
+            # Logic dành cho Nhân viên/Admin
+            # 1. Tin nhắn mới nhất (từ cuộc hội thoại Chưa xử lý)
+            hoi_thoai_chua_tl = HoiThoaiTuVan.objects.filter(TrangThai='Chưa xử lý').first()
+            if hoi_thoai_chua_tl:
+                msg = TinNhanTuVan.objects.filter(MaHoiThoai=hoi_thoai_chua_tl).order_by('-ThoiGianGui').first()
+                if msg:
+                    notifications.append({
+                        'type': 'msg',
+                        'tag': 'Tin nhắn mới',
+                        'author': msg.MaHoiThoai.MaKH.HoTen if msg.MaHoiThoai.MaKH else 'Khách hàng',
+                        'preview': (msg.NoiDung[:45] + '...') if len(msg.NoiDung) > 45 else msg.NoiDung,
+                        'time': msg.ThoiGianGui.strftime('%H:%M - %d/%m/%Y'),
+                        'link': f"{reverse('cskh:chat_reply')}?ma_kh={msg.MaHoiThoai.MaKH.MaKH}" if msg.MaHoiThoai.MaKH else reverse('cskh:chat_reply')
+                    })
+
+            # 2. Đổi trả mới nhất (Chờ xử lý)
+            dt = DoiTra.objects.filter(TrangThai='PENDING').order_by('-NgayYeuCau').first()
+            if dt:
+                notifications.append({
+                    'type': 'return',
+                    'tag': 'Yêu cầu đổi trả mới',
+                    'author': dt.MaKH.HoTen if dt.MaKH else 'Khách hàng',
+                    'preview': (dt.LyDo[:45] + '...') if len(dt.LyDo) > 45 else dt.LyDo,
+                    'time': dt.NgayYeuCau.strftime('00:00 - %d/%m/%Y'),
+                    'link': reverse('orders:doitra_list')
+                })
+
+            # 3. Đánh giá mới nhất
+            dg = DanhGia.objects.order_by('-NgayDanhGia').first()
+            if dg:
+                notifications.append({
+                    'type': 'review',
+                    'tag': 'Đánh giá mới',
+                    'author': dg.MaKH.HoTen if dg.MaKH else 'Khách hàng',
+                    'preview': (dg.NoiDung[:45] + '...') if dg.NoiDung and len(dg.NoiDung) > 45 else (dg.NoiDung or "Không có nội dung"),
+                    'time': dg.NgayDanhGia.strftime('00:00 - %d/%m/%Y'),
+                    'link': reverse('cskh:quan_ly_danh_gia')
+                })
     except Exception:
-        pass # Fallback an toàn nếu thiếu DB model chưa migrate
+        pass
 
     return {
         'nav_notifications': notifications,
