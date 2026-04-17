@@ -23,6 +23,7 @@ class TichDiem(models.Model):
 class LichSuTichDiem(models.Model):
     MaLS = models.CharField(max_length=10, primary_key=True)
     MaKH = models.ForeignKey(KhachHang, on_delete=models.CASCADE)
+    MaNV = models.ForeignKey(NhanVien, on_delete=models.SET_NULL, null=True, blank=True)
     DiemThayDoi = models.IntegerField()
     LyDo = models.CharField(max_length=200)
     NgayThucHien = models.DateField()

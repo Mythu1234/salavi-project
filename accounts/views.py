@@ -342,7 +342,7 @@ def customer_detail_view(request, customer_code):
         or 0
     )
     point_history = list(
-        LichSuTichDiem.objects.filter(MaKH=customer).order_by('-NgayThucHien')
+        LichSuTichDiem.objects.filter(MaKH=customer).select_related('MaNV').order_by('-NgayThucHien')
     )
     points_by_date = {}
     for item in point_history:
@@ -365,7 +365,7 @@ def customer_detail_view(request, customer_code):
         purchase_history = [
             {
                 'date': item.NgayThucHien.strftime('%d/%m/%Y'),
-                'content': item.LyDo,
+                'content': f"{item.LyDo} (Bởi: {item.MaNV.HoTen})" if hasattr(item, 'MaNV') and item.MaNV else item.LyDo,
                 'payment': '-',
                 'points': f"{item.DiemThayDoi:+d}",
             }

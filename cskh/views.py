@@ -275,12 +275,13 @@ def diem_tich_luy_view(request):
 def api_chi_tiet_tich_diem(request, ma_kh):
     try:
         td = TichDiem.objects.select_related('MaKH', 'MaKH__user').get(MaKH__MaKH=ma_kh)
-        lich_su = LichSuTichDiem.objects.filter(MaKH__MaKH=ma_kh).order_by('NgayThucHien')
+        lich_su = LichSuTichDiem.objects.filter(MaKH__MaKH=ma_kh).select_related('MaNV').order_by('NgayThucHien')
         ls_data = []
         running_total = 0
         for ls in lich_su:
             running_total += ls.DiemThayDoi
-            ls_data.append({'ngay': ls.NgayThucHien.strftime('%d/%m/%Y'), 'noi_dung': ls.LyDo, 'diem_thay_doi': f"+{ls.DiemThayDoi}" if ls.DiemThayDoi > 0 else str(ls.DiemThayDoi), 'ket_qua': running_total})
+            ten_nv = f" (Bởi: {ls.MaNV.HoTen})" if hasattr(ls, 'MaNV') and ls.MaNV else ""
+            ls_data.append({'ngay': ls.NgayThucHien.strftime('%d/%m/%Y'), 'noi_dung': f"{ls.LyDo}{ten_nv}", 'diem_thay_doi': f"+{ls.DiemThayDoi}" if ls.DiemThayDoi > 0 else str(ls.DiemThayDoi), 'ket_qua': running_total})
         ls_data.reverse()
         return JsonResponse({'success': True, 'data': {'ho_ten': td.MaKH.HoTen, 'ma_kh': td.MaKH.MaKH, 'sdt': td.MaKH.user.username, 'tong_diem': td.TongDiem, 'lich_su': ls_data}})
     except Exception as e: return JsonResponse({'success': False, 'error': str(e)})
@@ -296,7 +297,8 @@ def api_tru_tich_diem(request, ma_kh):
             td.TongDiem -= diem_tru
             td.save()
             ma_ls = "LS" + ''.join(random.choices(string.digits, k=6))
-            LichSuTichDiem.objects.create(MaLS=ma_ls, MaKH=td.MaKH, DiemThayDoi=-diem_tru, LyDo='Trừ điểm', NgayThucHien=date.today())
+            nv = getattr(request.user, 'nhanvien', None) if request.user.is_authenticated else None
+            LichSuTichDiem.objects.create(MaLS=ma_ls, MaKH=td.MaKH, MaNV=nv, DiemThayDoi=-diem_tru, LyDo='Trừ điểm', NgayThucHien=date.today())
             return JsonResponse({'success': True, 'new_tong_diem': td.TongDiem})
         except Exception as e: return JsonResponse({'success': False, 'error': str(e)})
     return JsonResponse({'success': False, 'error': 'Invalid method'})
@@ -313,7 +315,8 @@ def api_sua_tich_diem(request, ma_kh):
             td.TongDiem = diem_moi
             td.save()
             ma_ls = "LS" + ''.join(random.choices(string.digits, k=6))
-            LichSuTichDiem.objects.create(MaLS=ma_ls, MaKH=td.MaKH, DiemThayDoi=chenh_lech, LyDo='Cập nhật điểm', NgayThucHien=date.today())
+            nv = getattr(request.user, 'nhanvien', None) if request.user.is_authenticated else None
+            LichSuTichDiem.objects.create(MaLS=ma_ls, MaKH=td.MaKH, MaNV=nv, DiemThayDoi=chenh_lech, LyDo='Cập nhật điểm', NgayThucHien=date.today())
             return JsonResponse({'success': True, 'new_tong_diem': td.TongDiem})
         except Exception as e: return JsonResponse({'success': False, 'error': str(e)})
     return JsonResponse({'success': False, 'error': 'Invalid method'})
