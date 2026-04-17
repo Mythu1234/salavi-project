@@ -21,8 +21,9 @@ urlpatterns = [
     path('chat/nhan/<str:ma_kh>/', views.nhan_xu_ly_view, name='nhan_xu_ly'),
     path('chat/ket-thuc/<str:ma_kh>/', views.ket_thuc_tu_van_view, name='ket_thuc_tu_van'),
     path('store/', views.guest_home_view, name='guest_home'),
+    path('store/product/<str:ma_sp>/', views.store_product_detail_view, name='store_product_detail'),
+    path('store/products/', views.store_product_list_view, name='store_product_list'),
 ]
-
 
 
 

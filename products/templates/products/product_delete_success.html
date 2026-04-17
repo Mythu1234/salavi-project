@@ -18,54 +18,82 @@
         align-items: center;
         z-index: 2000;
         box-sizing: border-box;
+        animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
     }
 
     .success-modal-content {
         background-color: #fafafa;
         width: 380px;
         max-width: 90%;
-        border-radius: 12px;
-        padding: 35px 25px 25px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        border-radius: 16px;
+        padding: 40px 30px 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
         display: flex;
         flex-direction: column;
         align-items: center;
+        animation: slideUp 0.3s ease;
     }
 
-    .success-icon {
+    @keyframes slideUp {
+        from { transform: translateY(20px); opacity: 0; }
+        to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .success-icon-circle {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background-color: #e8f8ef;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
         color: #0ab253;
-        margin-bottom: 25px;
     }
 
     .success-card {
         background: #fff;
-        border-radius: 8px;
-        padding: 25px 20px;
+        border-radius: 10px;
+        padding: 20px 24px;
         width: 100%;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06);
         text-align: center;
         box-sizing: border-box;
+        margin-bottom: 16px;
     }
 
     .success-text {
-        font-size: 16px;
+        font-size: 17px;
         font-weight: bold;
         color: #111;
         margin: 0;
     }
 </style>
 
-<a href="{% url 'products:product_list' %}" class="modal-overlay" style="text-decoration: none;">
-    <div class="success-modal-content" onclick="event.preventDefault(); event.stopPropagation();">
-        <div class="success-icon">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+<div class="modal-overlay">
+    <div class="success-modal-content">
+        <div class="success-icon-circle">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="3"
+                 stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
         </div>
         <div class="success-card">
-            <p class="success-text">Xoá sản phẩm thành công</p>
+            <p class="success-text">Xoá sản phẩm thành công!</p>
         </div>
     </div>
-</a>
+</div>
+
+<script>
+    setTimeout(function () {
+        window.location.href = "{% url 'products:product_list' %}";
+    }, 2000);
+</script>
 
 {% endblock %}

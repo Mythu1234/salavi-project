@@ -41,10 +41,6 @@
         border-bottom: 2px solid #f47879;
     }
 
-    .sub-nav a:hover {
-        color: #f47879;
-    }
-
     /* Container */
     .product-layout {
         max-width: 1200px;
@@ -52,17 +48,24 @@
         font-family: Arial, sans-serif;
     }
 
+    .product-list-title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
     .product-list-title {
         font-size: 16px;
         font-weight: bold;
         color: #333;
-        margin-bottom: 20px;
+        margin: 0;
     }
 
     /* Header */
     .product-list-header {
         display: grid;
-        grid-template-columns: 1fr 2fr 1.5fr 1fr 1fr;
+        grid-template-columns: 1.4fr 1.8fr 1.2fr 1.1fr 1.5fr 1fr;
         align-items: center;
         background-color: #fff;
         padding: 15px 30px;
@@ -75,60 +78,47 @@
     }
 
     .header-name {
-        text-align: center;
-        width: 280px;
-        justify-self: center;
+        text-align: left;
+        padding-left: 75px;
     }
 
     .add-product-btn {
-        justify-self: center;
         background-color: #f47879;
         color: white;
         padding: 10px 20px;
         border-radius: 20px;
         text-decoration: none;
         font-size: 13px;
-        border: none;
-        cursor: pointer;
         font-weight: bold;
         box-shadow: 0 2px 4px rgba(244, 120, 121, 0.3);
     }
 
-    .add-product-btn:hover {
-        background-color: #e36a6b;
-    }
-
     /* List container */
-    .product-cards-container {
-        background-color: transparent;
+    .product-group-container {
+        margin-bottom: 15px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+        border: 1px solid #eaeaea;
+        background-color: #fff;
     }
 
     .product-card {
         display: grid;
-        grid-template-columns: 1fr 2fr 1.5fr 1fr 1fr;
+        grid-template-columns: 1.4fr 1.8fr 1.2fr 1.1fr 1.5fr 1fr;
         align-items: center;
-        background-color: #fff;
         padding: 15px 30px;
-        margin-bottom: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-        border: 1px solid #eaeaea;
         text-align: center;
-        transition: box-shadow 0.2s;
     }
 
     .product-card:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    }
-
-    .product-card:last-child {
-        margin-bottom: 0;
+        background-color: #f9f9f9;
     }
 
     .product-code {
         color: #555;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: normal;
     }
 
     .card-name-col {
@@ -136,15 +126,8 @@
         align-items: center;
         gap: 15px;
         justify-content: flex-start;
-        width: 280px;
-        justify-self: center;
         padding-left: 10px;
-        text-decoration: none;
         color: inherit;
-    }
-
-    .card-name-col:hover .product-name {
-        color: #f47879;
     }
 
     .product-image {
@@ -159,35 +142,82 @@
         color: #333;
         font-size: 14px;
         text-align: left;
+        font-weight: normal;
+        cursor: pointer;
     }
 
-    .header-price {
-        text-align: left;
-        padding-left: 20%;
+    .product-name:hover {
+        color: #f47879;
     }
 
     .product-price {
         font-weight: normal;
         color: #000;
-        text-align: left;
-        padding-left: 20%;
     }
 
-    .header-rating {
+    /* Dropdown variants styles */
+    .variants-dropdown {
+        display: none;
+        background-color: #fdfdfd;
+        border-top: 1px dashed #eee;
+        padding: 5px 0;
+    }
+
+    .product-group-container.active .variants-dropdown {
+        display: block;
+    }
+
+    .variant-row {
+        display: grid;
+        grid-template-columns: 1.4fr 1.8fr 1.2fr 1.1fr 1.5fr 1fr;
+        align-items: center;
+        padding: 10px 30px;
         text-align: center;
     }
 
-    .product-rating {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 2px;
+    .variant-name-link {
+        grid-column: 2;
+        text-align: left;
+        padding-left: 10px;
+        font-size: 13px;
+        color: #777;
+        text-decoration: none;
+    }
+
+    .variant-name-link:hover {
+        color: #f47879;
+    }
+
+    /* Star Rating */
+    .stars-outer {
+        display: inline-block;
+        position: relative;
+        font-size: 18px;
+        color: #ffc107;
+    }
+
+    .stars-inner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 0;
+        color: #ffc107;
+    }
+
+    .stars-outer::before {
+        content: "\2606\2606\2606\2606\2606";
+    }
+
+    .stars-inner::before {
+        content: "\2605\2605\2605\2605\2605";
     }
 
     .product-actions {
         display: flex;
         justify-content: center;
-        gap: 20px;
+        gap: 15px;
         align-items: center;
     }
 
@@ -199,94 +229,114 @@
         padding: 0;
         display: flex;
         align-items: center;
-        justify-content: center;
         text-decoration: none;
     }
 
     .action-icon.delete {
         color: #f47879;
     }
-
-    .action-icon.edit:hover {
-        color: #333;
-    }
-
-    .action-icon:hover {
-        opacity: 0.7;
-    }
 </style>
 
-<!-- Sub Navigation with filtering URLs -->
 <div class="sub-nav-container">
     <div class="sub-nav">
-        <a href="{% url 'products:product_list' %}?loai=Tất cả" class="{% if not request.GET.loai or request.GET.loai == 'Tất cả' %}active{% endif %}">Tất cả</a>
-        <a href="{% url 'products:product_list' %}?loai=Áo" class="{% if request.GET.loai == 'Áo' %}active{% endif %}">Áo</a>
-        <a href="{% url 'products:product_list' %}?loai=Quần" class="{% if request.GET.loai == 'Quần' %}active{% endif %}">Quần</a>
-        <a href="{% url 'products:product_list' %}?loai=Váy" class="{% if request.GET.loai == 'Váy' %}active{% endif %}">Váy</a>
-        <a href="{% url 'products:product_list' %}?loai=Phụ kiện" class="{% if request.GET.loai == 'Phụ kiện' %}active{% endif %}">Phụ kiện</a>
+        <a href="?loai=Tất cả" class="{% if current_loai == 'Tất cả' %}active{% endif %}">Tất cả</a>
+        <a href="?loai=Áo" class="{% if current_loai == 'Áo' %}active{% endif %}">Áo</a>
+        <a href="?loai=Quần" class="{% if current_loai == 'Quần' %}active{% endif %}">Quần</a>
+        <a href="?loai=Váy" class="{% if current_loai == 'Váy' %}active{% endif %}">Váy</a>
+        <a href="?loai=Phụ kiện" class="{% if current_loai == 'Phụ kiện' %}active{% endif %}">Phụ kiện</a>
     </div>
 </div>
 
 <div class="product-layout">
-    <div class="product-list-title">Danh sách sản phẩm: {{ request.GET.loai|default:"Tất cả" }}</div>
+    <div class="product-list-title-row">
+        <h2 class="product-list-title">Danh sách sản phẩm: {{ current_loai }}</h2>
+        <a href="{% url 'products:add_product' %}" class="add-product-btn">+ Thêm sản phẩm</a>
+    </div>
 
     <div class="product-list-header">
         <div>Mã sản phẩm</div>
         <div class="header-name">Tên sản phẩm</div>
-        <div class="header-price">Giá bán</div>
-        <div class="header-rating">Đánh giá</div>
-        <a href="{% url 'products:add_product' %}" class="add-product-btn">+ Thêm sản phẩm</a>
+        <div>Giá bán</div>
+        <div>Tồn kho</div>
+        <div>Đánh giá</div>
+        <div>Thao tác</div>
     </div>
 
     <div class="product-cards-container">
         {% for product in products %}
-        <div class="product-card">
-            <div class="product-code">{{ product.MaSP }}</div>
-            <a href="{% url 'products:product_detail' product.MaSP %}" class="card-name-col">
-                {% if product.HinhAnh %}
-                <img src="{{ product.HinhAnh.url }}" alt="{{ product.TenSP }}" class="product-image">
-                {% else %}
-                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=60&h=60" alt="{{ product.TenSP }}" class="product-image">
-                {% endif %}
-                <div class="product-name">{{ product.TenSP }}</div>
-            </a>
-            <div class="product-price">{{ product.Gia|floatformat:0 }}đ</div>
-            <div class="product-rating">
-                <div style="position: relative; display: inline-flex; width: 78px; height: 14px; justify-content: flex-start; align-items: center;" title="{{ product.sao_trung|floatformat:1 }} sao">
-                    <!-- Gray Stars -->
-                    <div style="display: flex; gap: 2px; position: absolute; left: 0; top: 0; width: 78px;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#e5e7eb" stroke="#e5e7eb" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#e5e7eb" stroke="#e5e7eb" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#e5e7eb" stroke="#e5e7eb" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#e5e7eb" stroke="#e5e7eb" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#e5e7eb" stroke="#e5e7eb" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        <div class="product-group-container">
+            <div class="product-card">
+                <div class="product-code">{{ product.MaSP }}</div>
+                <div class="card-name-col">
+                    {% if product.HinhAnh %}
+                    <img src="{{ product.HinhAnh.url }}" class="product-image">
+                    {% else %}
+                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=60&h=60"
+                        class="product-image">
+                    {% endif %}
+                    <div class="product-name"
+                        onclick="this.closest('.product-group-container').classList.toggle('active')">{{ product.TenSP }}</div>
+                </div>
+                <div class="product-price">{{ product.Gia|floatformat:0 }}đ</div>
+                <div>{{ product.total_stock }}</div>
+                <div class="product-rating">
+                    <div class="stars-outer">
+                        <div class="stars-inner" style="width: {{ product.star_percent }}%;"></div>
                     </div>
-                    <!-- Gold Stars (Dynamic width based on Python percent calc) -->
-                    <div style="position: absolute; left: 0; top: 0; overflow: hidden; width: {{ product.star_percent|default:0|floatformat:2 }}%; height: 14px;">
-                        <div style="display: flex; gap: 2px; width: 78px;">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="#facc15" stroke="#facc15" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="#facc15" stroke="#facc15" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="#facc15" stroke="#facc15" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="#facc15" stroke="#facc15" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="#facc15" stroke="#facc15" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                        </div>
+                    <span style="font-size: 11px; margin-left: 4px;">({{ product.co_danh_gia }})</span>
+                </div>
+                <div class="product-actions">
+                    <a class="action-icon" title="Sửa nhóm"
+                        href="{% url 'products:edit_product' product.MaSP %}?mode=group">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                    </a>
+                    <a class="action-icon delete" title="Xóa nhóm"
+                        href="{% url 'products:delete_product' product.MaSP %}?mode=group">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                            </path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="variants-dropdown">
+                {% for v in product.variants %}
+                <div class="variant-row">
+                    <div class="product-code"></div> <!-- Mã BT ẩn -->
+                    <a href="{% url 'products:product_detail' v.MaBTSP %}" class="variant-name-link">{{ product.TenSP }}-{{ v.MauSac }}-{{ v.Size }}</a>
+                    <div class="product-price" style="font-size: 12px; color: #888;">{{ product.Gia|floatformat:0 }}đ
+                    </div>
+                    <div style="font-size: 12px; color: #888;">{{ v.SoLuongTon }}</div>
+                    <div class="product-rating"></div>
+                    <div class="product-actions">
+                        <a class="action-icon" title="Sửa loại"
+                            href="{% url 'products:edit_product' v.MaBTSP %}?mode=variant">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                        </a>
+                        <a class="action-icon delete" title="Xóa loại"
+                            href="{% url 'products:delete_product' v.MaBTSP %}?mode=variant">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path
+                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                </path>
+                            </svg>
+                        </a>
                     </div>
                 </div>
-                <span class="review-count" style="font-size: 13px; color: #777; margin-left: 6px;">({{ product.co_danh_gia|default:0 }})</span>
-            </div>
-            <div class="product-actions">
-                <a class="action-icon edit" title="Chỉnh sửa" href="{% url 'products:edit_product' product.MaSP %}">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                    </svg>
-                </a>
-                <a class="action-icon delete" title="Xóa" href="{% url 'products:delete_product' product.MaSP %}">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="3 6 5 6 21 6"></polyline>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                    </svg>
-                </a>
+                {% endfor %}
             </div>
         </div>
         {% empty %}
@@ -294,5 +344,4 @@
         {% endfor %}
     </div>
 </div>
-
 {% endblock %}
