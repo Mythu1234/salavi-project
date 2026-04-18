@@ -152,3 +152,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+# AUTH REDIRECTS
+LOGIN_REDIRECT_URL = 'cskh:dashboard'
+LOGOUT_REDIRECT_URL = 'cskh:guest_home'

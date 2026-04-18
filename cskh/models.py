@@ -53,7 +53,7 @@ class TinNhanTuVan(models.Model):
     MaHoiThoai = models.ForeignKey(HoiThoaiTuVan, on_delete=models.CASCADE)
     MaNV = models.ForeignKey(NhanVien, on_delete=models.SET_NULL, null=True, blank=True)
     NoiDung = models.CharField(max_length=200, null=True, blank=True)
-    HinhAnh = models.ImageField(upload_to='chat/', null=True, blank=True)
+    HinhAnh = models.ImageField(upload_to='chat_images/', null=True, blank=True)
     ThoiGianGui = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

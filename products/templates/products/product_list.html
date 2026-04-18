@@ -3,18 +3,7 @@
 
 {% block content %}
 <style>
-    /* Override base.html styles for navigation */
-    .header-nav .nav a {
-        color: #fff !important;
-        font-weight: normal !important;
-    }
-
-    .header-nav .nav a:nth-of-type(3) {
-        color: #333 !important;
-        font-weight: bold !important;
-    }
-
-    /* Sub navigation */
+    /* 1. GIỮ NGUYÊN CSS GỐC CỦA BẠN */
     .sub-nav-container {
         background-color: #fff;
         border-bottom: 1px solid #eaeaea;
@@ -41,7 +30,6 @@
         border-bottom: 2px solid #f47879;
     }
 
-    /* Container */
     .product-layout {
         max-width: 1200px;
         margin: 30px auto;
@@ -62,7 +50,6 @@
         margin: 0;
     }
 
-    /* Header */
     .product-list-header {
         display: grid;
         grid-template-columns: 1.4fr 1.8fr 1.2fr 1.1fr 1.5fr 1fr;
@@ -77,10 +64,7 @@
         margin-bottom: 15px;
     }
 
-    .header-name {
-        text-align: left;
-        padding-left: 75px;
-    }
+    .header-name { text-align: left; padding-left: 75px; }
 
     .add-product-btn {
         background-color: #f47879;
@@ -93,7 +77,6 @@
         box-shadow: 0 2px 4px rgba(244, 120, 121, 0.3);
     }
 
-    /* List container */
     .product-group-container {
         margin-bottom: 15px;
         border-radius: 8px;
@@ -111,15 +94,9 @@
         text-align: center;
     }
 
-    .product-card:hover {
-        background-color: #f9f9f9;
-    }
+    .product-card:hover { background-color: #f9f9f9; }
 
-    .product-code {
-        color: #555;
-        font-size: 14px;
-        font-weight: normal;
-    }
+    .product-code { color: #555; font-size: 14px; }
 
     .card-name-col {
         display: flex;
@@ -146,16 +123,10 @@
         cursor: pointer;
     }
 
-    .product-name:hover {
-        color: #f47879;
-    }
+    .product-name:hover { color: #f47879; }
 
-    .product-price {
-        font-weight: normal;
-        color: #000;
-    }
+    .product-price { font-weight: normal; color: #000; }
 
-    /* Dropdown variants styles */
     .variants-dropdown {
         display: none;
         background-color: #fdfdfd;
@@ -163,9 +134,7 @@
         padding: 5px 0;
     }
 
-    .product-group-container.active .variants-dropdown {
-        display: block;
-    }
+    .product-group-container.active .variants-dropdown { display: block; }
 
     .variant-row {
         display: grid;
@@ -184,11 +153,8 @@
         text-decoration: none;
     }
 
-    .variant-name-link:hover {
-        color: #f47879;
-    }
+    .variant-name-link:hover { color: #f47879; }
 
-    /* Star Rating */
     .stars-outer {
         display: inline-block;
         position: relative;
@@ -206,20 +172,10 @@
         color: #ffc107;
     }
 
-    .stars-outer::before {
-        content: "\2606\2606\2606\2606\2606";
-    }
+    .stars-outer::before { content: "\2606\2606\2606\2606\2606"; }
+    .stars-inner::before { content: "\2605\2605\2605\2605\2605"; }
 
-    .stars-inner::before {
-        content: "\2605\2605\2605\2605\2605";
-    }
-
-    .product-actions {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        align-items: center;
-    }
+    .product-actions { display: flex; justify-content: center; gap: 15px; align-items: center; }
 
     .action-icon {
         cursor: pointer;
@@ -232,9 +188,36 @@
         text-decoration: none;
     }
 
-    .action-icon.delete {
-        color: #f47879;
+    .action-icon.delete { color: #f47879; }
+
+    /* 2. THÊM CSS CHO GIAO DIỆN KHÁCH (GRID) */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
+        padding: 20px 0;
     }
+    .guest-card {
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .guest-img-wrapper {
+        width: 100%;
+        height: 380px;
+        background: #f5f5f5;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+    .guest-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .guest-info { padding: 12px 2px; }
+    .guest-name { font-size: 14px; color: #444; margin-bottom: 4px; }
+    .guest-price { font-size: 15px; font-weight: 700; color: #111; }
 </style>
 
 <div class="sub-nav-container">
@@ -248,100 +231,114 @@
 </div>
 
 <div class="product-layout">
-    <div class="product-list-title-row">
-        <h2 class="product-list-title">Danh sách sản phẩm: {{ current_loai }}</h2>
-        <a href="{% url 'products:add_product' %}" class="add-product-btn">+ Thêm sản phẩm</a>
-    </div>
+    
+    {% if user.is_staff or user.nhanvien or user.is_superuser %}
+        <!-- GIAO DIỆN NHÂN VIÊN/CHỦ: BẢNG + BIẾN THỂ (GIỮ NGUYÊN CODE CỦA BẠN) -->
+        <div class="product-list-title-row">
+            <h2 class="product-list-title">Danh sách sản phẩm: {{ current_loai }}</h2>
+            <a href="{% url 'products:add_product' %}" class="add-product-btn">+ Thêm sản phẩm</a>
+        </div>
 
-    <div class="product-list-header">
-        <div>Mã sản phẩm</div>
-        <div class="header-name">Tên sản phẩm</div>
-        <div>Giá bán</div>
-        <div>Tồn kho</div>
-        <div>Đánh giá</div>
-        <div>Thao tác</div>
-    </div>
+        <div class="product-list-header">
+            <div>Mã sản phẩm</div>
+            <div class="header-name">Tên sản phẩm</div>
+            <div>Giá bán</div>
+            <div>Tồn kho</div>
+            <div>Đánh giá</div>
+            <div>Thao tác</div>
+        </div>
 
-    <div class="product-cards-container">
-        {% for product in products %}
-        <div class="product-group-container">
-            <div class="product-card">
-                <div class="product-code">{{ product.MaSP }}</div>
-                <div class="card-name-col">
-                    {% if product.HinhAnh %}
-                    <img src="{{ product.HinhAnh.url }}" class="product-image">
-                    {% else %}
-                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=60&h=60"
-                        class="product-image">
-                    {% endif %}
-                    <div class="product-name"
-                        onclick="this.closest('.product-group-container').classList.toggle('active')">{{ product.TenSP }}</div>
-                </div>
-                <div class="product-price">{{ product.Gia|floatformat:0 }}đ</div>
-                <div>{{ product.total_stock }}</div>
-                <div class="product-rating">
-                    <div class="stars-outer">
-                        <div class="stars-inner" style="width: {{ product.star_percent }}%;"></div>
+        <div class="product-cards-container">
+            {% for product in products %}
+            <div class="product-group-container">
+                <div class="product-card">
+                    <div class="product-code">{{ product.MaSP }}</div>
+                    <div class="card-name-col">
+                        {% if product.HinhAnh %}
+                        <img src="{{ product.HinhAnh.url }}" class="product-image">
+                        {% else %}
+                        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=60&h=60" class="product-image">
+                        {% endif %}
+                        <div class="product-name" onclick="this.closest('.product-group-container').classList.toggle('active')">
+                            {{ product.TenSP }}
+                        </div>
                     </div>
-                    <span style="font-size: 11px; margin-left: 4px;">({{ product.co_danh_gia }})</span>
-                </div>
-                <div class="product-actions">
-                    <a class="action-icon" title="Sửa nhóm"
-                        href="{% url 'products:edit_product' product.MaSP %}?mode=group">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                        </svg>
-                    </a>
-                    <a class="action-icon delete" title="Xóa nhóm"
-                        href="{% url 'products:delete_product' product.MaSP %}?mode=group">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <polyline points="3 6 5 6 21 6"></polyline>
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                            </path>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-
-            <div class="variants-dropdown">
-                {% for v in product.variants %}
-                <div class="variant-row">
-                    <div class="product-code"></div> <!-- Mã BT ẩn -->
-                    <a href="{% url 'products:product_detail' v.MaBTSP %}" class="variant-name-link">{{ product.TenSP }}-{{ v.MauSac }}-{{ v.Size }}</a>
-                    <div class="product-price" style="font-size: 12px; color: #888;">{{ product.Gia|floatformat:0 }}đ
+                    <div class="product-price">{{ product.Gia|floatformat:0 }}đ</div>
+                    <div>{{ product.total_stock }}</div>
+                    <div class="product-rating">
+                        <div class="stars-outer">
+                            <div class="stars-inner" style="width: {{ product.star_percent }}%;"></div>
+                        </div>
+                        <span style="font-size: 11px; margin-left: 4px;">({{ product.co_danh_gia }})</span>
                     </div>
-                    <div style="font-size: 12px; color: #888;">{{ v.SoLuongTon }}</div>
-                    <div class="product-rating"></div>
                     <div class="product-actions">
-                        <a class="action-icon" title="Sửa loại"
-                            href="{% url 'products:edit_product' v.MaBTSP %}?mode=variant">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
+                        <a class="action-icon" title="Sửa nhóm" href="{% url 'products:edit_product' product.MaSP %}?mode=group">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                             </svg>
                         </a>
-                        <a class="action-icon delete" title="Xóa loại"
-                            href="{% url 'products:delete_product' v.MaBTSP %}?mode=variant">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
+                        <a class="action-icon delete" title="Xóa nhóm" href="{% url 'products:delete_product' product.MaSP %}?mode=group">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="3 6 5 6 21 6"></polyline>
-                                <path
-                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                </path>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                             </svg>
                         </a>
                     </div>
                 </div>
-                {% endfor %}
+
+                <div class="variants-dropdown">
+                    {% for v in product.variants %}
+                    <div class="variant-row">
+                        <div class="product-code"></div>
+                        <a href="{% url 'products:product_detail' v.MaBTSP %}" class="variant-name-link">{{ product.TenSP }}-{{ v.MauSac }}-{{ v.Size }}</a>
+                        <div class="product-price" style="font-size: 12px; color: #888;">{{ product.Gia|floatformat:0 }}đ</div>
+                        <div style="font-size: 12px; color: #888;">{{ v.SoLuongTon }}</div>
+                        <div class="product-rating"></div>
+                        <div class="product-actions">
+                            <a class="action-icon" title="Sửa loại" href="{% url 'products:edit_product' v.MaBTSP %}?mode=variant">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                            </a>
+                            <a class="action-icon delete" title="Xóa loại" href="{% url 'products:delete_product' v.MaBTSP %}?mode=variant">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
+            {% empty %}
+            <div style="text-align: center; padding: 40px; color: #999;">Không có sản phẩm nào.</div>
+            {% endfor %}
         </div>
-        {% empty %}
-        <div style="text-align: center; padding: 40px; color: #999;">Không tìm thấy sản phẩm nào phù hợp.</div>
-        {% endfor %}
-    </div>
+
+    {% else %}
+        <!-- GIAO DIỆN KHÁCH HÀNG: LƯỚI ẢNH (Actor khách) -->
+        <h2 class="text-2xl font-bold mb-8 text-[#111]">Sản phẩm: {{ current_loai }}</h2>
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="guest-card" onclick="window.location.href='{% url 'cskh:store_product_detail' product.MaSP %}'">
+                <div class="guest-img-wrapper relative">
+                    {% if product.HinhAnh %}
+                        <img src="{{ product.HinhAnh.url }}" alt="{{ product.TenSP }}">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=500&q=80">
+                    {% endif %}
+                </div>
+                <div class="guest-info">
+                    <h3 class="guest-name">{{ product.TenSP }}</h3>
+                    <p class="guest-price">{{ product.Gia|floatformat:0 }}đ</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
 </div>
 {% endblock %}

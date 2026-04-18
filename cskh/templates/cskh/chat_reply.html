@@ -554,7 +554,7 @@
 
         <div class="chat-messages" id="chatMessages">
             {% for msg in tin_nhan_list %}
-            {% if msg.MaNV.MaNV != 'NV_KH' %}
+            {% if msg.MaNV and msg.MaNV.MaNV != 'NV_KH' %}
             <div class="message-bubble-wrapper message-wrapper-shop">
                 <div class="message-bubble shop">
                     {% if msg.HinhAnh %}
