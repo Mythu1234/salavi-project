@@ -121,7 +121,8 @@ def chat_reply_view(request):
     # 3. Xử lý Gửi tin nhắn
     if request.method == 'POST' and current_chat:
         noi_dung = request.POST.get('NoiDung')
-        if noi_dung:
+        hinh_anh = request.FILES.get('HinhAnh')
+        if noi_dung or hinh_anh:
             ma_tn = "TN" + ''.join(random.choices(string.digits, k=6))
             nv = NhanVien.objects.exclude(MaNV='NV_KH').first()
             if not nv:
@@ -130,7 +131,8 @@ def chat_reply_view(request):
                 nv, _ = NhanVien.objects.get_or_create(MaNV='NV_ADMIN', defaults={'user': test_user, 'HoTen': 'Admin'})
             
             TinNhanTuVan.objects.create(
-                MaTinNhan=ma_tn, MaHoiThoai=current_chat, MaNV=nv, NoiDung=noi_dung
+                MaTinNhan=ma_tn, MaHoiThoai=current_chat, MaNV=nv, 
+                NoiDung=noi_dung, HinhAnh=hinh_anh
             )
             # Khi nhân viên gửi tin, nếu trạng thái là Chưa xử lý hoặc Đang xử lý -> Đã phản hồi
             if current_chat.TrangThai in ['Chưa xử lý', 'Đang xử lý']:
@@ -396,15 +398,22 @@ def store_product_detail_view(request, ma_sp):
     avg_rating = float(rating_data['avg'] or 0.0)
     san_pham.star_percent = avg_rating * 20
     
+    # Sản phẩm liên quan (cùng loại dựa trên từ đầu tiên của tên SP)
+    first_word = san_pham.TenSP.split(' ')[0]
+    related_products = SanPham.objects.filter(TenSP__icontains=first_word).exclude(MaSP=ma_sp).annotate(
+        avg_stars=Avg('danhgia__SoSao')
+    )[:4]
+    
     return render(request, 'cskh/store_product_detail.html', {
         'product': san_pham,
         'variants': variants,
         'colors': colors,
         'sizes': sizes,
-        'avg_rating': round(avg_rating, 1),
+        'avg_rating': round(avg_rating, 1) if avg_rating > 0 else 0,
         'review_count': rating_data['count'],
         'color_list': list(colors),
         'size_list': list(sizes),
+        'related_products': related_products,
     })
 
 
