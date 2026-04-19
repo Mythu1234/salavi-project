@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết sản phẩm – Salavi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #fff;
+            color: #333;
+        }
+
+        /* ===== HEADER ===== */
+        .header-top-container {
+            background: #fff;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .header-top {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 10px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            color: #e58f8b;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .search-box {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 450px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px 16px;
+            font-size: 13px;
+            border-radius: 20px;
+            border: 1px solid #eaeaea;
+            background: #fdfdfd;
+            color: #666;
+            outline: none;
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border: 1px solid #eaeaea;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .icon-list {
+            display: flex;
+            gap: 16px;
+            color: #333;
+        }
+
+        /* ===== MENU CHÍNH ===== */
+        .header-nav {
+            background: #e58f8b;
+            color: #fff;
+        }
+
+        .nav-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 14px 0;
+            opacity: 0.8;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .nav a:hover {
+            opacity: 1;
+        }
+
+        .nav a.active {
+            font-weight: 700;
+            color: #111;
+            opacity: 1;
+        }
+
+        /* Custom Detail styles */
+        .color-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid #e1e1e1;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s;
+        }
+
+        .color-dot:hover {
+            transform: scale(1.1);
+        }
+
+        .color-dot.active {
+            border: 2px solid #111;
+        }
+
+        .color-dot.active::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 1.5px solid #111;
+            border-radius: 50%;
+        }
+
+        .size-box {
+            min-width: 45px;
+            height: 40px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .size-box:hover {
+            border-color: #999;
+        }
+
+        .size-box.active {
+            border: 2px solid #111;
+            font-weight: 700;
+        }
+
+        /* CSS for the images grid matching the user's requirement */
+        .product-images {
+            width: 100%;
+            height: 100%;
+        }
+
+        .product-images img {
+            width: 100%;
+            height: 100%;
+            min-height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 0;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: white;
+            padding: 24px 32px;
+            border-radius: 12px;
+            max-width: 620px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.2s;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .size-chart-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 2px;
+            margin-top: 20px;
+        }
+
+        .size-chart-table th {
+            background: #000;
+            color: #fff;
+            padding: 8px 10px;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .size-chart-table td {
+            background: #fdf5e6;
+            padding: 8px 10px;
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .size-chart-table td:first-child {
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #333;
+        }
+
+        /* Inline size chart specific */
+        .inline-size-table th,
+        .inline-size-table td {
+            padding: 4px 2px !important;
+            font-size: 9px !important;
+        }
+
+        .inline-size-table th {
+            background: #333 !important;
+        }
+
+        .inline-size-table td {
+            background: #fafafa !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header-top-container">
+        <div class="header-top">
+            <div class="logo"><a href="{% url 'cskh:guest_home' %}"
+                    style="text-decoration: none; color: inherit;">SALAVI</a></div>
+            <div class="search-box">
+                <form action="{% url 'cskh:store_product_list' %}" method="GET" style="display: flex; width: 100%;">
+                    <input type="text" name="q" placeholder="Tìm kiếm sản phẩm..."
+                        value="{{ request.GET.q|default:'' }}">
+                </form>
+            </div>
+            <div class="header-icons">
+                {% if user.is_authenticated %}
+                <div class="user-btn relative group">
+                    {{ user.khachhang.HoTen|default:user.username }}
+                    <i class="fas fa-user text-lg ml-1"></i>
+                    <div
+                        class="absolute top-full right-0 mt-2 w-40 bg-white shadow-xl rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 border border-gray-100 py-2">
+                        <a href="{% url 'accounts:logout' %}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-500">Đăng
+                            xuất</a>
+                    </div>
+                </div>
+                {% else %}
+                <a href="{% url 'accounts:login' %}" style="text-decoration:none;">
+                    <div class="user-btn">
+                        Tài khoản <i class="fas fa-user text-lg ml-1"></i>
+                    </div>
+                </a>
+                {% endif %}
+                <div class="icon-list text-xl flex items-center gap-4">
+                    <div class="relative cursor-pointer hover:text-[#e58f8b] transition text-[#333]"
+                        onclick="alertCart()">
+                        <i class="fas fa-shopping-cart text-[#e58f8b]"></i>
+                        <span id="cart-badge" style="display: none;"
+                            class="absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold border border-white"></span>
+                    </div>
+                    <div class="relative cursor-pointer hover:text-[#e58f8b] transition text-[#333]">
+                        <i class="far fa-heart"></i>
+                        <span id="wishlist-badge" style="display: none;"
+                            class="absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold border border-white"></span>
+                    </div>
+                    <i class="far fa-user cursor-pointer hover:text-[#e58f8b]"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <header class="header-nav">
+        <div class="nav-container">
+            <nav class="nav">
+                <a href="{% url 'cskh:guest_home' %}">Trang chủ</a>
+                <a href="{% url 'cskh:store_product_list' %}" class="active">Sản phẩm</a>
+                {% if user.is_authenticated and user.khachhang %}
+                <a href="{% url 'cskh:diem_tich_luy' %}">Tích điểm</a>
+                <a href="{% url 'cskh:quan_ly_danh_gia' %}">Đánh giá</a>
+                <a href="{% url 'orders:doitra_list' %}">Đổi trả</a>
+                {% else %}
+                <a href="{% url 'cskh:quan_ly_danh_gia' %}">Đánh giá</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-[1000px] mx-auto py-10 px-4">
+        <div
+            class="bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.08)] border border-gray-100 overflow-hidden flex flex-col lg:flex-row items-stretch">
+            <!-- Left: Image fills full card height -->
+            <div class="lg:w-2/5 relative border-r border-gray-100 flex-shrink-0">
+                {% if product.HinhAnh %}
+                <img src="{{ product.HinhAnh.url }}" alt="{{ product.TenSP }}" class="absolute inset-0 w-full h-full object-cover">
+                {% else %}
+                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    alt="{{ product.TenSP }}" class="absolute inset-0 w-full h-full object-cover">
+                {% endif %}
+            </div>
+
+            <!-- Right Column: Info + Buttons -->
+            <div class="lg:w-3/5 px-8 py-6 flex flex-col justify-start bg-white gap-4">
+
+                <!-- TOP: Product Details -->
+                <div class="flex flex-col gap-3">
+                    <!-- Name + Rating row -->
+                    <div class="flex items-start justify-between gap-4">
+                        <h1 class="text-[17px] font-bold text-gray-900 leading-snug">{{ product.TenSP }}</h1>
+                        <div class="flex items-center gap-1 shrink-0 mt-0.5">
+                            <div class="flex items-center gap-0.5 text-amber-400 text-[12px]">
+                                {% if avg_rating > 0 %}
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="{% if avg_rating >= 4.5 %}fas{% else %}fas fa-star-half-alt{% endif %} fa-star"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                            </div>
+                            <span class="text-[11px] font-semibold text-gray-500 ml-1">{{ avg_rating|floatformat:1 }}</span>
+                        </div>
+                    </div>
+
+                    <div class="text-[20px] font-extrabold text-rose-500 tracking-tight">
+                        {{ product.Gia|floatformat:0 }} <span class="text-[13px] font-semibold text-gray-400">VND</span>
+                    </div>
+
+                    <!-- Short Description -->
+                    {% if product.MoTa %}
+                    <p class="text-[13px] text-gray-500 leading-relaxed">{{ product.MoTa|truncatewords:50 }}</p>
+                    {% endif %}
+
+                    <!-- Divider -->
+                    <div class="border-t border-gray-100"></div>
+
+                    <!-- Colors -->
+                    <div>
+                        <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2"
+                            id="selected-color-label">Màu sắc: Chọn màu</div>
+                        <div class="flex gap-2.5 flex-wrap">
+                            {% for c in color_list %}
+                            <div class="color-dot" data-name="{{ c }}"
+                                style="background-color: {% if c|lower == 'trắng' %}#ffffff{% elif c|lower == 'đen' %}#000000{% elif c|lower == 'xám' %}#cccccc{% elif c|lower == 'hồng' %}#fbcfe8{% elif c|lower == 'kem' or c|lower == 'màu kem' %}#fff5e1{% elif c|lower == 'xanh dương' %}#bfdbfe{% elif c|lower == 'đỏ' %}#fca5a5{% else %}#e5e7eb{% endif %};"
+                                onclick="selectColor(this, '{{ c }}')"></div>
+                            {% empty %}
+                            <div class="color-dot active" style="background-color: #fff5e1;"
+                                onclick="selectColor(this, 'KEM')"></div>
+                            <div class="color-dot" style="background-color: #ffffff;"
+                                onclick="selectColor(this, 'TRẮNG')"></div>
+                            <div class="color-dot" style="background-color: #1f2937;"
+                                onclick="selectColor(this, 'ĐEN')"></div>
+                            <div class="color-dot" style="background-color: #cccccc;"
+                                onclick="selectColor(this, 'XÁM')"></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Sizes -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider"
+                                id="selected-size-label">Kích cỡ: Chọn size</div>
+                            <a href="javascript:void(0)" onclick="openSizeModal()"
+                                class="text-[11px] text-rose-400 font-semibold hover:underline flex items-center gap-1">
+                                <i class="fas fa-ruler-horizontal"></i> Bảng size
+                            </a>
+                        </div>
+                        <div class="flex gap-2 flex-wrap">
+                            {% for s in size_list %}
+                            <div class="size-box px-3 py-1.5 text-xs" onclick="selectSize(this, '{{ s }}')">{{ s }}
+                            </div>
+                            {% empty %}
+                            <div class="size-box px-3 py-1.5 text-xs" onclick="selectSize(this, 'XS')">XS</div>
+                            <div class="size-box px-3 py-1.5 text-xs" onclick="selectSize(this, 'S')">S</div>
+                            <div class="size-box px-3 py-1.5 text-xs active bg-black text-white"
+                                onclick="selectSize(this, 'M')">M</div>
+                            <div class="size-box px-3 py-1.5 text-xs" onclick="selectSize(this, 'L')">L</div>
+                            <div class="size-box px-3 py-1.5 text-xs" onclick="selectSize(this, 'XL')">XL</div>
+                            <div class="size-box px-3 py-1.5 text-xs" onclick="selectSize(this, 'XXL')">XXL</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOTTOM: Action Buttons -->
+                <div class="flex flex-col gap-2 mt-2">
+                    {% if user.is_authenticated %}
+                    <!-- Quantity row -->
+                    <div class="flex items-center gap-3 mb-1">
+                        <div
+                            class="flex items-center justify-between w-24 bg-gray-100 rounded-full px-3 select-none h-9 gap-2">
+                            <span class="text-gray-400 hover:text-black cursor-pointer text-lg leading-none"
+                                onclick="decreaseQuantity()">−</span>
+                            <span id="quantity-display" class="text-[13px] font-semibold text-gray-700">1</span>
+                            <span class="text-gray-400 hover:text-black cursor-pointer text-lg leading-none"
+                                onclick="increaseQuantity()">+</span>
+                        </div>
+                        <span class="text-[11px] text-gray-400 font-medium">Còn hàng</span>
+                    </div>
+                    <!-- Cart + Buy row -->
+                    <div class="flex gap-2.5">
+                        <button onclick="toggleCart()" id="btn-add-cart"
+                            class="flex-1 border border-gray-300 text-gray-700 bg-white rounded-full font-bold text-[9px] tracking-widest h-10 flex items-center justify-center transition-all hover:border-gray-500">
+                            THÊM VÀO GIỎ HÀNG
+                        </button>
+                        <button
+                            class="flex-1 bg-rose-400 text-white rounded-full font-bold text-[9px] tracking-widest h-10 flex items-center justify-center shadow-md hover:bg-rose-500 transition-all">
+                            MUA NGAY
+                        </button>
+                    </div>
+                    {% else %}
+                    <div
+                        class="text-[11px] text-rose-400 font-medium bg-rose-50 p-3 rounded-xl border border-rose-100 italic text-center">
+                        Vui lòng đăng nhập để mua hàng
+                    </div>
+                    {% endif %}
+                    <!-- Wishlist -->
+                    <button onclick="toggleWishlist()" id="btn-wishlist"
+                        class="w-full border border-gray-200 rounded-full font-semibold text-[9px] tracking-widest text-gray-500 h-10 flex items-center justify-center gap-2 transition-all hover:border-rose-300 hover:text-rose-400">
+                        <i class="far fa-heart"></i>
+                        <span id="wishlist-text">THÊM VÀO MỤC YÊU THÍCH</span>
+                    </button>
+                </div>
+
+                <!-- Size Chart matching button width -->
+                <div class="mt-auto pt-4">
+                    <div class="w-full bg-[#fdfaf5] border border-[#f5e6d3] rounded-xl p-3 shadow-sm">
+                        <div class="text-[10px] font-bold text-[#8a7a66] uppercase tracking-widest mb-2.5 flex items-center gap-2">
+                            <i class="fas fa-ruler-combined text-[#e58f8b]"></i> Bảng size tham khảo
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="size-chart-table inline-size-table w-full mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Thông số</th>
+                                        <th>S</th>
+                                        <th>M</th>
+                                        <th>L</th>
+                                        <th>XL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Cao (cm)</td><td>150-160</td><td>160-170</td><td>160-170</td><td>165-175</td></tr>
+                                    <tr><td>Nặng (kg)</td><td>42-49</td><td>50-56</td><td>57-65</td><td>66-72</td></tr>
+                                    <tr><td>Vai</td><td>36</td><td>37</td><td>38</td><td>39</td></tr>
+                                    <tr><td>Ngực</td><td>84</td><td>88</td><td>92</td><td>96</td></tr>
+                                    <tr><td>Eo</td><td>66</td><td>70</td><td>74</td><td>78</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Related Products Section -->
+        {% if related_products %}
+        <div class="mt-16 pt-10 border-t border-gray-100">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="text-xl font-bold text-gray-900 flex items-center gap-3">
+                    <span class="w-1.5 h-6 bg-rose-400 rounded-full"></span>
+                    Sản phẩm tương tự
+                </h3>
+                <a href="{% url 'cskh:store_product_list' %}?loai={{ product.TenSP.split|first }}"
+                    class="text-xs font-bold text-rose-400 hover:text-rose-500 uppercase tracking-widest transition-colors">
+                    Xem tất cả <i class="fas fa-chevron-right ml-1 text-[10px]"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for related in related_products %}
+                <div class="group cursor-pointer" onclick="window.location.href='{% url 'cskh:store_product_detail' related.MaSP %}'">
+                    <div class="aspect-[3/4] rounded-2xl overflow-hidden bg-gray-50 mb-4 shadow-sm relative border border-gray-100">
+                        {% if related.HinhAnh %}
+                        <img src="{{ related.HinhAnh.url }}" alt="{{ related.TenSP }}" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        {% else %}
+                        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                             class="w-full h-full object-cover">
+                        {% endif %}
+                        <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+                    </div>
+                    <div class="px-1">
+                        <h4 class="text-[14px] font-semibold text-gray-800 line-clamp-1 group-hover:text-rose-400 transition-colors mb-1">
+                            {{ related.TenSP }}
+                        </h4>
+                        <div class="flex items-center justify-between">
+                            <p class="text-[15px] font-bold text-gray-900">{{ related.Gia|floatformat:0 }} <span class="text-[10px] font-medium text-gray-400">VND</span></p>
+                            <div class="text-[10px] text-amber-400">
+                                <i class="{% if related.avg_stars > 0 %}fas{% else %}far{% endif %} fa-star"></i> {{ related.avg_stars|default:0|floatformat:1 }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </main>
+
+    <!-- Size Chart Modal -->
+    <div id="sizeModal" class="modal-overlay" onclick="closeSizeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-modal" onclick="closeSizeModal()">&times;</span>
+            <h2 class="text-2xl font-bold text-center mb-2 tracking-widest italic">BẢNG SIZE ÁO</h2>
+            <p class="text-right text-[11px] text-gray-400 italic mb-4">Đơn vị: cm, kg</p>
+
+            <div class="overflow-x-auto">
+                <table class="size-chart-table">
+                    <thead>
+                        <tr>
+                            <th>SIZE</th>
+                            <th>XS</th>
+                            <th>S</th>
+                            <th>M</th>
+                            <th>L</th>
+                            <th>XL</th>
+                            <th>XXL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CHIỀU CAO</td>
+                            <td>150 - 160</td>
+                            <td>150 - 160</td>
+                            <td>160 - 170</td>
+                            <td>160 - 170</td>
+                            <td>160 - 170</td>
+                            <td>165 - 175</td>
+                        </tr>
+                        <tr>
+                            <td>CÂN NẶNG</td>
+                            <td>Dưới 42</td>
+                            <td>42 - 49</td>
+                            <td>50 - 56</td>
+                            <td>57 - 65</td>
+                            <td>66 - 72</td>
+                            <td>73 - 80</td>
+                        </tr>
+                        <tr>
+                            <td>RỘNG VAI</td>
+                            <td>35</td>
+                            <td>36</td>
+                            <td>37</td>
+                            <td>38</td>
+                            <td>39</td>
+                            <td>40</td>
+                        </tr>
+                        <tr>
+                            <td>VÒNG NGỰC</td>
+                            <td>80</td>
+                            <td>84</td>
+                            <td>88</td>
+                            <td>92</td>
+                            <td>96</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>VÒNG EO</td>
+                            <td>62</td>
+                            <td>66</td>
+                            <td>70</td>
+                            <td>74</td>
+                            <td>78</td>
+                            <td>82</td>
+                        </tr>
+                        <tr>
+                            <td>VÒNG MÔNG</td>
+                            <td>86</td>
+                            <td>90</td>
+                            <td>94</td>
+                            <td>98</td>
+                            <td>102</td>
+                            <td>106</td>
+                        </tr>
+                        <tr>
+                            <td>RỘNG BẮP TAY</td>
+                            <td>31</td>
+                            <td>32</td>
+                            <td>33</td>
+                            <td>34</td>
+                            <td>35</td>
+                            <td>36</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="mt-8 text-[11px] text-gray-400 italic text-center leading-relaxed">
+                Lưu ý: Hướng dẫn chọn size chỉ mang tính chất tương đối và tham khảo, kích thước sản phẩm<br>
+                sẽ tùy thuộc vào từng chất liệu và phom dáng khác nhau
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Set initial label text if items exist
+        document.addEventListener("DOMContentLoaded", function () {
+            const activeColor = document.querySelector('.color-dot.active');
+            if (activeColor && activeColor.getAttribute('data-name')) {
+                document.getElementById('selected-color-label').innerText = 'Màu sắc: ' + activeColor.getAttribute('data-name');
+            }
+        });
+
+        function selectColor(element, colorName) {
+            document.querySelectorAll('.color-dot').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            document.getElementById('selected-color-label').innerText = 'Màu sắc: ' + colorName;
+        }
+
+        function selectSize(element, sizeName) {
+            document.querySelectorAll('.size-box').forEach(el => {
+                el.classList.remove('active', 'bg-black', 'text-white');
+            });
+            element.classList.add('active', 'bg-black', 'text-white');
+            document.getElementById('selected-size-label').innerText = 'Kích cỡ: ' + sizeName;
+        }
+
+        // Quantity logic
+        let currentQuantity = 1;
+        function decreaseQuantity() {
+            if (currentQuantity > 1) {
+                currentQuantity--;
+                document.getElementById('quantity-display').innerText = currentQuantity;
+            }
+        }
+        function increaseQuantity() {
+            currentQuantity++;
+            document.getElementById('quantity-display').innerText = currentQuantity;
+        }
+
+        // Cart & Wishlist Logic
+        let isInCart = false;
+        let lastAddedQty = 0;
+        let isInWishlist = false;
+
+        function toggleCart() {
+            const badge = document.getElementById('cart-badge');
+            const btn = document.getElementById('btn-add-cart');
+            let currentCartVal = badge.innerText ? parseInt(badge.innerText) : 0;
+
+            if (!isInCart) {
+                // ADD ACTION
+                lastAddedQty = currentQuantity;
+                currentCartVal += lastAddedQty;
+                isInCart = true;
+                btn.innerText = "HUỶ THÊM GIỎ HÀNG";
+                btn.classList.replace('text-black', 'text-red-500');
+                btn.classList.replace('border-black', 'border-red-500');
+                btn.classList.add('bg-red-50');
+            } else {
+                // CANCEL ACTION
+                currentCartVal -= lastAddedQty;
+                isInCart = false;
+                lastAddedQty = 0;
+                btn.innerText = "THÊM VÀO GIỎ HÀNG";
+                btn.classList.replace('text-red-500', 'text-black');
+                btn.classList.replace('border-red-500', 'border-black');
+                btn.classList.remove('bg-red-50');
+            }
+
+            badge.innerText = currentCartVal;
+            badge.style.display = currentCartVal > 0 ? 'flex' : 'none';
+        }
+
+        function toggleWishlist() {
+            const badge = document.getElementById('wishlist-badge');
+            const btn = document.getElementById('btn-wishlist');
+            const text = document.getElementById('wishlist-text');
+            const icon = btn.querySelector('i');
+            let currentWishVal = badge.innerText ? parseInt(badge.innerText) : 0;
+
+            if (!isInWishlist) {
+                // ADD ACTION
+                currentWishVal++;
+                isInWishlist = true;
+                icon.classList.remove('far');
+                icon.classList.add('fas', 'text-red-500');
+                text.innerText = "ĐÃ THÊM (NHẤN ĐỂ HUỶ)";
+                btn.classList.add('bg-red-50', 'border-red-200');
+            } else {
+                // CANCEL ACTION
+                currentWishVal--;
+                isInWishlist = false;
+                icon.classList.remove('fas', 'text-red-500');
+                icon.classList.add('far');
+                text.innerText = "THÊM VÀO MỤC YÊU THÍCH";
+                btn.classList.remove('bg-red-50', 'border-red-200');
+            }
+
+            badge.innerText = currentWishVal;
+            badge.style.display = currentWishVal > 0 ? 'flex' : 'none';
+        }
+
+        // Helper to see click if needed
+        function alertCart() {
+            console.log("Cart icon clicked");
+        }
+
+        // Modal Handlers
+        function openSizeModal() {
+            document.getElementById('sizeModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Stop scrolling
+        }
+
+        function closeSizeModal(event) {
+            document.getElementById('sizeModal').style.display = 'none';
+            document.body.style.overflow = 'auto'; // Restore scrolling
+        }
+    </script>
+</body>
+
+</html>

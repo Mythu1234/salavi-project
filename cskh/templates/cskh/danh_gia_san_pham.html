@@ -1,0 +1,404 @@
+{% extends 'base.html' %}
+
+{% block title %}Đánh giá Sản phẩm - Salavi{% endblock %}
+
+{% block content %}
+<style>
+    body { background-color: #fafafa !important; font-family: 'Inter', -apple-system, sans-serif; }
+    
+    .review-container {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 40px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+    }
+
+    /* Header Styling */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+    }
+
+    .page-title {
+        font-size: 32px;
+        font-weight: 800;
+        margin: 0;
+        color: #1a1a1a;
+        letter-spacing: -0.8px;
+    }
+
+    /* PREMIUM SUBMIT BUTTON */
+    .btn-submit-review {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: linear-gradient(135deg, #F38D91 0%, #ff7675 100%);
+        color: white;
+        text-decoration: none;
+        padding: 14px 28px;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 15px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 10px 20px -10px rgba(243, 141, 145, 0.6);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+    }
+
+    .btn-submit-review:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 15px 25px -10px rgba(243, 141, 145, 0.8);
+        filter: brightness(1.1);
+    }
+
+    .btn-submit-review svg {
+        width: 18px;
+        height: 18px;
+        transition: transform 0.3s;
+    }
+
+    .btn-submit-review:hover svg {
+        transform: rotate(-15deg);
+    }
+
+    .btn-back-all {
+        background: #f0f0f0;
+        color: #555;
+        box-shadow: none;
+    }
+    .btn-back-all:hover {
+        background: #e5e5e5;
+        color: #333;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    /* Product List Layout */
+    .product-list {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-item {
+        display: flex;
+        align-items: center;
+        padding: 25px 0;
+        border-bottom: 1px solid #f2f2f2;
+        transition: background 0.3s;
+    }
+
+    .product-item:hover {
+        background: #fafafa;
+    }
+
+    .product-img-box {
+        width: 80px;
+        height: 100px;
+        background: #f8f8f8;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-right: 30px;
+        flex-shrink: 0;
+        border: 1px solid #eee;
+    }
+
+    .product-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .product-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .product-id {
+        color: #b2bec3;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 0;
+    }
+
+    .product-name {
+        color: #2d3436;
+        font-size: 19px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .product-stats {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+        color: #a0a0a0;
+        margin: 2px 0;
+    }
+
+    .stat-stars {
+        color: #f1c40f;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .product-price {
+        color: #F38D91;
+        font-style: italic;
+        font-size: 17px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .btn-view-review {
+        background: #F38D91;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+        cursor: pointer;
+    }
+
+    .btn-view-review:hover {
+        opacity: 0.8;
+    }
+
+    /* MODAL POPUP STYLING */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(5px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .modal-overlay.active {
+        display: flex;
+        opacity: 1;
+    }
+
+    .modal-card {
+        background: white;
+        width: 90%;
+        max-width: 500px;
+        border-radius: 20px;
+        overflow: hidden;
+        transform: translateY(20px);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .modal-overlay.active .modal-card {
+        transform: translateY(0);
+    }
+
+    .modal-header {
+        background: #F38D91;
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .modal-header h2 { margin: 0; font-size: 28px; font-weight: 800; }
+
+    .modal-body { padding: 30px; }
+
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 30px;
+    }
+    .star-rating input { display: none; }
+    .star-rating label { font-size: 45px; color: #e0e0e0; cursor: pointer; transition: color 0.2s; }
+    .star-rating label:hover, .star-rating label:hover ~ label, .star-rating input:checked ~ label { color: #f1c40f; }
+
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; font-weight: 700; color: #333; margin-bottom: 8px; font-size: 16px; }
+    .form-control { width: 100%; padding: 12px; border: 1.5px solid #eee; border-radius: 10px; font-size: 14px; box-sizing: border-box; }
+    .form-control:focus { border-color: #F38D91; outline: none; }
+    textarea.form-control { height: 100px; resize: none; }
+
+    .modal-footer { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
+    .btn-modal { padding: 12px 35px; border-radius: 12px; font-weight: 800; font-size: 16px; border: none; cursor: pointer; }
+    .btn-modal-submit { background: #F38D91; color: white; }
+    .btn-modal-cancel { background: white; color: #333; border: 1px solid #ddd; }
+
+    @media (max-width: 768px) {
+        .page-header { flex-direction: column; align-items: stretch; gap: 20px; }
+        .product-item { flex-direction: column; align-items: flex-start; gap: 15px; }
+        .product-img-box { width: 100%; height: 200px; }
+        .btn-view-review { width: 100%; text-align: center; }
+    }
+</style>
+
+<div class="review-container">
+    <div class="page-header">
+        <h1 class="page-title">
+            {% if filter_mode == 'todo' %}Sản phẩm chờ đánh giá{% else %}Đánh giá Sản phẩm{% endif %}
+        </h1>
+        
+        {% if khach_hang %}
+            {% if filter_mode == 'todo' %}
+                <a href="{% url 'cskh:danh_gia_san_pham' %}" class="btn-submit-review btn-back-all">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+                    Quay lại danh sách
+                </a>
+            {% else %}
+                <a href="{% url 'cskh:danh_gia_san_pham' %}?filter=todo" class="btn-submit-review">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    Gửi đánh giá ngay
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="product-list">
+        {% for sp in list_sp %}
+        <div class="product-item">
+            <div class="product-img-box">
+                {% if sp.HinhAnh %}
+                    <img src="{{ sp.HinhAnh.url }}" alt="{{ sp.TenSP }}" class="product-img">
+                {% else %}
+                    <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#ccc; font-size:12px;">No Image</div>
+                {% endif %}
+            </div>
+
+            <div class="product-info">
+                <p class="product-id">ID: {{ sp.MaSP }}</p>
+                <h3 class="product-name">{{ sp.TenSP }}</h3>
+                
+                <div class="product-stats">
+                    <span class="stat-stars">
+                        {% if sp.avg_stars %}
+                            ★ {{ sp.avg_stars|floatformat:1 }}
+                        {% else %}
+                            <span style="color:#eee;">★</span> 0.0
+                        {% endif %}
+                    </span>
+                    <span style="color:#f0f0f0;">|</span>
+                    <span>{{ sp.review_count }} đánh giá</span>
+                </div>
+
+                <p class="product-price">{{ sp.Gia|floatformat:0 }}đ</p>
+            </div>
+
+            <!-- Nút hành động: Sử dụng JS để mở Popup nếu là Đánh giá ngay -->
+            {% if filter_mode == 'todo' %}
+                <button type="button" 
+                        onclick="openReviewModal('{{ sp.MaSP }}', '{{ sp.TenSP }}')" 
+                        class="btn-view-review">
+                    Đánh giá ngay
+                </button>
+            {% else %}
+                <a href="{% url 'cskh:chi_tiet_danh_gia' sp.MaSP %}" class="btn-view-review">
+                    Xem đánh giá
+                </a>
+            {% endif %}
+        </div>
+        {% empty %}
+        <div style="padding: 100px; text-align: center; color: #ccc;">
+            <p style="font-size: 18px; font-weight: 600;">Hệ thống chưa có sản phẩm nào cho mục này.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- MODAL STRUCTURE -->
+<div id="reviewModal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h2>Gửi đánh giá</h2>
+        </div>
+        <form id="reviewForm" method="POST" enctype="multipart/form-data" class="modal-body">
+            {% csrf_token %}
+            
+            <p id="modalProductName" style="text-align:center; font-weight:700; color:#F38D91; margin-bottom:15px;"></p>
+
+            <!-- Star Selection -->
+            <div class="star-rating">
+                <input type="radio" id="m_star5" name="so_sao" value="5" checked><label for="m_star5">★</label>
+                <input type="radio" id="m_star4" name="so_sao" value="4"><label for="m_star4">★</label>
+                <input type="radio" id="m_star3" name="so_sao" value="3"><label for="m_star3">★</label>
+                <input type="radio" id="m_star2" name="so_sao" value="2"><label for="m_star2">★</label>
+                <input type="radio" id="m_star1" name="so_sao" value="1"><label for="m_star1">★</label>
+            </div>
+
+            <!-- Image Upload -->
+            <div class="form-group">
+                <label class="form-label">Hình ảnh</label>
+                <input type="file" name="hinh_anh" class="form-control" accept="image/*">
+            </div>
+
+            <!-- Comment -->
+            <div class="form-group">
+                <label class="form-label">Nhận xét</label>
+                <textarea name="noi_dung" class="form-control" placeholder="Nhập nhận xét sản phẩm..."></textarea>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn-modal btn-modal-submit">Gửi</button>
+                <button type="button" onclick="closeReviewModal()" class="btn-modal btn-modal-cancel">Hủy</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openReviewModal(maSp, tenSp) {
+        const modal = document.getElementById('reviewModal');
+        const form = document.getElementById('reviewForm');
+        const nameDisplay = document.getElementById('modalProductName');
+        
+        // Cập nhật action của form và tên sản phẩm
+        form.action = `/gui-danh-gia/${maSp}/`;
+        nameDisplay.textContent = tenSp;
+        
+        // Hiển thị modal
+        modal.classList.add('active');
+    }
+
+    function closeReviewModal() {
+        document.getElementById('reviewModal').classList.remove('active');
+    }
+
+    // Đóng khi click ra ngoài
+    window.onclick = function(event) {
+        const modal = document.getElementById('reviewModal');
+        if (event.target == modal) {
+            closeReviewModal();
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const navLinks = document.querySelectorAll('.nav-container .nav a');
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.textContent.trim() === 'Đánh giá') {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+{% endblock %}

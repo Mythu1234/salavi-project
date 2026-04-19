@@ -12,23 +12,39 @@
     <!-- TỆP CSS DÙNG CHUNG -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}?v=5">
     <style>
-        .logout-wrapper { position: relative; display: flex; align-items: center; }
-        .logout-icon-btn { cursor: pointer; transition: opacity 0.2s; }
-        .logout-icon-btn:hover { opacity: 0.7; }
+        .logout-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .logout-icon-btn {
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .logout-icon-btn:hover {
+            opacity: 0.7;
+        }
+
         .logout-dropdown {
             position: absolute;
             top: calc(100% + 10px);
             right: 0;
             background: #fff;
             border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             display: none;
             z-index: 1000;
             border: 1px solid #f0f0f0;
             min-width: 140px;
             overflow: hidden;
         }
-        .logout-dropdown.show { display: block; }
+
+        .logout-dropdown.show {
+            display: block;
+        }
+
         .dropdown-item {
             padding: 12px 20px;
             color: #333;
@@ -40,7 +56,11 @@
             align-items: center;
             gap: 10px;
         }
-        .dropdown-item:hover { background: #fdf5f4; color: #e58f8b; }
+
+        .dropdown-item:hover {
+            background: #fdf5f4;
+            color: #e58f8b;
+        }
 
         /* Logout Confirm Modal Styles */
         .confirm-overlay {
@@ -52,6 +72,7 @@
             align-items: center;
             z-index: 9999;
         }
+
         .confirm-modal {
             background: #fff;
             border-radius: 12px;
@@ -61,22 +82,63 @@
             max-width: 320px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
+
         .confirm-icon {
-            width: 42px; height: 42px; border: 2px solid #ed6c6c; border-radius: 50%;
-            color: #ed6c6c; display: inline-flex; align-items: center; justify-content: center;
-            font-size: 24px; font-weight: 500; margin: 0 auto 16px;
+            width: 42px;
+            height: 42px;
+            border: 2px solid #ed6c6c;
+            border-radius: 50%;
+            color: #ed6c6c;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 500;
+            margin: 0 auto 16px;
         }
-        .confirm-title { font-size: 16px; font-weight: 700; color: #2b2b2b; margin-bottom: 24px; line-height: 1.4; }
-        .confirm-actions { display: flex; justify-content: center; gap: 20px; }
+
+        .confirm-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2b2b2b;
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+
+        .confirm-actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
         .confirm-btn {
-            min-width: 104px; height: 38px; border: none; border-radius: 6px;
-            font-size: 15px; font-weight: 700; cursor: pointer; display: inline-flex;
-            justify-content: center; align-items: center;
+            min-width: 104px;
+            height: 38px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
         }
-        .confirm-btn-yes { background: #ef8989; color: #fff; text-decoration: none; }
+
+        .confirm-btn-yes {
+            background: #ef8989;
+            color: #fff;
+            text-decoration: none;
+        }
 
         /* Notification Dropdown Styles */
-        .notification-bell { position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .notif-dropdown {
             position: absolute;
             top: calc(100% + 12px);
@@ -84,14 +146,18 @@
             width: 320px;
             background: #fff;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             display: none;
             z-index: 1000;
             border: 1px solid #eaeaea;
             flex-direction: column;
             cursor: default;
         }
-        .notif-dropdown.show { display: flex; }
+
+        .notif-dropdown.show {
+            display: flex;
+        }
+
         .notif-dropdown::before {
             content: '';
             position: absolute;
@@ -104,6 +170,7 @@
             border-left: 1px solid #eaeaea;
             border-top: 1px solid #eaeaea;
         }
+
         .notif-header {
             padding: 12px 16px;
             background: #fdfaf9;
@@ -115,18 +182,27 @@
             border-top-right-radius: 12px;
             position: relative;
         }
+
         .notif-list {
             max-height: 400px;
             overflow-y: auto;
         }
+
         .notif-item {
             padding: 12px 16px;
             border-bottom: 1px solid #f2f2f2;
             cursor: pointer;
             transition: background 0.2s;
         }
-        .notif-item:hover { background: #fdfdfd; }
-        .notif-item:last-child { border-bottom: none; }
+
+        .notif-item:hover {
+            background: #fdfdfd;
+        }
+
+        .notif-item:last-child {
+            border-bottom: none;
+        }
+
         .notif-tag {
             display: inline-block;
             padding: 3px 8px;
@@ -137,150 +213,116 @@
             color: #555;
             background: #fae8e8;
         }
-        .notif-author { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 4px; }
-        .notif-preview { font-size: 14px; color: #666; margin-bottom: 6px; line-height: 1.4; }
-        .notif-time { font-size: 12px; color: #a0a0a0; }
+
+        .notif-author {
+            font-size: 15px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .notif-preview {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .notif-time {
     </style>
 </head>
 
-<body>
+<body class="flex flex-col min-h-screen">
 
     <div class="header-top-container">
         <div class="header-top">
-            {% if user.khachhang or not user.is_authenticated %}
-                <!-- GIAO ĐIỆN KHÁCH HÀNG & KHÁCH VÃNG LAI: Sử dụng Flexbox để chống đè layer -->
-                <div class="logo"><a href="{% url 'cskh:dashboard' %}" style="text-decoration: none; color: inherit;">SALAVI</a></div>
-                
-                <div class="search-box" style="position: relative; left: 0; transform: none; flex: 1; margin: 0 40px; max-width: 500px;">
-                    <form action="{% url 'products:product_list' %}" method="GET" style="display: flex; width: 100%;">
-                        <input type="text" name="q" placeholder="Tìm kiếm sản phẩm..." value="{{ request.GET.q|default:'' }}" style="width: 100%;">
-                        <button type="submit" style="display: none;"></button>
-                    </form>
+            <div class="logo"><a href="{% url 'cskh:dashboard' %}"
+                    style="text-decoration: none; color: inherit;">SALAVI</a></div>
+            <div class="search-box">
+                <!-- Cập nhật Search Form -->
+                <form action="{% url 'products:product_list' %}" method="GET" style="display: flex; width: 100%;">
+                    <input type="text" name="q" placeholder="Tìm kiếm sản phẩm..."
+                        value="{{ request.GET.q|default:'' }}">
+                    <button type="submit" style="display: none;"></button>
+                </form>
+            </div>
+            <div class="header-icons">
+                <div class="user-btn">
+                    Salavi
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>
                 </div>
-
-                <div class="header-icons" style="gap: 15px; flex-shrink: 0;">
-                    <div class="user-btn">
-                        <span style="max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block;">
-                            {% if user.is_authenticated %}
-                                {{ user.khachhang.HoTen|default:user.username }}
-                            {% else %}
-                                Tài khoản
-                            {% endif %}
-                        </span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                        </svg>
-                    </div>
-                    <div class="icon-list" style="gap: 15px;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="9" cy="21" r="1"></circle>
-                            <circle cx="20" cy="21" r="1"></circle>
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                        </svg>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                        </svg>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                        
-                        {% if user.is_authenticated %}
-                            <div class="logout-wrapper">
-                                <div class="logout-icon-btn" id="logoutIconBtn" style="cursor: pointer;">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                        <polyline points="16 17 21 12 16 7"></polyline>
-                                        <line x1="21" y1="12" x2="9" y2="12"></line>
-                                    </svg>
-                                </div>
-                                <div class="logout-dropdown" id="logoutDropdown">
-                                    <div class="dropdown-item" id="startLogout">
-                                        <i class="fas fa-sign-out-alt"></i>
-                                        Đăng xuất
-                                    </div>
-                                </div>
-                            </div>
-                        {% else %}
-                            <!-- Icon Đăng nhập cho khách vãng lai -->
-                            <a href="{% url 'accounts:login' %}" style="color: inherit; display: flex; align-items: center;">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-                                    <polyline points="10 17 15 12 10 7"></polyline>
-                                    <line x1="15" y1="12" x2="3" y2="12"></line>
-                                </svg>
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-            {% else %}
-                <!-- GIAO ĐIỆN ADMIN/NHÂN VIÊN: Giữ nguyên cấu trúc Absolute gốc -->
-                <div class="logo"><a href="{% url 'cskh:dashboard' %}" style="text-decoration: none; color: inherit;">SALAVI</a></div>
-                <div class="search-box">
-                    <form action="{% url 'products:product_list' %}" method="GET" style="display: flex; width: 100%;">
-                        <input type="text" name="q" placeholder="Tìm kiếm sản phẩm..." value="{{ request.GET.q|default:'' }}">
-                        <button type="submit" style="display: none;"></button>
-                    </form>
-                </div>
-                <div class="header-icons">
-                    <div class="user-btn">
-                        Salavi
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                        </svg>
-                    </div>
-                    <div class="icon-list">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="9" cy="21" r="1"></circle>
-                            <circle cx="20" cy="21" r="1"></circle>
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                        </svg>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                        </svg>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                        <div class="logout-wrapper">
-                            <div class="logout-icon-btn" id="logoutIconBtn">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                    <polyline points="16 17 21 12 16 7"></polyline>
-                                    <line x1="21" y1="12" x2="9" y2="12"></line>
-                                </svg>
-                            </div>
-                            <div class="logout-dropdown" id="logoutDropdown">
-                                <div class="dropdown-item" id="startLogout">
-                                    <i class="fas fa-sign-out-alt"></i>
-                                    Đăng xuất
-                                </div>
+                <div class="icon-list">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                        </path>
+                    </svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <div class="logout-wrapper">
+                        <div class="logout-icon-btn" id="logoutIconBtn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                        </div>
+                        <div class="logout-dropdown" id="logoutDropdown">
+                            <div class="dropdown-item" id="startLogout">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Đăng xuất
                             </div>
                         </div>
                     </div>
                 </div>
-            {% endif %}
+            </div>
         </div>
     </div>
 
     <header class="header-nav">
         <div class="nav-container">
             <nav class="nav">
-                <a href="{% url 'cskh:dashboard' %}" class="{% if request.path == '/' %}active !text-gray-900{% endif %}">Trang chủ</a>
-                
-                {% if user.is_superuser or user.nhanvien %}
-                    <a href="{% url 'accounts:customer_list' %}" class="{% if 'customers' in request.path or 'accounts' in request.path %}active !text-gray-900{% endif %}">Khách hàng</a>
-                {% endif %}
-
-                <a href="{% url 'products:product_list' %}" class="{% if 'products' in request.path %}active !text-gray-900{% endif %}">Sản phẩm</a>
-                
                 {% if user.is_superuser %}
+                    <!-- CHỦ SHOP (Đầy đủ) -->
+                    <a href="{% url 'cskh:dashboard' %}" class="{% if request.path == '/' %}active !text-gray-900{% endif %}">Trang chủ</a>
+                    <a href="{% url 'accounts:customer_list' %}" class="{% if 'customers' in request.path %}active !text-gray-900{% endif %}">Khách hàng</a>
+                    <a href="{% url 'products:product_list' %}" class="{% if 'products' in request.path %}active !text-gray-900{% endif %}">Sản phẩm</a>
                     <a href="{% url 'cskh:uudai_list' %}" class="{% if 'uudai' in request.path %}active !text-gray-900{% endif %}">Ưu đãi</a>
+                    <a href="{% url 'cskh:diem_tich_luy' %}" class="{% if 'tich-luy' in request.path %}active !text-gray-900{% endif %}">Tích điểm</a>
+                    <a href="{% url 'cskh:quan_ly_danh_gia' %}" class="{% if 'danh-gia' in request.path %}active !text-gray-900{% endif %}">Đánh giá</a>
+                    <a href="{% url 'orders:doitra_list' %}" class="{% if 'doitra' in request.path %}active !text-gray-900{% endif %}">Đổi trả</a>
+                {% elif user.is_staff or user.nhanvien %}
+                    <!-- NHÂN VIÊN (Đầy đủ nhưng KHÔNG có Ưu đãi) -->
+                    <a href="{% url 'cskh:dashboard' %}" class="{% if request.path == '/' %}active !text-gray-900{% endif %}">Trang chủ</a>
+                    <a href="{% url 'accounts:customer_list' %}" class="{% if 'customers' in request.path %}active !text-gray-900{% endif %}">Khách hàng</a>
+                    <a href="{% url 'products:product_list' %}" class="{% if 'products' in request.path %}active !text-gray-900{% endif %}">Sản phẩm</a>
+                    <a href="{% url 'cskh:diem_tich_luy' %}" class="{% if 'tich-luy' in request.path %}active !text-gray-900{% endif %}">Tích điểm</a>
+                    <a href="{% url 'cskh:quan_ly_danh_gia' %}" class="{% if 'danh-gia' in request.path %}active !text-gray-900{% endif %}">Đánh giá</a>
+                    <a href="{% url 'orders:doitra_list' %}" class="{% if 'doitra' in request.path %}active !text-gray-900{% endif %}">Đổi trả</a>
+                {% elif user.is_authenticated %}
+                    <!-- KHÁCH HÀNG CÓ TÀI KHOẢN (Chỉ có 5 mục) -->
+                    <a href="{% url 'cskh:guest_home' %}" class="{% if request.path == '/store/' %}active !text-gray-900{% endif %}">Trang chủ</a>
+                    <a href="{% url 'products:product_list' %}" class="{% if 'products' in request.path %}active !text-gray-900{% endif %}">Sản phẩm</a>
+                    <a href="{% url 'cskh:client_diem_tich_luy' %}" class="{% if 'my-points' in request.path %}active !text-gray-900{% endif %}">Tích điểm</a>
+                    <a href="{% url 'cskh:danh_gia_san_pham' %}" class="{% if 'danh-gia' in request.path %}active !text-gray-900{% endif %}">Đánh giá</a>
+                    <a href="{% url 'orders:doitra_list' %}" class="{% if 'doitra' in request.path %}active !text-gray-900{% endif %}">Đổi trả</a>
+                {% else %}
+                    <!-- KHÁCH VÃNG LAI (Không có tài khoản - 3 mục) -->
+                    <a href="{% url 'cskh:guest_home' %}" class="{% if request.path == '/store/' %}active !text-gray-900{% endif %}">Trang chủ</a>
+                    <a href="{% url 'products:product_list' %}" class="{% if 'products' in request.path %}active !text-gray-900{% endif %}">Sản phẩm</a>
+                    <a href="{% url 'cskh:danh_gia_san_pham' %}" class="{% if 'danh-gia' in request.path %}active !text-gray-900{% endif %}">Đánh giá</a>
                 {% endif %}
-
-                <a href="{% url 'cskh:diem_tich_luy' %}" class="{% if 'tich-luy' in request.path %}active !text-gray-900{% endif %}">Tích điểm</a>
-                <a href="{% url 'cskh:quan_ly_danh_gia' %}" class="{% if 'danh-gia' in request.path %}active !text-gray-900{% endif %}">Đánh giá</a>
-                <a href="{% url 'orders:doitra_list' %}" class="{% if 'doitra' in request.path or 'orders' in request.path %}active !text-gray-900{% endif %}">Đổi trả</a>
             </nav>
             <div class="notification-bell" id="bellIconBtn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -290,7 +332,7 @@
                 {% if nav_notifications_count > 0 %}
                 <span class="badge">{{ nav_notifications_count }}</span>
                 {% endif %}
-                
+
                 <!-- DROPDOWN THÔNG BÁO -->
                 <div class="notif-dropdown" id="notifDropdown">
                     <div class="notif-header">
@@ -298,7 +340,8 @@
                     </div>
                     <div class="notif-list">
                         {% for notif in nav_notifications %}
-                        <a href="{{ notif.link }}" class="notif-item block" style="text-decoration:none; display:block;">
+                        <a href="{{ notif.link }}" class="notif-item block"
+                            style="text-decoration:none; display:block;">
                             <div class="notif-tag">{{ notif.tag }}</div>
                             <div class="notif-author">{{ notif.author }}</div>
                             <div class="notif-preview">{{ notif.preview }}</div>
@@ -306,7 +349,8 @@
                         </a>
                         {% empty %}
                         <div style="padding: 24px; text-align: center; color: #999; font-size: 15px;">
-                            <i class="fas fa-bell-slash" style="font-size: 24px; margin-bottom: 8px; color: #ccc;"></i><br>
+                            <i class="fas fa-bell-slash"
+                                style="font-size: 24px; margin-bottom: 8px; color: #ccc;"></i><br>
                             Không có thông báo mới
                         </div>
                         {% endfor %}
@@ -317,9 +361,43 @@
         </div>
     </header>
 
-    <!-- BLOCK CONTENT TRỐNG TẠI ĐÂY -->
-    {% block content %}
-    {% endblock %}
+    <!-- CHÍNH: NỘI DUNG TRANG -->
+    <main class="flex-grow">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {% if user.khachhang or not user.is_authenticated %}
+    <footer class="bg-[#fdf7f7] text-[#555] py-16 border-t border-[#f0eaea] mt-10">
+        <div class="max-w-[1200px] mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-[#e58f8b] text-2xl font-bold mb-4 tracking-wider uppercase">Salavi</h3>
+                <p class="text-[13px] leading-relaxed max-w-xs text-gray-600">Thời trang cao cấp dành cho bạn</p>
+            </div>
+            <div>
+                <h4 class="text-gray-800 font-semibold mb-4 text-sm">Hỗ trợ</h4>
+                <ul class="space-y-3 text-[13px] text-gray-600">
+                    <li><a href="#" class="hover:text-[#e58f8b] transition-colors">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#" class="hover:text-[#e58f8b] transition-colors">Chính sách đổi trả</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-gray-800 font-semibold mb-4 text-sm">Về chúng tôi</h4>
+                <ul class="space-y-3 text-[13px] text-gray-600">
+                    <li><a href="#" class="hover:text-[#e58f8b] transition-colors">Giới thiệu</a></li>
+                    <li><a href="#" class="hover:text-[#e58f8b] transition-colors">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-gray-800 font-semibold mb-4 text-sm">Liên hệ</h4>
+                <ul class="space-y-3 text-[13px] text-gray-600">
+                    <li>Hotline: 1900 1234</li>
+                    <li>Email: support@salavi.vn</li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    {% endif %}
 
     <a href="{% url 'cskh:chat_reply' %}" class="support-btn" style="display: flex; text-decoration: none;">
         <svg viewBox="0 0 24 24">
@@ -334,14 +412,18 @@
     {% if messages %}
     <div class="fixed bottom-5 right-5 z-50 flex flex-col gap-2">
         {% for message in messages %}
-        <div class="toast flex items-center gap-3 px-5 py-3 min-w-[280px] bg-[#8ef0ba] text-[#111] rounded shadow-lg transform transition-all duration-300 translate-x-0">
-            <svg class="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <div
+            class="toast flex items-center gap-3 px-5 py-3 min-w-[280px] bg-[#8ef0ba] text-[#111] rounded shadow-lg transform transition-all duration-300 translate-x-0">
+            <svg class="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
             <span class="font-bold text-[15px]">{{ message }}</span>
         </div>
         {% endfor %}
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const toasts = document.querySelectorAll('.toast');
             toasts.forEach(toast => {
                 setTimeout(() => {
@@ -366,7 +448,7 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const logoutIconBtn = document.getElementById('logoutIconBtn');
             const logoutDropdown = document.getElementById('logoutDropdown');
             const startLogout = document.getElementById('startLogout');
@@ -374,29 +456,29 @@
             const btnCancelLogout = document.getElementById('btnCancelLogout');
 
             if (logoutIconBtn && logoutDropdown) {
-                logoutIconBtn.addEventListener('click', function(e) {
+                logoutIconBtn.addEventListener('click', function (e) {
                     e.stopPropagation();
                     logoutDropdown.classList.toggle('show');
                 });
 
-                document.addEventListener('click', function() {
+                document.addEventListener('click', function () {
                     logoutDropdown.classList.remove('show');
                 });
 
-                logoutDropdown.addEventListener('click', function(e) {
+                logoutDropdown.addEventListener('click', function (e) {
                     e.stopPropagation();
                 });
             }
 
             if (startLogout && logoutConfirmOverlay) {
-                startLogout.addEventListener('click', function() {
+                startLogout.addEventListener('click', function () {
                     logoutDropdown.classList.remove('show');
                     logoutConfirmOverlay.style.display = 'flex';
                 });
             }
 
             if (btnCancelLogout && logoutConfirmOverlay) {
-                btnCancelLogout.addEventListener('click', function() {
+                btnCancelLogout.addEventListener('click', function () {
                     logoutConfirmOverlay.style.display = 'none';
                 });
             }
@@ -406,23 +488,23 @@
             const notifDropdown = document.getElementById('notifDropdown');
 
             if (bellIconBtn && notifDropdown) {
-                bellIconBtn.addEventListener('click', function(e) {
+                bellIconBtn.addEventListener('click', function (e) {
                     e.stopPropagation();
                     notifDropdown.classList.toggle('show');
                     if (logoutDropdown) logoutDropdown.classList.remove('show');
                 });
 
-                document.addEventListener('click', function() {
+                document.addEventListener('click', function () {
                     notifDropdown.classList.remove('show');
                 });
 
-                notifDropdown.addEventListener('click', function(e) {
+                notifDropdown.addEventListener('click', function (e) {
                     e.stopPropagation();
                 });
             }
 
             // Close modal when clicking outside
-            logoutConfirmOverlay.addEventListener('click', function(e) {
+            logoutConfirmOverlay.addEventListener('click', function (e) {
                 if (e.target === logoutConfirmOverlay) {
                     logoutConfirmOverlay.style.display = 'none';
                 }
