@@ -605,51 +605,111 @@ def store_product_detail_view(request, ma_sp):
 
 def global_notifications(request):
     notifications = []
+    user = request.user
 
     try:
-        # 1. Tin nhắn mới nhất (từ cuộc hội thoại Chưa xử lý)
-        hoi_thoai_chua_tl = HoiThoaiTuVan.objects.filter(TrangThai='Chưa xử lý').first()
-        if hoi_thoai_chua_tl:
-            msg = TinNhanTuVan.objects.filter(MaHoiThoai=hoi_thoai_chua_tl).order_by('-ThoiGianGui').first()
-            if msg:
+        # 1. TRƯỜNG HỢP: NHÂN VIÊN / ADMIN (Giữ nguyên logic cũ)
+        if user.is_authenticated and (user.is_superuser or user.is_staff or hasattr(user, 'nhanvien')):
+            # Tin nhắn mới nhất (từ cuộc hội thoại Chưa xử lý)
+            hoi_thoai_chua_tl = HoiThoaiTuVan.objects.filter(TrangThai='Chưa xử lý').first()
+            if hoi_thoai_chua_tl:
+                msg = TinNhanTuVan.objects.filter(MaHoiThoai=hoi_thoai_chua_tl).order_by('-ThoiGianGui').first()
+                if msg:
+                    notifications.append({
+                        'type': 'msg',
+                        'tag': 'Tin nhắn mới',
+                        'author': msg.MaHoiThoai.MaKH.HoTen if msg.MaHoiThoai.MaKH else 'Khách hàng',
+                        'preview': (msg.NoiDung[:45] + '...') if msg.NoiDung and len(msg.NoiDung) > 45 else msg.NoiDung,
+                        'time': msg.ThoiGianGui.strftime('%H:%M - %d/%m/%Y'),
+                        'link': f'/chat/reply/?ma_kh={msg.MaHoiThoai.MaKH.MaKH}' if msg.MaHoiThoai.MaKH else '/chat/reply/'
+                    })
+
+            # Đổi trả mới nhất (Chờ xử lý)
+            dt = DoiTra.objects.filter(TrangThai='PENDING').order_by('-NgayYeuCau').first()
+            if dt:
                 notifications.append({
-                    'type': 'msg',
-                    'tag': 'Tin nhắn mới',
-                    'author': msg.MaHoiThoai.MaKH.HoTen if msg.MaHoiThoai.MaKH else 'Khách hàng',
-                    'preview': (msg.NoiDung[:45] + '...') if len(msg.NoiDung) > 45 else msg.NoiDung,
-                    'time': msg.ThoiGianGui.strftime('%H:%M - %d/%m/%Y'),
-                    'link': f'/chat/reply/?ma_kh={msg.MaHoiThoai.MaKH.MaKH}' if msg.MaHoiThoai.MaKH else '/chat/reply/'
+                    'type': 'return',
+                    'tag': 'Yêu cầu đổi trả mới',
+                    'author': dt.MaKH.HoTen if dt.MaKH else 'Khách hàng',
+                    'preview': (dt.LyDo[:45] + '...') if dt.LyDo and len(dt.LyDo) > 45 else dt.LyDo,
+                    'time': dt.NgayYeuCau.strftime('00:00 - %d/%m/%Y'),
+                    'link': '/orders/doitra/'
                 })
 
-        # 2. Đổi trả mới nhất (Chờ xử lý)
-        dt = DoiTra.objects.filter(TrangThai='PENDING').order_by('-NgayYeuCau').first()
-        if dt:
-            notifications.append({
-                'type': 'return',
-                'tag': 'Yêu cầu đổi trả mới',
-                'author': dt.MaKH.HoTen if dt.MaKH else 'Khách hàng',
-                'preview': (dt.LyDo[:45] + '...') if len(dt.LyDo) > 45 else dt.LyDo,
-                'time': dt.NgayYeuCau.strftime('00:00 - %d/%m/%Y'),
-                'link': '/orders/doitra/'
-            })
+            # Đánh giá mới nhất
+            dg = DanhGia.objects.order_by('-NgayDanhGia').first()
+            if dg:
+                notifications.append({
+                    'type': 'review',
+                    'tag': 'Đánh giá mới',
+                    'author': dg.MaKH.HoTen if dg.MaKH else 'Khách hàng',
+                    'preview': (dg.NoiDung[:45] + '...') if dg.NoiDung and len(dg.NoiDung) > 45 else (dg.NoiDung or "Không có nội dung"),
+                    'time': dg.NgayDanhGia.strftime('00:00 - %d/%m/%Y'),
+                    'link': f'/danh-gia/review/{dg.MaDanhGia}/'
+                })
 
-        # 3. Đánh giá mới nhất
-        dg = DanhGia.objects.order_by('-NgayDanhGia').first()
-        if dg:
-            notifications.append({
-                'type': 'review',
-                'tag': 'Đánh giá mới',
-                'author': dg.MaKH.HoTen if dg.MaKH else 'Khách hàng',
-                'preview': (dg.NoiDung[:45] + '...') if dg.NoiDung and len(dg.NoiDung) > 45 else (dg.NoiDung or "Không có nội dung"),
-                'time': dg.NgayDanhGia.strftime('00:00 - %d/%m/%Y'),
-                'link': f'/danh-gia/review/{dg.MaDanhGia}/'
-            })
+        # 2. TRƯỜNG HỢP: KHÁCH HÀNG ĐÃ ĐĂNG NHẬP
+        elif user.is_authenticated and hasattr(user, 'khachhang'):
+            kh = user.khachhang
+
+            # Cập nhật trạng thái Đổi trả (Chỉ những cái đã Xử lý hoặc Từ chối)
+            doitras = DoiTra.objects.filter(MaKH=kh, TrangThai__in=['DONE', 'REJECT']).order_by('-NgayYeuCau')[:2]
+            for dt in doitras:
+                status_text = "đã được duyệt" if dt.TrangThai == 'DONE' else "đã bị từ chối"
+                notifications.append({
+                    'type': 'return_update',
+                    'tag': 'Cập nhật đổi trả',
+                    'author': 'Hệ thống',
+                    'preview': f"Yêu cầu {dt.MaDoiTra} {status_text}.",
+                    'time': dt.NgayYeuCau.strftime('%d/%m/%Y'),
+                    'link': '/orders/my-returns/'
+                })
+
+            # Khuyến mãi sắp tới / đang diễn ra
+            promotions = KhuyenMai.objects.filter(NgayKetThuc__gte=date.today()).order_by('-NgayBatDau')[:2]
+            for km in promotions:
+                notifications.append({
+                    'type': 'promo',
+                    'tag': 'Ưu đãi mới',
+                    'author': 'Salavi Store',
+                    'preview': km.TenKhuyenMai,
+                    'time': km.NgayBatDau.strftime('%d/%m/%Y'),
+                    'link': '/store/'
+                })
+
+            # Phản hồi từ nhân viên trong chat
+            chat = HoiThoaiTuVan.objects.filter(MaKH=kh).first()
+            if chat:
+                last_reply = TinNhanTuVan.objects.filter(MaHoiThoai=chat, MaNV__isnull=False).order_by('-ThoiGianGui').first()
+                if last_reply:
+                    notifications.append({
+                        'type': 'chat_reply',
+                        'tag': 'Tin nhắn từ shop',
+                        'author': last_reply.MaNV.HoTen if last_reply.MaNV else 'Nhân viên',
+                        'preview': (last_reply.NoiDung[:45] + '...') if last_reply.NoiDung and len(last_reply.NoiDung) > 45 else (last_reply.NoiDung or "Đã gửi một hình ảnh"),
+                        'time': last_reply.ThoiGianGui.strftime('%H:%M - %d/%m/%Y'),
+                        'link': '/chat/reply/' # Màn hình chat
+                    })
+
+        # 3. TRƯỜNG HỢP: KHÁCH VÃNG LAI (Chưa đăng nhập)
+        else:
+            promotions = KhuyenMai.objects.filter(NgayKetThuc__gte=date.today()).order_by('-NgayBatDau')[:3]
+            for km in promotions:
+                notifications.append({
+                    'type': 'promo_guest',
+                    'tag': 'Khuyến mãi',
+                    'author': 'Salavi Store',
+                    'preview': km.TenKhuyenMai,
+                    'time': km.NgayBatDau.strftime('%d/%m/%Y'),
+                    'link': '/store/'
+                })
+
     except Exception:
-        pass # Fallback an toàn nếu thiếu DB model chưa migrate
+        pass
 
     return {
         'nav_notifications': notifications,
-        'nav_notifications_count': sum(1 for n in notifications)
+        'nav_notifications_count': len(notifications)
     }
 
 def gui_danh_gia_view(request, ma_sp):
