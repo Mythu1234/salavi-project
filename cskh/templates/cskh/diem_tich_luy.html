@@ -656,9 +656,19 @@
 
 
     function executeDeletePoints() {
-        const diemTru = document.getElementById('deleteInput').value;
+        const diemTru = parseInt(document.getElementById('deleteInput').value);
        
-        if (!currentMaKH) return;
+        if (!currentMaKH || isNaN(diemTru)) return;
+
+        // Lấy số điểm hiện tại từ modal để kiểm tra
+        const currentPointsText = document.getElementById('modalDiem').textContent;
+        const currentPoints = parseInt(currentPointsText.replace(/[^0-9]/g, ''));
+
+        if (diemTru > currentPoints) {
+            alert('Số điểm không hợp lệ, vui lòng nhập lại!');
+            closeConfirmModal(true);
+            return;
+        }
 
 
         fetch(`/diem-tich-luy/api/${currentMaKH}/tru-diem/`, {
