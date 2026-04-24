@@ -383,6 +383,10 @@ def api_tru_tich_diem(request, ma_kh):
             body = json.loads(request.body)
             diem_tru = int(body.get('diem_tru', 0))
             td = TichDiem.objects.get(MaKH__MaKH=ma_kh)
+            
+            if diem_tru > td.TongDiem:
+                return JsonResponse({'success': False, 'error': 'Số điểm không hợp lệ, vui lòng nhập lại!'})
+                
             td.TongDiem -= diem_tru
             td.save()
             
@@ -408,6 +412,9 @@ def api_sua_tich_diem(request, ma_kh):
         try:
             body = json.loads(request.body)
             diem_moi = int(body.get('diem_moi', -1))
+            if diem_moi < 0:
+                return JsonResponse({'success': False, 'error': 'Số điểm không hợp lệ, vui lòng nhập lại!'})
+                
             td = TichDiem.objects.get(MaKH__MaKH=ma_kh)
             chenh_lech = diem_moi - td.TongDiem
             td.TongDiem = diem_moi
