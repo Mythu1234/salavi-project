@@ -668,12 +668,13 @@ def global_notifications(request):
             # Khuyến mãi sắp tới / đang diễn ra
             promotions = KhuyenMai.objects.filter(NgayKetThuc__gte=date.today()).order_by('-NgayBatDau')[:2]
             for km in promotions:
+                giam_gia_str = f"{int(km.PhanTramGiam)}" if km.PhanTramGiam == int(km.PhanTramGiam) else f"{km.PhanTramGiam}"
                 notifications.append({
                     'type': 'promo',
                     'tag': 'Ưu đãi mới',
                     'author': 'Salavi Store',
-                    'preview': km.TenKhuyenMai,
-                    'time': km.NgayBatDau.strftime('%d/%m/%Y'),
+                    'preview': f"{km.TenKhuyenMai} (Giảm {giam_gia_str}%)",
+                    'time': f"{km.NgayBatDau.strftime('%d/%m/%Y')} - {km.NgayKetThuc.strftime('%d/%m/%Y')}",
                     'link': '/store/'
                 })
 
@@ -695,12 +696,13 @@ def global_notifications(request):
         else:
             promotions = KhuyenMai.objects.filter(NgayKetThuc__gte=date.today()).order_by('-NgayBatDau')[:3]
             for km in promotions:
+                giam_gia_str = f"{int(km.PhanTramGiam)}" if km.PhanTramGiam == int(km.PhanTramGiam) else f"{km.PhanTramGiam}"
                 notifications.append({
                     'type': 'promo_guest',
                     'tag': 'Khuyến mãi',
                     'author': 'Salavi Store',
-                    'preview': km.TenKhuyenMai,
-                    'time': km.NgayBatDau.strftime('%d/%m/%Y'),
+                    'preview': f"{km.TenKhuyenMai} (Giảm {giam_gia_str}%)",
+                    'time': f"{km.NgayBatDau.strftime('%d/%m/%Y')} - {km.NgayKetThuc.strftime('%d/%m/%Y')}",
                     'link': '/store/'
                 })
 

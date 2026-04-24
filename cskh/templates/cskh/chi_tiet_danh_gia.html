@@ -209,6 +209,13 @@
 
 <div class="page-wrapper">
     <div class="header-section">
+        <div style="margin-bottom: 12px;">
+            {% if user.nhanvien or user.is_superuser %}
+                <a href="{% url 'cskh:quan_ly_danh_gia' %}" style="color:#a0a0a0; text-decoration:none; font-size:18px; font-weight: 500;">&lsaquo; Quay lại</a>
+            {% else %}
+                <a href="{% url 'cskh:danh_gia_san_pham' %}" style="color:#a0a0a0; text-decoration:none; font-size:18px; font-weight: 500;">&lsaquo; Quay lại</a>
+            {% endif %}
+        </div>
         <h1>Đánh giá sản phẩm</h1>
         <p>Xem tất cả đánh giá từ khách hàng</p>
     </div>
@@ -216,6 +223,8 @@
     <div class="view-layout">
         <!-- Sidebar -->
         <div class="sidebar">
+
+
             <div class="sidebar-card">
                 <h3>Tổng quan đánh giá</h3>
                 <div class="rating-summary">
@@ -272,12 +281,6 @@
                     <button type="submit" class="btn-filter-side">Lọc</button>
                 </form>
             </div>
-            
-            {% if user.nhanvien or user.is_superuser %}
-                <a href="{% url 'cskh:quan_ly_danh_gia' %}" style="color:#d0d0d0; text-decoration:none; font-size:14px;">&lsaquo; Quay lại Quản lý</a>
-            {% else %}
-                <a href="{% url 'cskh:danh_gia_san_pham' %}" style="color:#d0d0d0; text-decoration:none; font-size:14px;">&lsaquo; Quay lại Danh sách</a>
-            {% endif %}
         </div>
 
         <!-- Feed Area -->
