@@ -90,6 +90,8 @@ def register_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         password_confirm = request.POST.get('password_confirm')
+        name = request.POST.get('name', '').strip()
+        address = request.POST.get('address', '').strip()
 
         try:
             # 3a. Kiểm tra tài khoản tồn tại
@@ -114,7 +116,14 @@ def register_view(request):
                 return render(request, 'accounts/login/register.html')
 
             # Tạo tài khoản
-            User.objects.create_user(username=username, password=password)
+            user = User.objects.create_user(username=username, password=password)
+            code = _generate_next_customer_code()
+            KhachHang.objects.create(
+                MaKH=code,
+                user=user,
+                HoTen=name,
+                DiaChi=address
+            )
             messages.success(request, 'Tạo tài khoản thành công')
             return redirect('accounts:login')
 

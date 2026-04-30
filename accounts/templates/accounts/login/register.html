@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salavi - Tạo tài khoản</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -163,6 +163,8 @@
             <svg viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
         </div>
 
+        <h2>Tạo tài khoản</h2>
+
         {% for message in messages %}
             {% if message.level_tag != 'success' and 'username' not in message.tags and 'password' not in message.tags and 'password_confirm' not in message.tags %}
                 <div style="margin-bottom: 20px; padding: 12px 16px; background: #fff1f1; color: #d32f2f; font-size: 14px; font-weight: 600; border-radius: 8px; border: 1px solid #f9dcdc; display: flex; align-items: center; gap: 10px;">
@@ -216,6 +218,32 @@
                 </div>
                 {% for message in messages %}
                     {% if 'password_confirm' in message.tags %}
+                        <p style="margin: 8px 0 0 5px; color: #d32f2f; font-size: 13px; font-weight: 500; text-align: left;">{{ message }}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label>Họ tên</label>
+                <div class="input-wrapper">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <input type="text" name="name" placeholder="Nhập họ tên" required>
+                </div>
+                {% for message in messages %}
+                    {% if 'name' in message.tags %}
+                        <p style="margin: 8px 0 0 5px; color: #d32f2f; font-size: 13px; font-weight: 500; text-align: left;">{{ message }}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label>Địa chỉ</label>
+                <div class="input-wrapper">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h14a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><path d="M4 6h2"></path><path d="M4 12h2"></path><path d="M4 18h2"></path><circle cx="13" cy="9" r="2.5"></circle><path d="M9 16c0-1.5 2-2.5 4-2.5s4 1 4 2.5"></path></svg>
+                    <input type="text" name="address" placeholder="Nhập địa chỉ" required>
+                </div>
+                {% for message in messages %}
+                    {% if 'address' in message.tags %}
                         <p style="margin: 8px 0 0 5px; color: #d32f2f; font-size: 13px; font-weight: 500; text-align: left;">{{ message }}</p>
                     {% endif %}
                 {% endfor %}
