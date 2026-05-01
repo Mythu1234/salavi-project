@@ -90,13 +90,14 @@ def register_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         password_confirm = request.POST.get('password_confirm')
-        full_name = request.POST.get('full_name', '').strip()
+
+        name = request.POST.get('name', '').strip()
         address = request.POST.get('address', '').strip()
 
         context = {
             'username': username,
-            'full_name': full_name,
-            'address': address
+            'name': name,
+            'address': address,
         }
 
         try:
@@ -121,19 +122,18 @@ def register_view(request):
                 messages.error(request, 'Mật khẩu xác nhận không khớp với mật khẩu', extra_tags='password_confirm')
                 return render(request, 'accounts/login/register.html', context)
 
-            if not full_name:
-                messages.error(request, 'Vui lòng nhập họ tên.', extra_tags='full_name')
+            if not name:
+                messages.error(request, 'Vui lòng nhập họ tên.', extra_tags='name')
                 return render(request, 'accounts/login/register.html', context)
 
             # Tạo tài khoản
             user = User.objects.create_user(username=username, password=password)
-            
-            # Tạo thông tin khách hàng
-            kh_code = _generate_next_customer_code()
+
+            code = _generate_next_customer_code()
             KhachHang.objects.create(
-                MaKH=kh_code,
+                MaKH=code,
                 user=user,
-                HoTen=full_name,
+                HoTen=name,
                 DiaChi=address
             )
 
