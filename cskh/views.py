@@ -474,9 +474,15 @@ def danh_gia_san_pham_view(request):
         # 3. Lọc ra những ID thực sự chưa được đánh giá
         to_review_ids = [id for id in bought_sp_ids if id not in reviewed_sp_ids]
 
+    reviewed_list = []
     if filter_mode == 'todo' and khach_hang:
         # CHẾ ĐỘ 2: Chỉ hiện sản phẩm CẦN ĐÁNH GIÁ
         list_sp = SanPham.objects.filter(MaSP__in=to_review_ids).annotate(
+            avg_stars=Avg('danhgia__SoSao'),
+            review_count=Count('danhgia')
+        ).order_by('MaSP')
+        # Lịch sử đánh giá
+        reviewed_list = SanPham.objects.filter(MaSP__in=reviewed_sp_ids).annotate(
             avg_stars=Avg('danhgia__SoSao'),
             review_count=Count('danhgia')
         ).order_by('MaSP')
@@ -489,8 +495,9 @@ def danh_gia_san_pham_view(request):
 
     return render(request, 'cskh/danh_gia_san_pham.html', {
         'list_sp': list_sp,
-        'khach_hang': khach_hang,
+        'reviewed_list': reviewed_list,
         'filter_mode': filter_mode,
+        'khach_hang': khach_hang,
         'to_review_ids': to_review_ids
     })
 
@@ -545,6 +552,15 @@ def mot_danh_gia_view(request, ma_dg):
     danh_gia = get_object_or_404(DanhGia.objects.select_related('MaKH', 'MaSP'), MaDanhGia=ma_dg)
     return render(request, 'cskh/mot_danh_gia.html', {'danh_gia': danh_gia})
 
+def xoa_danh_gia_view(request, ma_dg):
+    if request.method == 'POST':
+        khach_hang = getattr(request.user, 'khachhang', None)
+        if khach_hang:
+            danh_gia = get_object_or_404(DanhGia, MaDanhGia=ma_dg, MaKH=khach_hang)
+            ma_sp = danh_gia.MaSP.MaSP
+            danh_gia.delete()
+            return redirect('cskh:chi_tiet_danh_gia', ma_sp=ma_sp)
+    return redirect('cskh:danh_gia_san_pham')
 
 def guest_home_view(request):
     loai = request.GET.get('loai', 'Tất cả')

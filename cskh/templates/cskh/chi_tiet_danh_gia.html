@@ -205,6 +205,34 @@
         .view-layout { flex-direction: column; }
         .sidebar { width: 100%; }
     }
+
+    /* DELETE MODAL */
+    .del-modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+        display: none; align-items: center; justify-content: center; z-index: 1000;
+        opacity: 0; transition: opacity 0.2s;
+    }
+    .del-modal-overlay.active { display: flex; opacity: 1; }
+    .del-modal-card {
+        background: white; border-radius: 16px; padding: 40px; text-align: center;
+        width: 90%; max-width: 400px; transform: scale(0.9); transition: transform 0.2s;
+    }
+    .del-modal-overlay.active .del-modal-card { transform: scale(1); }
+    .del-icon {
+        width: 50px; height: 50px; border-radius: 50%; border: 3px solid #e67e80;
+        color: #e67e80; font-size: 28px; display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 20px auto; font-weight: 500;
+    }
+    .del-title { font-size: 20px; font-weight: 700; color: #333; margin-bottom: 35px; }
+    .del-actions { display: flex; gap: 15px; justify-content: center; }
+    .del-btn {
+        padding: 12px 0; border-radius: 6px; font-size: 16px; font-weight: 700;
+        cursor: pointer; border: none; transition: opacity 0.2s; flex: 1;
+    }
+    .del-btn-cancel { background: #dfdfdf; color: #666; }
+    .del-btn-confirm { background: #e67e80; color: white; }
+    .del-btn:hover { opacity: 0.8; }
 </style>
 
 <div class="page-wrapper">
@@ -315,6 +343,15 @@
                         </a>
                     </div>
                     {% endif %}
+
+                    {% if user.khachhang and dg.MaKH == user.khachhang %}
+                    <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
+                        <button type="button" onclick="showDeleteModal('form_del_{{ dg.MaDanhGia }}')" style="background: none; border: none; color: #ff4757; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: underline;">Xóa đánh giá</button>
+                        <form id="form_del_{{ dg.MaDanhGia }}" method="POST" action="{% url 'cskh:xoa_danh_gia' dg.MaDanhGia %}" style="display:none;">
+                            {% csrf_token %}
+                        </form>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             {% empty %}
@@ -346,4 +383,33 @@
         </div>
     </div>
 </div>
+
+<!-- DELETE MODAL HTML -->
+<div class="del-modal-overlay" id="deleteModal">
+    <div class="del-modal-card">
+        <div class="del-icon">!</div>
+        <div class="del-title">Xác nhận xóa đánh giá</div>
+        <div class="del-actions">
+            <button class="del-btn del-btn-cancel" onclick="hideDeleteModal()">Không</button>
+            <button class="del-btn del-btn-confirm" onclick="confirmDelete()">Xác nhận</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentDeleteFormId = null;
+    function showDeleteModal(formId) {
+        currentDeleteFormId = formId;
+        document.getElementById('deleteModal').classList.add('active');
+    }
+    function hideDeleteModal() {
+        currentDeleteFormId = null;
+        document.getElementById('deleteModal').classList.remove('active');
+    }
+    function confirmDelete() {
+        if (currentDeleteFormId) {
+            document.getElementById(currentDeleteFormId).submit();
+        }
+    }
+</script>
 {% endblock %}

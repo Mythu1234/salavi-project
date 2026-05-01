@@ -21,6 +21,7 @@ urlpatterns = [
     path('danh-gia/chi-tiet/<str:ma_sp>/', views.chi_tiet_danh_gia_view, name='chi_tiet_danh_gia'),
     path('gui-danh-gia/<str:ma_sp>/', views.gui_danh_gia_view, name='gui_danh_gia'),
     path('danh-gia/review/<str:ma_dg>/', views.mot_danh_gia_view, name='mot_danh_gia'),
+    path('xoa-danh-gia/<str:ma_dg>/', views.xoa_danh_gia_view, name='xoa_danh_gia'),
     path('chat/reply/', views.chat_reply_view, name='chat_reply'),
     path('chat/nhan/<str:ma_kh>/', views.nhan_xu_ly_view, name='nhan_xu_ly'),
     path('chat/ket-thuc/<str:ma_kh>/', views.ket_thuc_tu_van_view, name='ket_thuc_tu_van'),

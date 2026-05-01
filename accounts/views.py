@@ -90,38 +90,60 @@ def register_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         password_confirm = request.POST.get('password_confirm')
+        full_name = request.POST.get('full_name', '').strip()
+        address = request.POST.get('address', '').strip()
+
+        context = {
+            'username': username,
+            'full_name': full_name,
+            'address': address
+        }
 
         try:
             # 3a. Kiểm tra tài khoản tồn tại
             if User.objects.filter(username=username).exists():
                 messages.error(request, 'Tài khoản đã tồn tại. Vui lòng nhập lại', extra_tags='username')
-                return render(request, 'accounts/login/register.html')
+                return render(request, 'accounts/login/register.html', context)
 
             # 3b. Kiểm tra tên đăng nhập không hợp lệ (số điện thoại gồm 10 số)
             if not re.match(r'^\d{10}$', username):
                 messages.error(request, 'Tên đăng nhập không hợp lệ. Vui lòng nhập lại', extra_tags='username')
-                return render(request, 'accounts/login/register.html')
+                return render(request, 'accounts/login/register.html', context)
 
             # 4a/5a. Kiểm tra mật khẩu (Hoa, thường, số, ký tự đặc biệt)
             password_regex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&].*$'
             if not re.match(password_regex, password):
                 messages.error(request, 'Mật khẩu không hợp lệ.', extra_tags='password')
-                return render(request, 'accounts/login/register.html')
+                return render(request, 'accounts/login/register.html', context)
 
             # 5b. Mật khẩu xác nhận không khớp
             if password != password_confirm:
                 messages.error(request, 'Mật khẩu xác nhận không khớp với mật khẩu', extra_tags='password_confirm')
-                return render(request, 'accounts/login/register.html')
+                return render(request, 'accounts/login/register.html', context)
+
+            if not full_name:
+                messages.error(request, 'Vui lòng nhập họ tên.', extra_tags='full_name')
+                return render(request, 'accounts/login/register.html', context)
 
             # Tạo tài khoản
-            User.objects.create_user(username=username, password=password)
+            user = User.objects.create_user(username=username, password=password)
+            
+            # Tạo thông tin khách hàng
+            kh_code = _generate_next_customer_code()
+            KhachHang.objects.create(
+                MaKH=kh_code,
+                user=user,
+                HoTen=full_name,
+                DiaChi=address
+            )
+
             messages.success(request, 'Tạo tài khoản thành công')
             return redirect('accounts:login')
 
         except Exception:
             # 6b. Hệ thống lỗi
             messages.error(request, 'Hệ thống đang lỗi, không thể tạo tài khoản')
-            return render(request, 'accounts/login/register.html')
+            return render(request, 'accounts/login/register.html', context)
 
     return render(request, 'accounts/login/register.html')
 

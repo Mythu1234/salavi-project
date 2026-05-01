@@ -323,6 +323,52 @@
         </div>
         {% endfor %}
     </div>
+
+    {% if filter_mode == 'todo' %}
+    <div style="margin-top: 60px;">
+        <h2 class="page-title" style="font-size: 24px; margin-bottom: 20px; color: #555;">Lịch sử đánh giá</h2>
+        <div class="product-list">
+            {% for sp in reviewed_list %}
+            <div class="product-item">
+                <div class="product-img-box">
+                    {% if sp.HinhAnh %}
+                        <img src="{{ sp.HinhAnh.url }}" alt="{{ sp.TenSP }}" class="product-img">
+                    {% else %}
+                        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#ccc; font-size:12px;">No Image</div>
+                    {% endif %}
+                </div>
+
+                <div class="product-info">
+                    <p class="product-id">ID: {{ sp.MaSP }}</p>
+                    <h3 class="product-name" style="color: #666;">{{ sp.TenSP }}</h3>
+                    
+                    <div class="product-stats">
+                        <span class="stat-stars">
+                            {% if sp.avg_stars %}
+                                ★ {{ sp.avg_stars|floatformat:1 }}
+                            {% else %}
+                                <span style="color:#eee;">★</span> 0.0
+                            {% endif %}
+                        </span>
+                        <span style="color:#f0f0f0;">|</span>
+                        <span>{{ sp.review_count }} đánh giá</span>
+                    </div>
+
+                    <p class="product-price">{{ sp.Gia|floatformat:0 }}đ</p>
+                </div>
+
+                <a href="{% url 'cskh:chi_tiet_danh_gia' sp.MaSP %}" class="btn-view-review" style="background: #f0f0f0; color: #555;">
+                    Xem đánh giá
+                </a>
+            </div>
+            {% empty %}
+            <div style="padding: 40px; text-align: center; color: #ccc;">
+                <p style="font-size: 15px;">Bạn chưa đánh giá sản phẩm nào.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
 </div>
 
 <!-- MODAL STRUCTURE -->

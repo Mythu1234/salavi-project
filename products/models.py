@@ -1,12 +1,13 @@
 from django.db import models
 from accounts.models import KhachHang
+from CSKH_04.utils import UnaccentedUploadTo
 
 class SanPham(models.Model):
     MaSP = models.CharField(max_length=10, primary_key=True)
     TenSP = models.CharField(max_length=100)
     MoTa = models.CharField(max_length=200, null=True, blank=True)
     Gia = models.DecimalField(max_digits=18, decimal_places=2)
-    HinhAnh = models.ImageField(upload_to='sanpham/')
+    HinhAnh = models.ImageField(upload_to=UnaccentedUploadTo('sanpham/'))
 
     def __str__(self):
         return self.TenSP
@@ -36,7 +37,7 @@ class DanhGia(models.Model):
     MaSP = models.ForeignKey(SanPham, on_delete=models.CASCADE)
     SoSao = models.IntegerField()
     NoiDung = models.CharField(max_length=200, null=True, blank=True)
-    HinhAnh = models.ImageField(upload_to='danhgia/', blank=True)
+    HinhAnh = models.ImageField(upload_to=UnaccentedUploadTo('danhgia/'), blank=True)
     NgayDanhGia = models.DateField()
 
     def __str__(self):

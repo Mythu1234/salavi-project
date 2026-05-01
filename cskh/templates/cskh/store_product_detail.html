@@ -395,6 +395,55 @@
         .inline-size-table td {
             background: #fafafa !important;
         }
+
+        /* Support Buttons & Chat Popup */
+        .phone-btn {
+            position: fixed; right: 40px; bottom: 120px; width: 60px; height: 60px;
+            border-radius: 50%; background: #e65555; border: 2px solid #333;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 50;
+            transition: transform 0.2s;
+        }
+        .phone-btn:hover { transform: scale(1.1); }
+
+        .support-btn { 
+            position: fixed; right: 40px; bottom: 40px; width: 64px; height: 64px; border-radius: 50%; 
+            background: #ecc2c0; border: 2px solid #333; display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; z-index: 50; transition: transform 0.2s;
+        }
+        .support-btn:hover { transform: scale(1.1); }
+        .support-btn svg { width: 32px; height: 32px; fill: none; stroke: #333; stroke-width: 1.5; }
+
+        .chat-popup {
+            position: fixed; bottom: 20px; right: 20px; width: 350px; height: 480px;
+            background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: none; flex-direction: column; z-index: 10000; overflow: hidden; border: 1px solid #f0f0f0;
+        }
+        .chat-popup.show { display: flex; }
+        .chat-header { padding: 16px; border-bottom: 1px solid #f0f0f0; background: #fff; }
+        .chat-header h3 { margin: 0; font-size: 16px; font-weight: 700; color: #111; }
+        .chat-messages { flex-grow: 1; padding: 16px; overflow-y: auto; background: #fdfdfd; display: flex; flex-direction: column; }
+        .chat-loading { text-align: center; color: #999; font-size: 13px; margin-top: 20px; }
+        .chat-msg-row { display: flex; margin-bottom: 12px; flex-direction: column; }
+        .chat-msg-row.mine { align-items: flex-end; }
+        .chat-msg-row.shop { align-items: flex-start; }
+        .chat-bubble { max-width: 80%; padding: 10px 14px; border-radius: 16px; font-size: 14px; word-wrap: break-word; }
+        .chat-msg-row.mine .chat-bubble { background: #fdf5f4; color: #333; border-bottom-right-radius: 4px; }
+        .chat-msg-row.shop .chat-bubble { background: #f2f2f2; color: #333; border-bottom-left-radius: 4px; }
+        .chat-time { font-size: 11px; color: #999; margin-top: 4px; }
+        .chat-img-att { max-width: 150px; border-radius: 8px; margin-top: 5px; cursor: pointer; }
+        .chat-footer { padding: 12px 16px; background: #fff; border-top: 1px solid #f0f0f0; }
+        .chat-image-preview { display: none; align-items: center; gap: 10px; padding: 8px; background: #f9f9f9; border-radius: 8px; margin-bottom: 10px; position: relative; }
+        .preview-thumb { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; }
+        .preview-info { font-size: 12px; color: #555; flex-grow: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .preview-remove { cursor: pointer; color: #999; font-size: 18px; font-weight: bold; }
+        .chat-input-wrapper { position: relative; display: flex; align-items: center; background: #f4f4f4; border-radius: 20px; padding: 0 12px; margin-bottom: 12px; }
+        .chat-input-wrapper input[type="text"] { flex-grow: 1; background: transparent; border: none; padding: 10px 0; font-size: 14px; outline: none; color: #333; }
+        .chat-img-btn { cursor: pointer; color: #777; display: flex; align-items: center; justify-content: center; transition: color 0.2s; }
+        .chat-img-btn:hover { color: #e58f8b; }
+        .chat-actions { display: flex; justify-content: flex-end; gap: 12px; }
+        .btn-chat-huy { background: #7bd492; color: #fff; border: none; padding: 8px 24px; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+        .btn-chat-gui { background: #e58f8b; color: #fff; border: none; padding: 8px 24px; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+        .btn-chat-huy:hover, .btn-chat-gui:hover { opacity: 0.8; }
     </style>
 </head>
 
@@ -984,6 +1033,218 @@
             document.body.style.overflow = 'auto'; // Restore scrolling
         }
     </script>
+
+    {% if not user.is_staff and not user.is_superuser %}
+    <!-- Floating Support Buttons -->
+    <a href="tel:19001234" class="phone-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+    </a>
+
+    <div class="support-btn" id="openChatBtn">
+        <svg viewBox="0 0 24 24">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+            <circle cx="8" cy="12" r="1" fill="#333" stroke="none" />
+            <circle cx="12" cy="12" r="1" fill="#333" stroke="none" />
+            <circle cx="16" cy="12" r="1" fill="#333" stroke="none" />
+        </svg>
+    </div>
+
+    <!-- CHAT POPUP -->
+    <div id="chatPopup" class="chat-popup">
+        <div class="chat-header" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 42px; height: 42px; background: #f7e6e5; color: #b07e7b; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px;">S</div>
+                <div>
+                    <h3 style="font-size: 16px; margin: 0; color: #222;">Shop SALAVI</h3>
+                    <div style="font-size: 12px; color: #999; margin-top: 2px;">Thường trả lời trong vài phút</div>
+                </div>
+            </div>
+            <div id="closeChatIcon" style="cursor: pointer; color: #aaa; font-size: 24px; line-height: 1;">&times;</div>
+        </div>
+        <div class="chat-messages" id="chatMessages" {% if not user.is_authenticated %}style="background: #faf9f8;"{% endif %}>
+            {% if not user.is_authenticated %}
+            <!-- HIỂN THỊ CHO KHÁCH VÃNG LAI -->
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 0 20px;">
+                <div style="width: 72px; height: 72px; background: #fcf1f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c5867f" stroke-width="2">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                    </svg>
+                </div>
+                <h4 style="font-size: 16px; font-weight: 700; color: #333; margin-bottom: 8px;">Bạn cần đăng nhập để nhận tư vấn</h4>
+                <p style="font-size: 14px; color: #888; margin-bottom: 24px; line-height: 1.5;">Đăng nhập để được tư vấn trực tiếp từ Shop SALAVI về sản phẩm và đơn hàng</p>
+                <a href="{% url 'accounts:login' %}" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; background: #c5867f; color: #fff; border-radius: 24px; font-weight: 600; font-size: 15px; text-decoration: none; margin-bottom: 16px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+                    Đăng nhập
+                </a>
+                <div style="font-size: 14px; color: #999;">
+                    Chưa có tài khoản? <a href="{% url 'accounts:login' %}" style="color: #c5867f; text-decoration: none; font-weight: 600;">Đăng ký</a>
+                </div>
+            </div>
+            {% else %}
+            <!-- Messages will be loaded dynamically via AJAX -->
+            {% endif %}
+        </div>
+        <div class="chat-footer">
+            <div id="imagePreviewArea" class="chat-image-preview">
+                <img src="" id="previewImg" class="preview-thumb">
+                <span id="previewName" class="preview-info"></span>
+                <span id="removeImage" class="preview-remove" title="Bỏ chọn ảnh">&times;</span>
+            </div>
+            <div class="chat-input-wrapper" {% if not user.is_authenticated %}style="background: #f4f4f4; opacity: 0.7;"{% endif %}>
+                <input type="text" placeholder="Nhập nội dung gửi ..." {% if not user.is_authenticated %}disabled{% endif %}>
+                <label for="chatImageInput" class="chat-img-btn" title="Gửi ảnh" {% if not user.is_authenticated %}style="pointer-events: none;"{% endif %}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" {% if not user.is_authenticated %}style="color: #ccc;"{% endif %}>
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                </label>
+                <input type="file" id="chatImageInput" hidden accept="image/*" {% if not user.is_authenticated %}disabled{% endif %}>
+            </div>
+            <div class="chat-actions">
+                <button class="btn-chat-huy" id="closeChat" {% if not user.is_authenticated %}style="background: #e6eee5; color: #fff;" disabled{% endif %}>Huỷ</button>
+                <button class="btn-chat-gui" {% if not user.is_authenticated %}style="background: #ede0de; color: #fff;" disabled{% endif %}>Gửi</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const openChatBtn = document.getElementById('openChatBtn');
+            const closeChat = document.getElementById('closeChat');
+            const closeChatIcon = document.getElementById('closeChatIcon');
+            const chatPopup = document.getElementById('chatPopup');
+            const chatMessages = document.getElementById('chatMessages');
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            if (openChatBtn && chatPopup) {
+                let chatLoaded = false;
+                const isAuthenticated = "{{ user.is_authenticated }}" === "True";
+                openChatBtn.addEventListener('click', function() {
+                    chatPopup.classList.add('show');
+                    if (!chatLoaded && chatMessages && isAuthenticated) {
+                        chatMessages.innerHTML = '<div class="chat-loading">Đang tải lịch sử...</div>';
+                        fetch('/api/chat/history/')
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    chatMessages.innerHTML = '';
+                                    if (data.messages && data.messages.length > 0) {
+                                        data.messages.forEach(msg => {
+                                            const row = document.createElement('div');
+                                            row.className = 'chat-msg-row ' + (msg.is_mine ? 'mine' : 'shop');
+                                            let contentHtml = '';
+                                            if (msg.content) contentHtml += `<div class="chat-bubble">${msg.content}</div>`;
+                                            if (msg.image_url) contentHtml += `<img src="${msg.image_url}" class="chat-img-att" />`;
+                                            row.innerHTML = `${contentHtml}<div class="chat-time">${msg.time}</div>`;
+                                            chatMessages.appendChild(row);
+                                        });
+                                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                                    } else {
+                                        chatMessages.innerHTML = '<div class="chat-loading">Chưa có tin nhắn nào. Bắt đầu chat!</div>';
+                                    }
+                                } else {
+                                    chatMessages.innerHTML = '<div class="chat-loading">Không tải được lịch sử.</div>';
+                                }
+                                chatLoaded = true;
+                            })
+                            .catch(err => {
+                                chatMessages.innerHTML = '<div class="chat-loading">Lỗi kết nối.</div>';
+                            });
+                    }
+                });
+            }
+
+            if (closeChatIcon) closeChatIcon.addEventListener('click', () => chatPopup.classList.remove('show'));
+            if (closeChat) closeChat.addEventListener('click', () => chatPopup.classList.remove('show'));
+
+            const chatSendBtn = document.querySelector('.btn-chat-gui');
+            const chatInput = document.querySelector('.chat-input-wrapper input[type="text"]');
+            const chatImageInput = document.getElementById('chatImageInput');
+            const previewArea = document.getElementById('imagePreviewArea');
+            const previewImg = document.getElementById('previewImg');
+            const previewName = document.getElementById('previewName');
+            const removeImageBtn = document.getElementById('removeImage');
+
+            if (chatImageInput && previewArea) {
+                chatImageInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        previewArea.style.display = 'flex';
+                        previewName.textContent = this.files[0].name;
+                        previewImg.src = URL.createObjectURL(this.files[0]);
+                    }
+                });
+            }
+            if (removeImageBtn) {
+                removeImageBtn.addEventListener('click', function() {
+                    chatImageInput.value = '';
+                    previewArea.style.display = 'none';
+                });
+            }
+
+            if (chatSendBtn && chatInput) {
+                chatSendBtn.addEventListener('click', function() {
+                    const text = chatInput.value.trim();
+                    const file = chatImageInput ? chatImageInput.files[0] : null;
+                    if (!text && !file) return;
+
+                    const formData = new FormData();
+                    if (text) formData.append('NoiDung', text);
+                    if (file) formData.append('HinhAnh', file);
+
+                    const row = document.createElement('div');
+                    row.className = 'chat-msg-row mine';
+                    let optimisticHtml = '';
+                    if (text) optimisticHtml += `<div class="chat-bubble">${text}</div>`;
+                    if (file) optimisticHtml += `<img src="${URL.createObjectURL(file)}" class="chat-img-att" />`;
+                    const now = new Date();
+                    const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+                    row.innerHTML = `${optimisticHtml}<div class="chat-time">${timeStr} - Đang gửi...</div>`;
+                    chatMessages.appendChild(row);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                    chatInput.value = '';
+                    if (chatImageInput) chatImageInput.value = '';
+                    if (previewArea) previewArea.style.display = 'none';
+
+                    fetch('/api/chat/send/', {
+                        method: 'POST',
+                        headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                        body: formData
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            row.querySelector('.chat-time').textContent = data.time;
+                        } else {
+                            row.querySelector('.chat-time').textContent = 'Gửi thất bại';
+                        }
+                    })
+                    .catch(() => {
+                        row.querySelector('.chat-time').textContent = 'Lỗi kết nối';
+                    });
+                });
+                chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); chatSendBtn.click(); } });
+            }
+        });
+    </script>
+    {% endif %}
 </body>
 
 </html>

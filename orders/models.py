@@ -2,6 +2,7 @@ from django.db import models
 from accounts.models import KhachHang, NhanVien
 from products.models import BienTheSanPham
 from cskh.models import KhuyenMai
+from CSKH_04.utils import UnaccentedUploadTo
 
 class DonHang(models.Model):
     TRANGTHAI_CHOICES = [
@@ -55,7 +56,7 @@ class DoiTra(models.Model):
     LoaiYeuCau = models.CharField(max_length=50, choices=LOAI_CHOICES)
     NgayYeuCau = models.DateField()
     LyDo = models.CharField(max_length=200)
-    HinhAnh = models.ImageField(upload_to='doitra_images/')
+    HinhAnh = models.ImageField(upload_to=UnaccentedUploadTo('doitra_images/'))
     TrangThai = models.CharField(max_length=50, choices=TRANGTHAI_CHOICES, default='PENDING')
     GhiChuXuLy = models.CharField(max_length=100, null=True, blank=True)
 
